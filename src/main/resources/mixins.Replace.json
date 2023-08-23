@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "io.redstudioragnarok.Replace.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "mixins.Replace.refmap.json",
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [
+  ]
+}
