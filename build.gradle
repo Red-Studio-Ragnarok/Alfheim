@@ -88,7 +88,7 @@ dependencies {
     api (mixin) { transitive = false }
     annotationProcessor 'org.ow2.asm:asm-debug-all:5.2'
     annotationProcessor 'com.google.guava:guava:24.1.1-jre'
-    annotationProcessor 'com.google.code.gson:gson:2.8.6'
+    annotationProcessor 'com.google.code.gson:gson:2.10.1'
     annotationProcessor (mixin) { transitive = false }
 }
 
