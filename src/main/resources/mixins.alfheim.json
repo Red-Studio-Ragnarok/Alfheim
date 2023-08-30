@@ -1,0 +1,29 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "io.redstudioragnarok.alfheim.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "mixins.alfheim.refmap.json",
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "client": [
+    "client.BlockModelRendererMixin",
+    "client.MinecraftMixin",
+    "client.RenderGlobalMixin"
+  ],
+  "mixins": [
+    "AnvilChunkLoaderMixin",
+    "BlockMixin",
+    "BlockSlabMixin",
+    "BlockStairsMixin",
+    "BlockStateContainerMixin",
+    "BlockStateContainerMixin$StateImplementationMixin",
+    "ChunkCacheMixin",
+    "ChunkMixin",
+    "ChunkProviderServerMixin",
+    "ExtendedBlockStorageMixin",
+    "SPacketChunkDataMixin",
+    "WorldMixin"
+  ]
+}

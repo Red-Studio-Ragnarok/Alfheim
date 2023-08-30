@@ -1,5 +1,5 @@
-[![Curse Forge](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/available/curseforge_vector.svg)](https://www.curseforge.com/minecraft/mc-mods/replace)
-[![Modrinth](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/available/modrinth_vector.svg)](https://modrinth.com/mod/replace)
+[![Curse Forge](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/available/curseforge_vector.svg)](https://www.curseforge.com/minecraft/mc-mods/alfheim)
+[![Modrinth](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/available/modrinth_vector.svg)](https://modrinth.com/mod/alfheim)
 
 [![Buy Me a Coffee](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/donate/buymeacoffee-singular_vector.svg)](https://www.buymeacoffee.com/desoroxxx)
 [![Discord](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/social/discord-plural_vector.svg)](https://discord.gg/hKpUYx7VwS)
@@ -8,9 +8,43 @@
 [![Gradle](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/built-with/gradle_vector.svg)](https://gradle.org/)
 [![Forge](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/supported/forge_vector.svg)](http://files.minecraftforge.net/maven/net/minecraftforge/forge/index_1.12.2.html)
 
-# Replace
+# Alfheim
 
-The template has a lot of `Replace` that you need to replace, also it has everything you could need so some stuff will need to be removed.
+Alfheim is a fork *(or a rewrite depending on your views on the [ship of theseus](https://en.wikipedia.org/wiki/Ship_of_Theseus))* of [Hesperus] which is a fork of [Phosphor]
+
+## What benefit does this have over [Phosphor]/[Hesperus]?
+
+Alfheim aims to be compatible in all scenarios, and if for any reasons a something is fundamentally incompatible, a warning screen will tell you what is happening instead of crashing with hardly any information.
+
+Alfheim also has a lot of optimizations of all sizes over [Phosphor] it uses slightly less memory overall.
+
+Alfheim also improves client side performance unlike [Phosphor], by reducing by lighting related block updates by a factor of 27.
+To improve client side performance, Alfheim also limits how much lighting updates are performed each frame.
+In addition, [Phosphor] unnecessarily forces lights to be updates before each frame which Alfheim doesn't.
+
+Alfheim also fixes more vanilla lighting issues than [Phosphor], here is a list of all fixes and where they come from:
+
+Fixed in [Phosphor]:
+- Fixes [MC-3329](https://bugs.mojang.com/browse/MC-3329)
+- Fixes [MC-102162](https://bugs.mojang.com/browse/MC-102162)
+- Fixes [MC-116690](https://bugs.mojang.com/browse/MC-116690)
+- Fixes [MC-117067](https://bugs.mojang.com/browse/MC-117067)
+- Fixes [MC-117094](https://bugs.mojang.com/browse/MC-117094)
+
+Fixed in Alfheim:
+- Fixes [MC-92](https://bugs.mojang.com/browse/MC-92)
+- Fixes [MC-50734](https://bugs.mojang.com/browse/MC-50734)
+- Fixes [MC-80966](https://bugs.mojang.com/browse/MC-80966)
+- Fixes [MC-95515](https://bugs.mojang.com/browse/MC-95515)
+- Fixes [MC-104532](https://bugs.mojang.com/browse/MC-104532)
+- Fixes [MC-249343](https://bugs.mojang.com/browse/MC-249343)
+
+[Hesperus]: https://www.curseforge.com/minecraft/mc-mods/hesperus
+[Phosphor]: https://www.curseforge.com/minecraft/mc-mods/phosphor-forge
+
+---
+
+[![BisectHostingPromoBanner](https://www.bisecthosting.com/partners/custom-banners/d410513a-9aee-467a-96eb-88eb0976af9d.webp)](https://bisecthosting.com/Desoroxxx?r=Alfheim+GitHub)
 
 ## Want to have your own mod or support me?
 
