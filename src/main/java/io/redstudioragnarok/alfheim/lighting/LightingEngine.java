@@ -556,11 +556,7 @@ public final class LightingEngine {
     }
 
     private static final class NeighborInfo {
-
-        /**
-         * The reason we use a Vector3I instead of a MutableBlockPos is that MutableBlockPos stills inherit from the Vec3i of the blockpos since it extends it... yep...
-         * So doing this saves memory.
-         */
+        
         public final MutableBlockPos mutableBlockPos = new MutableBlockPos();
 
         public Chunk chunk;
