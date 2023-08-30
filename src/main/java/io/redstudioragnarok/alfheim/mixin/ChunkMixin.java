@@ -14,10 +14,7 @@ import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -35,23 +32,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Chunk.class)
 public abstract class ChunkMixin implements IChunkLighting, IChunkLightingData, ILightingEngineProvider {
 
-    private static final EnumFacing[] HORIZONTAL = EnumFacing.Plane.HORIZONTAL.facings();
+    @Unique private static final EnumFacing[] HORIZONTAL = EnumFacing.Plane.HORIZONTAL.facings();
 
-    private static final String SET_BLOCK_STATE_VANILLA = "setBlockState" + "(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;)" + "Lnet/minecraft/block/state/IBlockState;";
+    @Unique private static final String SET_BLOCK_STATE_VANILLA = "setBlockState" + "(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;)" + "Lnet/minecraft/block/state/IBlockState;";
 
     @Shadow @Final private ExtendedBlockStorage[] storageArrays;
-
-    @Shadow private boolean dirty;
 
     @Shadow @Final private int[] heightMap;
 
     @Shadow private int heightMapMinimum;
 
-    @Shadow @Final private int[] precipitationHeightMap;
-
     @Shadow @Final private World world;
-
-    @Shadow private boolean isTerrainPopulated;
 
     @Final @Shadow private boolean[] updateSkylightColumns;
 
@@ -60,12 +51,6 @@ public abstract class ChunkMixin implements IChunkLighting, IChunkLightingData, 
     @Final @Shadow public int z;
 
     @Shadow private boolean isGapLightingUpdated;
-
-    @Shadow
-    public abstract TileEntity getTileEntity(BlockPos pos, Chunk.EnumCreateEntityType type);
-
-    @Shadow
-    public abstract IBlockState getBlockState(BlockPos pos);
 
     @Shadow
     protected abstract int getBlockLightOpacity(int x, int y, int z);
@@ -164,7 +149,6 @@ public abstract class ChunkMixin implements IChunkLighting, IChunkLightingData, 
      */
     @Overwrite
     public void checkLight() {
-        isTerrainPopulated = true;
 
         LightingHooks.checkChunkLighting((Chunk) (Object) this, world);
     }
@@ -269,7 +253,6 @@ public abstract class ChunkMixin implements IChunkLighting, IChunkLightingData, 
                 world.checkLightFor(EnumSkyBlock.SKY, new BlockPos(x, i, z));
             }
 
-            dirty = true;
         }
     }
 

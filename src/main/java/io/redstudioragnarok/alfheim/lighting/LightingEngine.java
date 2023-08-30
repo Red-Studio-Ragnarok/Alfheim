@@ -101,7 +101,7 @@ public final class LightingEngine {
     private boolean isNeighborDataValid = false;
 
     private final NeighborInfo[] neighborInfos = new NeighborInfo[6];
-    private PooledLongQueue.LongQueueIterator currentQueue;
+    private PooledLongQueue.LongQueueIterator currentQueueIterator;
 
     private final ReentrantLock lock = new ReentrantLock();
 
@@ -232,7 +232,7 @@ public final class LightingEngine {
 
         currentChunkIdentifier = -1; //reset chunk cache
 
-        currentQueue = queue.iterator();
+        currentQueueIterator = queue.iterator();
 
         profiler.startSection("prepare");
 
@@ -252,7 +252,7 @@ public final class LightingEngine {
 
         profiler.endStartSection("enqueueBrightening");
 
-        currentQueue = initialBrightenings.iterator();
+        currentQueueIterator = initialBrightenings.iterator();
 
         while (nextItem()) {
             final byte newLight = (byte) (currentData >> S_L & M_L);
@@ -265,7 +265,7 @@ public final class LightingEngine {
 
         profiler.endStartSection("enqueueDarkening");
 
-        currentQueue = initialDarkenings.iterator();
+        currentQueueIterator = initialDarkenings.iterator();
 
         while (nextItem()) {
             final byte oldLight = getCursorCachedLight(lightType);
@@ -280,7 +280,7 @@ public final class LightingEngine {
 
         //Iterate through enqueued updates (brightening and darkening in parallel) from brightest to darkest so that we only need to iterate once
         for (byte currentLight = MAX_LIGHT_LEVEL; currentLight >= 0; --currentLight) {
-            currentQueue = darkeningQueue[currentLight].iterator();
+            currentQueueIterator = darkeningQueue[currentLight].iterator();
 
             while (nextItem()) {
                 // Don't darken if we got brighter due to some other change
@@ -331,7 +331,7 @@ public final class LightingEngine {
                 }
             }
 
-            currentQueue = brighteningQueue[currentLight].iterator();
+            currentQueueIterator = brighteningQueue[currentLight].iterator();
 
             while (nextItem()) {
                 final byte oldLight = getCursorCachedLight(lightType);
@@ -411,7 +411,6 @@ public final class LightingEngine {
                 return (byte) type.defaultLightValue;
         }
     }
-
 
     private byte calculateNewLightFromCursor(final EnumSkyBlock lightType) {
         final IBlockState blockState = currentChunk.getBlockState(currentPos);
@@ -502,19 +501,19 @@ public final class LightingEngine {
     }
 
     /**
-     * Polls a new item from {@link #currentQueue} and fills in state data members
+     * Polls a new item from {@link #currentQueueIterator} and fills in state data members
      *
      * @return If there was an item to poll
      */
     private boolean nextItem() {
-        if (!currentQueue.hasNext()) {
-            currentQueue.finish();
-            currentQueue = null;
+        if (!currentQueueIterator.hasNext()) {
+            currentQueueIterator.finish();
+            currentQueueIterator = null;
 
             return false;
         }
 
-        currentData = currentQueue.next();
+        currentData = currentQueueIterator.next();
         isNeighborDataValid = false;
 
         decodeWorldCoord(currentPos, currentData);
@@ -556,7 +555,7 @@ public final class LightingEngine {
     }
 
     private static final class NeighborInfo {
-        
+
         public final MutableBlockPos mutableBlockPos = new MutableBlockPos();
 
         public Chunk chunk;

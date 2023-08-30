@@ -51,7 +51,7 @@ public abstract class BlockMixin implements ILitBlock {
 
     @Inject(method = "getAmbientOcclusionLightValue", at = @At(value = "HEAD"), cancellable = true)
     private void fuckAO(final IBlockState blockState, final CallbackInfoReturnable<Float> callbackInfoReturnable) {
-        final int lightValue = (int) MathUtil.clampMinFirst(blockState.getLightValue() -1, 0, 15);
+        final byte lightValue = (byte) MathUtil.clampMinFirst(blockState.getLightValue() -1, 0, 15);
 
         if (lightValue == 0)
             callbackInfoReturnable.setReturnValue(blockState.isBlockNormalCube() ? 0.2F : 1);

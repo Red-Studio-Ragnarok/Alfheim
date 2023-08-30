@@ -29,6 +29,6 @@ public abstract class BlockModelRendererMixin {
             , at = @At(value = "INVOKE", target = "Lnet/minecraft/block/state/IBlockState;getLightValue(Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/util/math/BlockPos;)I", remap = false)
     )
     private int adjustGetLightValue(final IBlockState blockState, final IBlockAccess blockAccess, final BlockPos blockPos) {
-        return (int) MathUtil.clampMinFirst(blockState.getLightValue(blockAccess, blockPos) -1, 0, 15);
+        return MathUtil.clampMinFirst(blockState.getLightValue(blockAccess, blockPos) -1, 0, 15);
     }
 }

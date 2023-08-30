@@ -1,7 +1,6 @@
 package io.redstudioragnarok.alfheim.mixin.client;
 
 import io.redstudioragnarok.alfheim.api.ILightUpdatesProcessor;
-import io.redstudioragnarok.alfheim.api.ILightingEngineProvider;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.RenderGlobal;
@@ -31,8 +30,6 @@ public abstract class MinecraftMixin {
     @Inject(method = "runTick", at = @At(value = "CONSTANT", args = "stringValue=level", shift = At.Shift.BEFORE))
     private void onRunTick(final CallbackInfo callbackInfo) {
         this.profiler.endStartSection("processRenderGlobalLightUpdates");
-
-        ((ILightingEngineProvider) this.world).alfheim$getLightingEngine().processLightUpdates();
 
         ((ILightUpdatesProcessor) this.renderGlobal).alfheim$processLightUpdates();
     }

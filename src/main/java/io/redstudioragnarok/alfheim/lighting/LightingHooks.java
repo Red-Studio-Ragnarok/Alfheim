@@ -1,8 +1,6 @@
 package io.redstudioragnarok.alfheim.lighting;
 
-import io.redstudioragnarok.alfheim.api.IChunkLighting;
 import io.redstudioragnarok.alfheim.api.IChunkLightingData;
-import io.redstudioragnarok.alfheim.api.ILightingEngineProvider;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -94,16 +92,8 @@ public final class LightingHooks {
     }
 
     public enum EnumBoundaryFacing {
-        IN, OUT;
-
-        public EnumBoundaryFacing getOpposite() {
-            return this == IN ? OUT : IN;
-        }
-    }
-
-    public static void flagSecBoundaryForUpdate(final Chunk chunk, final BlockPos pos, final EnumSkyBlock lightType, final EnumFacing dir,
-                                                final EnumBoundaryFacing boundaryFacing) {
-        flagChunkBoundaryForUpdate(chunk, (short) (1 << (pos.getY() >> 4)), lightType, dir, getAxisDirection(dir, pos.getX(), pos.getZ()), boundaryFacing);
+        IN,
+        OUT
     }
 
     public static void flagChunkBoundaryForUpdate(final Chunk chunk, final short sectionMask, final EnumSkyBlock lightType, final EnumFacing dir,
@@ -261,7 +251,7 @@ public final class LightingHooks {
         }
     }
 
-    public static final String neighborLightChecksKey = "NeighborLightChecks";
+    public static final String NEIGHBOR_LIGHT_CHECKS_KEY = "NeighborLightChecks";
 
     public static void writeNeighborLightChecksToNBT(final Chunk chunk, final NBTTagCompound nbt) {
         short[] neighborLightChecks = ((IChunkLightingData) chunk).getNeighborLightChecks();
@@ -283,13 +273,13 @@ public final class LightingHooks {
         }
 
         if (!empty) {
-            nbt.setTag(neighborLightChecksKey, list);
+            nbt.setTag(NEIGHBOR_LIGHT_CHECKS_KEY, list);
         }
     }
 
     public static void readNeighborLightChecksFromNBT(final Chunk chunk, final NBTTagCompound nbt) {
-        if (nbt.hasKey(neighborLightChecksKey, 9)) {
-            final NBTTagList list = nbt.getTagList(neighborLightChecksKey, 2);
+        if (nbt.hasKey(NEIGHBOR_LIGHT_CHECKS_KEY, 9)) {
+            final NBTTagList list = nbt.getTagList(NEIGHBOR_LIGHT_CHECKS_KEY, 2);
 
             if (list.tagCount() == FLAG_COUNT) {
                 initNeighborLightChecks(chunk);
@@ -300,7 +290,7 @@ public final class LightingHooks {
                     neighborLightChecks[i] = ((NBTTagShort) list.get(i)).getShort();
                 }
             } else {
-                LOG.warn("Chunk field {} had invalid length, ignoring it (chunk coordinates: {} {})", neighborLightChecksKey, chunk.x, chunk.z);
+                LOG.warn("Chunk field {} had invalid length, ignoring it (chunk coordinates: {} {})", NEIGHBOR_LIGHT_CHECKS_KEY, chunk.x, chunk.z);
             }
         }
     }
@@ -385,21 +375,4 @@ public final class LightingHooks {
             }
         }
     }
-
-    private static short[] getNeighborLightChecks(Chunk chunk) {
-        return ((IChunkLightingData) chunk).getNeighborLightChecks();
-    }
-
-    private static void setNeighborLightChecks(Chunk chunk, short[] table) {
-        ((IChunkLightingData) chunk).setNeighborLightChecks(table);
-    }
-
-    public static int getCachedLightFor(Chunk chunk, EnumSkyBlock type, BlockPos pos) {
-        return ((IChunkLighting) chunk).alfheim$getCachedLightFor(type, pos);
-    }
-
-    public static LightingEngine getLightingEngine(World world) {
-        return ((ILightingEngineProvider) world).alfheim$getLightingEngine();
-    }
-
 }
