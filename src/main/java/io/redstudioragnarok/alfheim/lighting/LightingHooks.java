@@ -21,6 +21,7 @@ import static io.redstudioragnarok.alfheim.utils.ModReference.LOG;
  * @since 0.1
  */
 public final class LightingHooks {
+
     private static final EnumSkyBlock[] ENUM_SKY_BLOCK_VALUES = EnumSkyBlock.values();
 
     private static final EnumFacing.AxisDirection[] ENUM_AXIS_DIRECTION_VALUES = EnumFacing.AxisDirection.values();
@@ -46,7 +47,7 @@ public final class LightingHooks {
 
         for (int sec = yMax >> 4; sec >= yMin >> 4; --sec) {
             if (sections[sec] == Chunk.NULL_BLOCK_STORAGE) {
-                emptySections |= 1 << sec;
+                emptySections |= (short) (1 << sec);
             }
         }
 
