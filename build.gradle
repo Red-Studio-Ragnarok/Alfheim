@@ -120,12 +120,14 @@ idea {
     module {
         inheritOutputDirs = true
         excludeDirs = [
+                file(".settings"),
                 file(".github"),
                 file(".gradle"),
+                file("gradle"),
                 file(".idea"),
                 file("build"),
-                file("gradle"),
-                file("run")
+                file("run"),
+                file("bin")
         ]
     }
 
