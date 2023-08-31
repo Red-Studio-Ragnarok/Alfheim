@@ -43,6 +43,8 @@ public abstract class RenderGlobalMixin implements ILightUpdatesProcessor {
      * <p>
      * Also improves performance by updating only the blocks in the set instead of every block in a 3x3 radius around each block in the set.
      * Another performance improvement is using || instead of && allowing to skip earlier when there is nothing to update.
+     * <p>
+     * This also limits how many light updates are processed at once.
      *
      * @since 0.1
      */
@@ -52,9 +54,10 @@ public abstract class RenderGlobalMixin implements ILightUpdatesProcessor {
             return;
 
         final Iterator<BlockPos> iterator = setLightUpdates.iterator();
-        short lightUpdatesProcessed = 0; // Used to keep the number of light updates reasonable per frame.
+        final float lightUpdateLimitRatio = (float) setLightUpdates.size() / 1000;
+        short lightUpdatesProcessed = 0;
 
-        while (iterator.hasNext() && lightUpdatesProcessed < 512) {
+        while (iterator.hasNext() && lightUpdatesProcessed < (64 * lightUpdateLimitRatio)) {
             final BlockPos blockpos = iterator.next();
 
             iterator.remove();
