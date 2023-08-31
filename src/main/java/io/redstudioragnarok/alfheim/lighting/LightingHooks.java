@@ -1,7 +1,6 @@
 package io.redstudioragnarok.alfheim.lighting;
 
 import io.redstudioragnarok.alfheim.api.IChunkLightingData;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagShort;
@@ -299,9 +298,9 @@ public final class LightingHooks {
         final int xBase = chunk.x << 4;
         final int zBase = chunk.z << 4;
 
-        final BlockPos.PooledMutableBlockPos pos = BlockPos.PooledMutableBlockPos.retain(xBase, 0, zBase);
+        final BlockPos.PooledMutableBlockPos mutableBlockPos = BlockPos.PooledMutableBlockPos.retain(xBase, 0, zBase);
 
-        if (world.isAreaLoaded(pos.add(-16, 0, -16), pos.add(31, 255, 31), false)) {
+        if (world.isAreaLoaded(mutableBlockPos.add(-16, 0, -16), mutableBlockPos.add(31, 255, 31), false)) {
             final ExtendedBlockStorage[] extendedBlockStorage = chunk.getBlockStorageArray();
 
             for (int j = 0; j < extendedBlockStorage.length; ++j) {
@@ -316,17 +315,10 @@ public final class LightingHooks {
                 for (int y = 0; y < 16; y++) {
                     for (int z = 0; z < 16; z++) {
                         for (int x = 0; x < 16; x++) {
+                            mutableBlockPos.setPos(xBase + x, yBase + y, zBase + z);
 
-                            IBlockState state = storage.getData().get(x, y, z);
-
-                            int light = LightingEngineHelpers.getLightValueForState(state, world, pos);
-
-                            if (light > 0) {
-                                pos.setPos(xBase + x, yBase + y, zBase + z);
-
-                                world.checkLightFor(EnumSkyBlock.BLOCK, pos);
-                            }
-
+                            if (LightingEngineHelpers.getLightValueForState(storage.getData().get(x, y, z), world, mutableBlockPos) > 0)
+                                world.checkLightFor(EnumSkyBlock.BLOCK, mutableBlockPos);
                         }
                     }
                 }
@@ -339,7 +331,7 @@ public final class LightingHooks {
             ((IChunkLightingData) chunk).setLightInitialized(true);
         }
 
-        pos.release();
+        mutableBlockPos.release();
     }
 
     public static void checkChunkLighting(final Chunk chunk, final World world) {

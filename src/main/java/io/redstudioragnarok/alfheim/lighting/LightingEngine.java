@@ -338,8 +338,7 @@ public final class LightingEngine {
 
                 // Only process this if nothing else has happened at this position since scheduling
                 if (oldLight == currentLight) {
-                    if (lightType == EnumSkyBlock.BLOCK)
-                        world.notifyLightSet(currentPos);
+                    world.notifyLightSet(currentPos);
 
                     if (currentLight > 1)
                         spreadLightFromCursor(currentLight, lightType);
