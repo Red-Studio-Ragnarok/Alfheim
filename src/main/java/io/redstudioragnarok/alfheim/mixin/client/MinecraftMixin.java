@@ -2,7 +2,6 @@ package io.redstudioragnarok.alfheim.mixin.client;
 
 import io.redstudioragnarok.alfheim.api.ILightUpdatesProcessor;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.profiler.Profiler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -23,14 +22,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MinecraftMixin {
 
     @Shadow @Final public Profiler profiler;
-
-    @Shadow public WorldClient world;
+    
     @Shadow public RenderGlobal renderGlobal;
 
     @Inject(method = "runTick", at = @At(value = "CONSTANT", args = "stringValue=level", shift = At.Shift.BEFORE))
     private void onRunTick(final CallbackInfo callbackInfo) {
-        this.profiler.endStartSection("processRenderGlobalLightUpdates");
+        profiler.endStartSection("processRenderGlobalLightUpdates");
 
-        ((ILightUpdatesProcessor) this.renderGlobal).alfheim$processLightUpdates();
+        ((ILightUpdatesProcessor) renderGlobal).alfheim$processLightUpdates();
     }
 }
