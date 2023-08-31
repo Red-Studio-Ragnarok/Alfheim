@@ -203,7 +203,7 @@ public abstract class ChunkMixin implements IChunkLighting, IChunkLightingData, 
     private void recheckGaps(boolean onlyOne) {
         this.world.profiler.startSection("recheckGaps");
 
-        WorldChunkSlice slice = new WorldChunkSlice(this.world, this.x, this.z);
+        WorldChunkSlice slice = new WorldChunkSlice(this.world.getChunkProvider(), this.x, this.z);
 
         if (this.world.isAreaLoaded(new BlockPos(this.x * 16 + 8, 0, this.z * 16 + 8), 16)) {
             for (int x = 0; x < 16; ++x) {
