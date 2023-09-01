@@ -30,14 +30,12 @@ public abstract class WorldMixin implements ILightingEngineProvider, ILightLevel
 
     @Shadow public abstract int getLightFor(final EnumSkyBlock lightType, final BlockPos blockPos);
 
-    @Shadow public abstract int getLight(BlockPos pos);
+    @Shadow public abstract int getLight(final BlockPos blockPos);
 
-    @Shadow public abstract IBlockState getBlockState(BlockPos pos);
+    @Shadow public abstract IBlockState getBlockState(final BlockPos blockPos);
 
     /**
      * Initialize the lighting engine on world construction.
-     *
-     * @author Angeline (@jellysquid)
      */
     @Inject(method = "<init>", at = @At("RETURN"))
     private void onConstructed(final CallbackInfo callbackInfo) {
@@ -46,8 +44,6 @@ public abstract class WorldMixin implements ILightingEngineProvider, ILightLevel
 
     /**
      * Directs the light update to the lighting engine and always returns a success value.
-     *
-     * @author Angeline (@jellysquid)
      */
     @Inject(method = "checkLightFor", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;isAreaLoaded(Lnet/minecraft/util/math/BlockPos;IZ)Z", ordinal = 1, shift = At.Shift.BEFORE), cancellable = true)
     private void redirectLightUpdate(final EnumSkyBlock lightType, final BlockPos blockPos, final CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
@@ -78,6 +74,6 @@ public abstract class WorldMixin implements ILightingEngineProvider, ILightLevel
 
     @Override
     public int alfheim$getLight(final EnumSkyBlock lightType, final BlockPos blockPos) {
-        return this.getLightFor(lightType, blockPos);
+        return getLightFor(lightType, blockPos);
     }
 }

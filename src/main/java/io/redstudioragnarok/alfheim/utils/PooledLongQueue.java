@@ -150,9 +150,9 @@ public final class PooledLongQueue {
     private static final class Segment {
 
         private final long[] longArray = new long[QUEUE_SEGMENT_SIZE];
+        private final Pool pool;
         private int index = 0;
         private Segment next;
-        private final Pool pool;
 
         private Segment(final Pool pool) {
             this.pool = pool;

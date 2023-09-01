@@ -15,11 +15,10 @@ import org.spongepowered.asm.mixin.Unique;
 @Mixin(ExtendedBlockStorage.class)
 public abstract class ExtendedBlockStorageMixin {
 
-    @Shadow private NibbleArray skyLight;
-
     @Shadow private int blockRefCount;
 
     @Shadow private NibbleArray blockLight;
+    @Shadow private NibbleArray skyLight;
 
     @Unique private int alfheim$lightRefCount = -1;
 
@@ -52,6 +51,7 @@ public abstract class ExtendedBlockStorageMixin {
     @Overwrite
     public void setBlockLight(final NibbleArray array) {
         blockLight = array;
+
         alfheim$lightRefCount = -1;
     }
 
@@ -62,6 +62,7 @@ public abstract class ExtendedBlockStorageMixin {
     @Overwrite
     public void setSkyLight(final NibbleArray array) {
         skyLight = array;
+
         alfheim$lightRefCount = -1;
     }
 
@@ -76,7 +77,7 @@ public abstract class ExtendedBlockStorageMixin {
 
         // -1 indicates the lightRefCount needs to be re-calculated
         if (alfheim$lightRefCount == -1) {
-            if (alfheim$checkLightArrayEqual(skyLight, (byte) 0xFF) && alfheim$checkLightArrayEqual(blockLight, (byte) 0x00))
+            if (alfheim$checkLightArrayEqual(skyLight, (byte) 255) && alfheim$checkLightArrayEqual(blockLight, (byte) 0))
                 alfheim$lightRefCount = 0; // Lighting is trivial, don't send to clients
             else
                 alfheim$lightRefCount = 1; // Lighting is not trivial, send to clients
@@ -86,17 +87,18 @@ public abstract class ExtendedBlockStorageMixin {
     }
 
     /**
-     * @reason Check light array equality
+     * Check light array equality
+     *
      * @author Angeline (@jellysquid)
      * @author Luna Lage (Desoroxxx)
      */
     @Unique
-    private boolean alfheim$checkLightArrayEqual(final NibbleArray storage, final byte val) {
+    private boolean alfheim$checkLightArrayEqual(final NibbleArray storage, final byte targetValue) {
         if (storage == null)
             return true;
 
-        for (final byte b : storage.getData())
-            if (b != val)
+        for (final byte currentByte : storage.getData())
+            if (currentByte != targetValue)
                 return false;
 
         return true;

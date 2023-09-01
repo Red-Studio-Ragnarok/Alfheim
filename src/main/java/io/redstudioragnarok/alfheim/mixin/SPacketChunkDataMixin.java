@@ -10,7 +10,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 /**
  * @author Luna Lage (Desoroxxx)
- * @author Angeline (@jellysquid)
  * @since 0.1
  */
 @Mixin(SPacketChunkData.class)
@@ -18,8 +17,6 @@ public abstract class SPacketChunkDataMixin {
 
     /**
      * Redirect a call to {@link Chunk#getWorld()} in the ctor to force light updates to be processed before creating the client payload.
-     *
-     * @author Luna Lage (Desoroxxx)
      */
     @Redirect(method = "<init>(Lnet/minecraft/world/chunk/Chunk;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/Chunk;getWorld()Lnet/minecraft/world/World;"))
     private World processLightUpdates(final Chunk chunk) {
