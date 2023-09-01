@@ -27,7 +27,7 @@ public abstract class AnvilChunkLoaderMixin {
      * @author Angeline (@jellysquid)
      */
     @Inject(method = "saveChunk", at = @At("HEAD"))
-    private void onConstructed(World world, Chunk chunkIn, CallbackInfo callbackInfo) {
+    private void onConstructed(final World world, final Chunk chunk, final CallbackInfo callbackInfo) {
         ((ILightingEngineProvider) world).alfheim$getLightingEngine().processLightUpdates();
     }
 
@@ -37,13 +37,12 @@ public abstract class AnvilChunkLoaderMixin {
      * @author Angeline (@jellysquid)
      */
     @Inject(method = "readChunkFromNBT", at = @At("RETURN"))
-    private void onReadChunkFromNBT(World world, NBTTagCompound compound, CallbackInfoReturnable<Chunk> cir) {
-        Chunk chunk = cir.getReturnValue();
+    private void onReadChunkFromNBT(final World world, final NBTTagCompound compound, final CallbackInfoReturnable<Chunk> callbackInfoReturnable) {
+        final Chunk chunk = callbackInfoReturnable.getReturnValue();
 
         LightingHooks.readNeighborLightChecksFromNBT(chunk, compound);
 
         ((IChunkLightingData) chunk).alfheim$setLightInitialized(compound.getBoolean("LightPopulated"));
-
     }
 
     /**
@@ -52,7 +51,7 @@ public abstract class AnvilChunkLoaderMixin {
      * @author Angeline (@jellysquid)
      */
     @Inject(method = "writeChunkToNBT", at = @At("RETURN"))
-    private void onWriteChunkToNBT(Chunk chunk, World world, NBTTagCompound compound, CallbackInfo ci) {
+    private void onWriteChunkToNBT(final Chunk chunk, final World world, final NBTTagCompound compound, final CallbackInfo callbackInfo) {
         LightingHooks.writeNeighborLightChecksToNBT(chunk, compound);
 
         compound.setBoolean("LightPopulated", ((IChunkLightingData) chunk).alfheim$isLightInitialized());
