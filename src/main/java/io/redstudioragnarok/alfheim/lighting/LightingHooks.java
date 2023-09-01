@@ -99,7 +99,7 @@ public final class LightingHooks {
     public static void flagChunkBoundaryForUpdate(final Chunk chunk, final short sectionMask, final EnumSkyBlock lightType, final EnumFacing dir,
                                                   final EnumFacing.AxisDirection axisDirection, final EnumBoundaryFacing boundaryFacing) {
         initNeighborLightChecks(chunk);
-        ((IChunkLightingData) chunk).getNeighborLightChecks()[getFlagIndex(lightType, dir, axisDirection, boundaryFacing)] |= sectionMask;
+        ((IChunkLightingData) chunk).alfheim$getNeighborLightChecks()[getFlagIndex(lightType, dir, axisDirection, boundaryFacing)] |= sectionMask;
         chunk.markDirty();
     }
 
@@ -154,7 +154,7 @@ public final class LightingHooks {
                                    final EnumFacing.AxisDirection axisDir) {
         IChunkLightingData outChunkLightingData = (IChunkLightingData) outChunk;
 
-        if (outChunkLightingData.getNeighborLightChecks() == null) {
+        if (outChunkLightingData.alfheim$getNeighborLightChecks() == null) {
             return;
         }
 
@@ -165,7 +165,7 @@ public final class LightingHooks {
         final int inIndex = getFlagIndex(lightType, dir, axisDir, EnumBoundaryFacing.IN);
         final int outIndex = getFlagIndex(lightType, dir.getOpposite(), axisDir, EnumBoundaryFacing.OUT);
 
-        inChunkLightingData.getNeighborLightChecks()[inIndex] |= outChunkLightingData.getNeighborLightChecks()[outIndex];
+        inChunkLightingData.alfheim$getNeighborLightChecks()[inIndex] |= outChunkLightingData.alfheim$getNeighborLightChecks()[outIndex];
         //no need to call Chunk.setModified() since checks are not deleted from outChunk
     }
 
@@ -173,13 +173,13 @@ public final class LightingHooks {
                                                          final int xOffset, final int zOffset, final EnumFacing.AxisDirection axisDir) {
         IChunkLightingData chunkLightingData = (IChunkLightingData) chunk;
 
-        if (chunkLightingData.getNeighborLightChecks() == null) {
+        if (chunkLightingData.alfheim$getNeighborLightChecks() == null) {
             return;
         }
 
         final int flagIndex = getFlagIndex(lightType, xOffset, zOffset, axisDir, EnumBoundaryFacing.IN); //OUT checks from neighbor are already merged
 
-        final int flags = chunkLightingData.getNeighborLightChecks()[flagIndex];
+        final int flags = chunkLightingData.alfheim$getNeighborLightChecks()[flagIndex];
 
         if (flags == 0) {
             return;
@@ -204,12 +204,12 @@ public final class LightingHooks {
 
         final int reverseIndex = getFlagIndex(lightType, -xOffset, -zOffset, axisDir, EnumBoundaryFacing.OUT);
 
-        chunkLightingData.getNeighborLightChecks()[flagIndex] = 0;
+        chunkLightingData.alfheim$getNeighborLightChecks()[flagIndex] = 0;
 
         IChunkLightingData nChunkLightingData = (IChunkLightingData) nChunk;
 
-        if (nChunkLightingData.getNeighborLightChecks() != null) {
-            nChunkLightingData.getNeighborLightChecks()[reverseIndex] = 0; //Clear only now that it's clear that the checks are processed
+        if (nChunkLightingData.alfheim$getNeighborLightChecks() != null) {
+            nChunkLightingData.alfheim$getNeighborLightChecks()[reverseIndex] = 0; //Clear only now that it's clear that the checks are processed
         }
 
         chunk.markDirty();
@@ -246,15 +246,15 @@ public final class LightingHooks {
     public static void initNeighborLightChecks(final Chunk chunk) {
         IChunkLightingData lightingData = (IChunkLightingData) chunk;
 
-        if (lightingData.getNeighborLightChecks() == null) {
-            lightingData.setNeighborLightChecks(new short[FLAG_COUNT]);
+        if (lightingData.alfheim$getNeighborLightChecks() == null) {
+            lightingData.alfheim$setNeighborLightChecks(new short[FLAG_COUNT]);
         }
     }
 
     public static final String NEIGHBOR_LIGHT_CHECKS_KEY = "NeighborLightChecks";
 
     public static void writeNeighborLightChecksToNBT(final Chunk chunk, final NBTTagCompound nbt) {
-        short[] neighborLightChecks = ((IChunkLightingData) chunk).getNeighborLightChecks();
+        short[] neighborLightChecks = ((IChunkLightingData) chunk).alfheim$getNeighborLightChecks();
 
         if (neighborLightChecks == null) {
             return;
@@ -284,7 +284,7 @@ public final class LightingHooks {
             if (list.tagCount() == FLAG_COUNT) {
                 initNeighborLightChecks(chunk);
 
-                short[] neighborLightChecks = ((IChunkLightingData) chunk).getNeighborLightChecks();
+                short[] neighborLightChecks = ((IChunkLightingData) chunk).alfheim$getNeighborLightChecks();
 
                 for (int i = 0; i < FLAG_COUNT; ++i) {
                     neighborLightChecks[i] = ((NBTTagShort) list.get(i)).getShort();
@@ -326,17 +326,17 @@ public final class LightingHooks {
             }
 
             if (world.provider.hasSkyLight()) {
-                ((IChunkLightingData) chunk).setSkylightUpdatedPublic();
+                ((IChunkLightingData) chunk).alfheim$setSkylightUpdatedPublic();
             }
 
-            ((IChunkLightingData) chunk).setLightInitialized(true);
+            ((IChunkLightingData) chunk).alfheim$setLightInitialized(true);
         }
 
         mutableBlockPos.release();
     }
 
     public static void checkChunkLighting(final Chunk chunk, final World world) {
-        if (!((IChunkLightingData) chunk).isLightInitialized()) {
+        if (!((IChunkLightingData) chunk).alfheim$isLightInitialized()) {
             initChunkLighting(chunk, world);
         }
 
@@ -345,7 +345,7 @@ public final class LightingHooks {
                 if (x != 0 || z != 0) {
                     Chunk nChunk = world.getChunkProvider().getLoadedChunk(chunk.x + x, chunk.z + z);
 
-                    if (nChunk == null || !((IChunkLightingData) nChunk).isLightInitialized()) {
+                    if (nChunk == null || !((IChunkLightingData) nChunk).alfheim$isLightInitialized()) {
                         return;
                     }
                 }

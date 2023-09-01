@@ -42,7 +42,7 @@ public abstract class AnvilChunkLoaderMixin {
 
         LightingHooks.readNeighborLightChecksFromNBT(chunk, compound);
 
-        ((IChunkLightingData) chunk).setLightInitialized(compound.getBoolean("LightPopulated"));
+        ((IChunkLightingData) chunk).alfheim$setLightInitialized(compound.getBoolean("LightPopulated"));
 
     }
 
@@ -55,6 +55,6 @@ public abstract class AnvilChunkLoaderMixin {
     private void onWriteChunkToNBT(Chunk chunk, World world, NBTTagCompound compound, CallbackInfo ci) {
         LightingHooks.writeNeighborLightChecksToNBT(chunk, compound);
 
-        compound.setBoolean("LightPopulated", ((IChunkLightingData) chunk).isLightInitialized());
+        compound.setBoolean("LightPopulated", ((IChunkLightingData) chunk).alfheim$isLightInitialized());
     }
 }

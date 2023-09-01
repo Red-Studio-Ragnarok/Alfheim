@@ -7,13 +7,13 @@ package io.redstudioragnarok.alfheim.api;
  */
 public interface IChunkLightingData {
 
-    short[] getNeighborLightChecks();
+    short[] alfheim$getNeighborLightChecks();
 
-    void setNeighborLightChecks(short[] data);
+    void alfheim$setNeighborLightChecks(final short[] data);
 
-    boolean isLightInitialized();
+    boolean alfheim$isLightInitialized();
 
-    void setLightInitialized(boolean val);
+    void alfheim$setLightInitialized(final boolean lightInitialized);
 
-    void setSkylightUpdatedPublic();
+    void alfheim$setSkylightUpdatedPublic();
 }

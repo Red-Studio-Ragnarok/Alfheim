@@ -7,17 +7,13 @@ import io.redstudioragnarok.alfheim.lighting.LightingEngine;
 import io.redstudioragnarok.alfheim.lighting.LightingHooks;
 import io.redstudioragnarok.alfheim.utils.WorldChunkSlice;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -34,210 +30,166 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  */
 @Mixin(Chunk.class)
 public abstract class ChunkMixin implements IChunkLighting, IChunkLightingData, ILightingEngineProvider {
-    private static final EnumFacing[] HORIZONTAL = EnumFacing.Plane.HORIZONTAL.facings();
 
-    @Shadow
-    @Final
-    private ExtendedBlockStorage[] storageArrays;
+    @Final @Shadow private boolean[] updateSkylightColumns;
 
-    @Shadow
-    private boolean dirty;
+    @Shadow private boolean dirty;
+    @Shadow private boolean isTerrainPopulated;
+    @Shadow private boolean isGapLightingUpdated;
 
-    @Shadow
-    @Final
-    private int[] heightMap;
+    @Final @Shadow public int x;
+    @Final @Shadow public int z;
 
-    @Shadow
-    private int heightMapMinimum;
+    @Shadow @Final private int[] heightMap;
 
-    @Shadow
-    @Final
-    private int[] precipitationHeightMap;
+    @Shadow private int heightMapMinimum;
 
-    @Shadow
-    @Final
-    private World world;
+    @Shadow @Final private World world;
 
-    @Shadow
-    private boolean isTerrainPopulated;
+    @Shadow @Final private ExtendedBlockStorage[] storageArrays;
 
-    @Final
-    @Shadow
-    private boolean[] updateSkylightColumns;
+    @Shadow protected abstract int getBlockLightOpacity(final int x, final int y, final int z);
 
-    @Final
-    @Shadow
-    public int x;
+    @Shadow public abstract boolean canSeeSky(final BlockPos blockPos);
 
-    @Final
-    @Shadow
-    public int z;
+    @Shadow protected abstract void setSkylightUpdated();
 
-    @Shadow
-    private boolean isGapLightingUpdated;
+    @Shadow public abstract int getHeightValue(final int x, final int z);
 
-    @Shadow
-    public abstract TileEntity getTileEntity(BlockPos pos, Chunk.EnumCreateEntityType type);
+    @Unique private static final EnumFacing[] alfheim$ENUM_FACING_HORIZONTAL = EnumFacing.Plane.HORIZONTAL.facings();
 
-    @Shadow
-    public abstract IBlockState getBlockState(BlockPos pos);
+    @Unique private boolean alfheim$isLightInitialized;
 
-    @Shadow
-    protected abstract int getBlockLightOpacity(int x, int y, int z);
+    @Unique private short[] alfheim$neighborLightChecks;
 
-    @Shadow
-    public abstract boolean canSeeSky(BlockPos pos);
+    @Unique private LightingEngine alfheim$lightingEngine;
 
     /**
      * Callback injected into the Chunk ctor to cache a reference to the lighting engine from the world.
      *
-     * @author Angeline
+     * @author Angeline (@jellysquid)
      */
-    @Inject(method = "<init>", at = @At("RETURN"))
-    private void onConstructed(CallbackInfo ci) {
-        this.lightingEngine = ((ILightingEngineProvider) this.world).alfheim$getLightingEngine();
+    @Inject(method = "<init>*", at = @At("RETURN"))
+    private void onConstructed(final CallbackInfo callbackInfo) {
+        alfheim$lightingEngine = ((ILightingEngineProvider) world).alfheim$getLightingEngine();
     }
 
     /**
-     * Callback injected to the head of getLightSubtracted(BlockPos, int) to force deferred light updates to be processed.
+     * Callback injected to the head of {@link Chunk#getLightSubtracted(BlockPos, int)} to force deferred light updates to be processed.
      *
-     * @author Angeline
+     * @author Angeline (@jellysquid)
      */
     @Inject(method = "getLightSubtracted", at = @At("HEAD"))
-    private void onGetLightSubtracted(BlockPos pos, int amount, CallbackInfoReturnable<Integer> cir) {
-        this.lightingEngine.processLightUpdates();
+    private void onGetLightSubtracted(final BlockPos blockPos, final int amount, final CallbackInfoReturnable<Integer> callbackInfoReturnable) {
+        alfheim$lightingEngine.processLightUpdates();
     }
 
     /**
-     * Callback injected at the end of onLoad() to have previously scheduled light updates scheduled again.
+     * Callback injected at the end of {@link Chunk#onLoad()} to have previously scheduled light updates scheduled again.
      *
-     * @author Angeline
+     * @author Angeline (@jellysquid)
      */
     @Inject(method = "onLoad", at = @At("RETURN"))
-    private void onLoad(CallbackInfo ci) {
-        LightingHooks.scheduleRelightChecksForChunkBoundaries(this.world, (Chunk) (Object) this);
+    private void onLoad(final CallbackInfo callbackInfo) {
+        LightingHooks.scheduleRelightChecksForChunkBoundaries(world, (Chunk) (Object) this);
     }
 
-    // === REPLACEMENTS ===
-
     /**
-     * Replaces the call in setLightFor(Chunk, EnumSkyBlock, BlockPos) with our hook.
+     * Replaces the call in {@link Chunk#setLightFor(EnumSkyBlock, BlockPos, int)} with our hook.
      *
-     * @author Angeline
+     * @author Angeline (@jellysquid)
      */
-    @Redirect(
-            method = "setLightFor",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/world/chunk/Chunk;generateSkylightMap()V"
-            ),
-            expect = 0
-    )
-    private void setLightForRedirectGenerateSkylightMap(Chunk chunk, EnumSkyBlock type, BlockPos pos, int value) {
-        LightingHooks.initSkylightForSection(this.world, (Chunk) (Object) this, this.storageArrays[pos.getY() >> 4]);
+    @Redirect(method = "setLightFor", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/Chunk;generateSkylightMap()V"), expect = 0)
+    private void setLightForRedirectGenerateSkylightMap(final Chunk chunk, final EnumSkyBlock lightType, final BlockPos blockPos, final int value) {
+        LightingHooks.initSkylightForSection(this.world, (Chunk) (Object) this, storageArrays[blockPos.getY() >> 4]);
     }
 
     /**
      * @reason Overwrites relightBlock with a more efficient implementation.
-     * @author Angeline
+     * @author Angeline (@jellysquid)
      */
     @Overwrite
-    private void relightBlock(int x, int y, int z) {
-        int i = this.heightMap[z << 4 | x] & 255;
-        int j = i;
+    private void relightBlock(final int x, final int y, final int z) {
+        int heightMapY = heightMap[z << 4 | x] & 255;
+        int newHeightMapY = heightMapY;
 
-        if (y > i) {
-            j = y;
-        }
+        if (y > heightMapY)
+            newHeightMapY = y;
 
-        while (j > 0 && this.getBlockLightOpacity(x, j - 1, z) == 0) {
-            --j;
-        }
+        while (newHeightMapY > 0 && getBlockLightOpacity(x, newHeightMapY - 1, z) == 0)
+            --newHeightMapY;
 
-        if (j != i) {
-            this.heightMap[z << 4 | x] = j;
+        if (newHeightMapY == heightMapY)
+            return;
 
-            if (this.world.provider.hasSkyLight()) {
-                LightingHooks.relightSkylightColumn(this.world, (Chunk) (Object) this, x, z, i, j);
-            }
+        heightMap[z << 4 | x] = newHeightMapY;
 
-            int l1 = this.heightMap[z << 4 | x];
+        if (world.provider.hasSkyLight())
+            LightingHooks.relightSkylightColumn(world, (Chunk) (Object) this, x, z, heightMapY, newHeightMapY);
 
-            if (l1 < this.heightMapMinimum) {
-                this.heightMapMinimum = l1;
-            }
-        }
+        final int heightMapY1 = heightMap[z << 4 | x];
+
+        if (heightMapY1 < heightMapMinimum)
+            heightMapMinimum = heightMapY1;
     }
 
     /**
-     * @reason Hook for calculating light updates only as needed. {@link MixinChunk#getCachedLightFor(EnumSkyBlock, BlockPos)} does not
-     * call this hook.
-     *
-     * @author Angeline
+     * @reason Calculate light updates only as needed.
+     * @author Angeline (@jellysquid)
      */
     @Overwrite
-    public int getLightFor(EnumSkyBlock type, BlockPos pos) {
-        this.lightingEngine.processLightUpdatesForType(type);
+    public int getLightFor(final EnumSkyBlock lightType, final BlockPos pos) {
+        alfheim$lightingEngine.processLightUpdatesForType(lightType);
 
-        return this.alfheim$getCachedLightFor(type, pos);
+        return alfheim$getCachedLightFor(lightType, pos);
     }
 
     /**
-     * @reason Hooks into checkLight() to check chunk lighting and returns immediately after, voiding the rest of the function.
-     *
-     * @author Angeline
+     * @reason Check chunk lighting and returns immediately after.
+     * @author Angeline (@jellysquid)
      */
     @Overwrite
     public void checkLight() {
-        this.isTerrainPopulated = true;
+        isTerrainPopulated = true;
 
-        LightingHooks.checkChunkLighting((Chunk) (Object) this, this.world);
+        LightingHooks.checkChunkLighting((Chunk) (Object) this, world);
     }
 
     /**
-     * @reason Optimized version of recheckGaps. Avoids chunk fetches as much as possible.
-     *
-     * @author Angeline
+     * @reason Avoids chunk fetches as much as possible.
+     * @author Angeline (@jellysquid), Luna Lage (Desoroxxx)
      */
     @Overwrite
-    private void recheckGaps(boolean onlyOne) {
-        this.world.profiler.startSection("recheckGaps");
+    private void recheckGaps(final boolean onlyOne) {
+        if (!world.isAreaLoaded(new BlockPos(x * 16 + 8, 0, z * 16 + 8), 16))
+            return;
 
-        WorldChunkSlice slice = new WorldChunkSlice(this.world.getChunkProvider(), this.x, this.z);
+        final WorldChunkSlice slice = new WorldChunkSlice(world.getChunkProvider(), x, z);
 
-        if (this.world.isAreaLoaded(new BlockPos(this.x * 16 + 8, 0, this.z * 16 + 8), 16)) {
-            for (int x = 0; x < 16; ++x) {
-                for (int z = 0; z < 16; ++z) {
-                    if (this.recheckGapsForColumn(slice, x, z)) {
-                        if (onlyOne) {
-                            this.world.profiler.endSection();
+        for (int x = 0; x < 16; ++x) {
+            for (int z = 0; z < 16; ++z) {
+                if (!alfheim$recheckGapsForColumn(slice, x, z))
+                    continue;
 
-                            return;
-                        }
-                    }
-                }
+                if (onlyOne)
+                    return;
             }
-
-            this.isGapLightingUpdated = false;
         }
 
-        this.world.profiler.endSection();
+        isGapLightingUpdated = false;
     }
 
-    private boolean recheckGapsForColumn(WorldChunkSlice slice, int x, int z) {
-        int i = x + z * 16;
+    @Unique
+    private boolean alfheim$recheckGapsForColumn(final WorldChunkSlice slice, final int x, final int z) {
+        final int i = x + z * 16;
 
-        if (this.updateSkylightColumns[i]) {
-            this.updateSkylightColumns[i] = false;
+        if (updateSkylightColumns[i]) {
+            updateSkylightColumns[i] = false;
 
-            int height = this.getHeightValue(x, z);
+            final int x1 = this.x * 16 + x;
+            final int z1 = this.z * 16 + z;
 
-            int x1 = this.x * 16 + x;
-            int z1 = this.z * 16 + z;
-
-            int max = this.recheckGapsGetLowestHeight(slice, x1, z1);
-
-            this.recheckGapsSkylightNeighborHeight(slice, x1, z1, height, max);
+            alfheim$recheckGapsSkylightNeighborHeight(slice, x1, z1, getHeightValue(x, z), alfheim$recheckGapsGetLowestHeight(slice, x1, z1));
 
             return true;
         }
@@ -245,201 +197,144 @@ public abstract class ChunkMixin implements IChunkLighting, IChunkLightingData, 
         return false;
     }
 
-    private int recheckGapsGetLowestHeight(WorldChunkSlice slice, int x, int z) {
+    @Unique
+    private int alfheim$recheckGapsGetLowestHeight(final WorldChunkSlice slice, final int x, final int z) {
         int max = Integer.MAX_VALUE;
 
-        for (EnumFacing facing : HORIZONTAL) {
-            int j = x + facing.getXOffset();
-            int k = z + facing.getZOffset();
-            Chunk chunk = slice.getChunkFromWorldCoords(j, k);
-            if(chunk != null) {
-                max = Math.min(max, slice.getChunkFromWorldCoords(j, k).getLowestHeight());
-            }
+        for (final EnumFacing facing : alfheim$ENUM_FACING_HORIZONTAL) {
+            final Chunk chunk = slice.getChunkFromWorldCoords(x + facing.getXOffset(), z + facing.getZOffset());
 
+            if (chunk != null)
+                max = Math.min(max, chunk.getLowestHeight());
         }
 
         return max;
     }
 
-    private void recheckGapsSkylightNeighborHeight(WorldChunkSlice slice, int x, int z, int height, int max) {
-        this.checkSkylightNeighborHeight(slice, x, z, max);
+    @Unique
+    private void alfheim$recheckGapsSkylightNeighborHeight(final WorldChunkSlice slice, final int x, final int z, final int height, final int max) {
+        alfheim$checkSkylightNeighborHeight(slice, x, z, max);
 
-        for (EnumFacing facing : HORIZONTAL) {
-            int j = x + facing.getXOffset();
-            int k = z + facing.getZOffset();
-
-            this.checkSkylightNeighborHeight(slice, j, k, height);
-        }
+        for (final EnumFacing facing : alfheim$ENUM_FACING_HORIZONTAL)
+            alfheim$checkSkylightNeighborHeight(slice, x + facing.getXOffset(), z + facing.getZOffset(), height);
     }
 
-    private void checkSkylightNeighborHeight(WorldChunkSlice slice, int x, int z, int maxValue) {
-        if(slice.getChunkFromWorldCoords(x, z) == null) {
+    @Unique
+    private void alfheim$checkSkylightNeighborHeight(final WorldChunkSlice slice, final int x, final int z, final int maxValue) {
+        if (slice.getChunkFromWorldCoords(x, z) == null)
             return;
-        }
-        int i = slice.getChunkFromWorldCoords(x, z).getHeightValue(x & 15, z & 15);
 
-        if (i > maxValue) {
-            this.updateSkylightNeighborHeight(slice, x, z, maxValue, i + 1);
-        } else if (i < maxValue) {
-            this.updateSkylightNeighborHeight(slice, x, z, i, maxValue + 1);
-        }
+        final int y = slice.getChunkFromWorldCoords(x, z).getHeightValue(x & 15, z & 15);
+
+        if (y > maxValue)
+            alfheim$updateSkylightNeighborHeight(slice, x, z, maxValue, y + 1);
+        else if (y < maxValue)
+            alfheim$updateSkylightNeighborHeight(slice, x, z, y, maxValue + 1);
     }
 
-    private void updateSkylightNeighborHeight(WorldChunkSlice slice, int x, int z, int startY, int endY) {
-        if (endY > startY) {
-            if (!slice.isLoaded(x, z, 16)) {
-                return;
-            }
+    @Unique
+    private void alfheim$updateSkylightNeighborHeight(final WorldChunkSlice slice, final int x, final int z, final int startY, final int endY) {
+        if (endY < startY)
+            return;
 
-            for (int i = startY; i < endY; ++i) {
-                this.world.checkLightFor(EnumSkyBlock.SKY, new BlockPos(x, i, z));
-            }
+        if (!slice.isLoaded(x, z, 16))
+            return;
 
-            this.dirty = true;
-        }
-    }
+        for (int y = startY; y < endY; ++y)
+            world.checkLightFor(EnumSkyBlock.SKY, new BlockPos(x, y, z));
 
-    @Shadow
-    public abstract int getHeightValue(int i, int j);
-
-    // === INTERFACE IMPL ===
-
-    private short[] neighborLightChecks;
-
-    private boolean isLightInitialized;
-
-    private LightingEngine lightingEngine;
-
-    @Override
-    public short[] getNeighborLightChecks() {
-        return this.neighborLightChecks;
-    }
-
-    @Override
-    public void setNeighborLightChecks(short[] data) {
-        this.neighborLightChecks = data;
-    }
-
-    @Override
-    public LightingEngine alfheim$getLightingEngine() {
-        return this.lightingEngine;
-    }
-
-    @Override
-    public boolean isLightInitialized() {
-        return this.isLightInitialized;
-    }
-
-    @Override
-    public void setLightInitialized(boolean lightInitialized) {
-        this.isLightInitialized = lightInitialized;
-    }
-
-    @Shadow
-    protected abstract void setSkylightUpdated();
-
-    @Override
-    public void setSkylightUpdatedPublic() {
-        this.setSkylightUpdated();
-    }
-
-    @Override
-    public byte alfheim$getCachedLightFor(EnumSkyBlock type, BlockPos pos) {
-        int i = pos.getX() & 15;
-        int j = pos.getY();
-        int k = pos.getZ() & 15;
-
-        ExtendedBlockStorage extendedblockstorage = this.storageArrays[j >> 4];
-
-        if (extendedblockstorage == Chunk.NULL_BLOCK_STORAGE) {
-            if (this.canSeeSky(pos)) {
-                return (byte) type.defaultLightValue;
-            } else {
-                return 0;
-            }
-        } else if (type == EnumSkyBlock.SKY) {
-            if (!this.world.provider.hasSkyLight()) {
-                return 0;
-            } else {
-                return (byte) extendedblockstorage.getSkyLight(i, j & 15, k);
-            }
-        } else {
-            if (type == EnumSkyBlock.BLOCK) {
-                return (byte) extendedblockstorage.getBlockLight(i, j & 15, k);
-            } else {
-                return (byte) type.defaultLightValue;
-            }
-        }
-    }
-
-
-    // === END OF INTERFACE IMPL ===
-
-    private static final String SET_BLOCK_STATE_VANILLA = "setBlockState" +
-            "(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;)" +
-            "Lnet/minecraft/block/state/IBlockState;";
-
-    /**
-     * Redirects the construction of the ExtendedBlockStorage in setBlockState(BlockPos, IBlockState). We need to initialize
-     * the skylight data for the constructed section as soon as possible.
-     *
-     * @author Angeline
-     */
-    @Redirect(
-            method = SET_BLOCK_STATE_VANILLA,
-            at = @At(
-                    value = "NEW",
-                    args = "class=net/minecraft/world/chunk/storage/ExtendedBlockStorage"
-            ),
-            expect = 0
-    )
-    private ExtendedBlockStorage setBlockStateCreateSectionVanilla(int y, boolean storeSkylight) {
-        return this.initSection(y, storeSkylight);
-    }
-
-    private ExtendedBlockStorage initSection(int y, boolean storeSkylight) {
-        ExtendedBlockStorage storage = new ExtendedBlockStorage(y, storeSkylight);
-
-        LightingHooks.initSkylightForSection(this.world, (Chunk) (Object) this, storage);
-
-        return storage;
+        dirty = true;
     }
 
     /**
-     * Modifies the flag variable of setBlockState(BlockPos, IBlockState) to always be false after it is set.
+     * Redirects the construction of the ExtendedBlockStorage in {@link Chunk#setBlockState(BlockPos, IBlockState)}.
+     * We need to initialize the skylight data for the constructed section as soon as possible.
      *
-     * @author Angeline
+     * @author Angeline (@jellysquid)
      */
-    @ModifyVariable(
-            method = SET_BLOCK_STATE_VANILLA,
-            at = @At(
-                    value = "STORE",
-                    ordinal = 1
-            ),
-            index = 13,
-            name = "flag",
-            allow = 1
-    )
-    private boolean setBlockStateInjectGenerateSkylightMapVanilla(boolean generateSkylight) {
+    @Redirect(method = "setBlockState", at = @At(value = "NEW", args = "class=net/minecraft/world/chunk/storage/ExtendedBlockStorage"), expect = 0)
+    private ExtendedBlockStorage setBlockStateCreateSectionVanilla(final int y, final boolean hasSkyLight) {
+        final ExtendedBlockStorage extendedBlockStorage = new ExtendedBlockStorage(y, hasSkyLight);
+
+        LightingHooks.initSkylightForSection(world, (Chunk) (Object) this, extendedBlockStorage);
+
+        return extendedBlockStorage;
+    }
+
+    /**
+     * Modifies the flag variable of {@link Chunk#setBlockState(BlockPos, IBlockState)} to always be false after it is set, preventing the generation of the sky lightmap.
+     *
+     * @author Angeline (@jellysquid), Luna Lage (Desoroxxx)
+     */
+    @ModifyVariable(method = "setBlockState", at = @At(value = "STORE", ordinal = 1), name = "flag")
+    private boolean preventGenerateSkylightMap(final boolean original) {
         return false;
     }
 
     /**
      * Prevent propagateSkylightOcclusion from being called.
+     *
      * @author embeddedt
      */
-    @Redirect(method = SET_BLOCK_STATE_VANILLA, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/Chunk;propagateSkylightOcclusion(II)V"))
-    private void doPropagateSkylight(Chunk chunk, int i1, int i2) {
+    @Redirect(method = "setBlockState", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/Chunk;propagateSkylightOcclusion(II)V"))
+    private void doPropagateSkylight(final Chunk chunk, final int x, final int z) {
         /* No-op, we don't want skylight propagated */
     }
 
     /**
      * Prevent getLightFor from being called.
+     *
      * @author embeddedt
      */
-    @Redirect(method = SET_BLOCK_STATE_VANILLA, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/Chunk;getLightFor(Lnet/minecraft/world/EnumSkyBlock;Lnet/minecraft/util/math/BlockPos;)I"))
-    private int getFakeLightFor(Chunk chunk, EnumSkyBlock skyBlock, BlockPos blockPos) {
+    @Redirect(method = "setBlockState", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/Chunk;getLightFor(Lnet/minecraft/world/EnumSkyBlock;Lnet/minecraft/util/math/BlockPos;)I"))
+    private int fakeGetLightFor(final Chunk chunk, final EnumSkyBlock lightType, final BlockPos blockPos) {
         return 0;
+    }
+
+    @Override
+    public short[] alfheim$getNeighborLightChecks() {
+        return alfheim$neighborLightChecks;
+    }
+
+    @Override
+    public void alfheim$setNeighborLightChecks(final short[] data) {
+        alfheim$neighborLightChecks = data;
+    }
+
+    @Override
+    public LightingEngine alfheim$getLightingEngine() {
+        return alfheim$lightingEngine;
+    }
+
+    @Override
+    public boolean alfheim$isLightInitialized() {
+        return alfheim$isLightInitialized;
+    }
+
+    @Override
+    public void alfheim$setLightInitialized(final boolean lightInitialized) {
+        alfheim$isLightInitialized = lightInitialized;
+    }
+
+    @Override
+    public void alfheim$setSkylightUpdatedPublic() {
+        setSkylightUpdated();
+    }
+
+    @Override
+    public byte alfheim$getCachedLightFor(final EnumSkyBlock lightType, final BlockPos blockPos) {
+        final int x = blockPos.getX() & 15;
+        final int y = blockPos.getY();
+        final int z = blockPos.getZ() & 15;
+
+        final ExtendedBlockStorage extendedblockstorage = storageArrays[y >> 4];
+
+        if (extendedblockstorage == Chunk.NULL_BLOCK_STORAGE)
+            return canSeeSky(blockPos) ? (byte) lightType.defaultLightValue : 0;
+        else if (lightType == EnumSkyBlock.SKY)
+            return world.provider.hasSkyLight() ? (byte) extendedblockstorage.getSkyLight(x, y & 15, z) : 0;
+        else
+            return lightType == EnumSkyBlock.BLOCK ? (byte) extendedblockstorage.getBlockLight(x, y & 15, z) : (byte) lightType.defaultLightValue;
     }
 }
 
