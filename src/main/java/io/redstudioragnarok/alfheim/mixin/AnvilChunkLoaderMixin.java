@@ -2,16 +2,21 @@ package io.redstudioragnarok.alfheim.mixin;
 
 import io.redstudioragnarok.alfheim.api.IChunkLightingData;
 import io.redstudioragnarok.alfheim.api.ILightingEngineProvider;
-import io.redstudioragnarok.alfheim.lighting.LightingHooks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagShort;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import static io.redstudioragnarok.alfheim.Alfheim.FLAG_COUNT;
+import static io.redstudioragnarok.alfheim.utils.ModReference.LOG;
 
 /**
  * @author Luna Lage (Desoroxxx)
@@ -20,6 +25,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  */
 @Mixin(AnvilChunkLoader.class)
 public abstract class AnvilChunkLoaderMixin {
+
+    @Unique private static final String NEIGHBOR_LIGHT_CHECKS_KEY = "NeighborLightChecks";
 
     /**
      * Injects into the head of saveChunk() to forcefully process all pending light updates. Fail-safe.
@@ -40,7 +47,7 @@ public abstract class AnvilChunkLoaderMixin {
     private void onReadChunkFromNBT(final World world, final NBTTagCompound compound, final CallbackInfoReturnable<Chunk> callbackInfoReturnable) {
         final Chunk chunk = callbackInfoReturnable.getReturnValue();
 
-        LightingHooks.readNeighborLightChecksFromNBT(chunk, compound);
+        alfheim$readNeighborLightChecksFromNBT(chunk, compound);
 
         ((IChunkLightingData) chunk).alfheim$setLightInitialized(compound.getBoolean("LightPopulated"));
     }
@@ -52,8 +59,50 @@ public abstract class AnvilChunkLoaderMixin {
      */
     @Inject(method = "writeChunkToNBT", at = @At("RETURN"))
     private void onWriteChunkToNBT(final Chunk chunk, final World world, final NBTTagCompound compound, final CallbackInfo callbackInfo) {
-        LightingHooks.writeNeighborLightChecksToNBT(chunk, compound);
+        alfheim$writeNeighborLightChecksToNBT(chunk, compound);
 
         compound.setBoolean("LightPopulated", ((IChunkLightingData) chunk).alfheim$isLightInitialized());
+    }
+
+    @Unique
+    private static void alfheim$readNeighborLightChecksFromNBT(final Chunk chunk, final NBTTagCompound compound) {
+        if (!compound.hasKey(NEIGHBOR_LIGHT_CHECKS_KEY, 9))
+            return;
+
+        final NBTTagList tagList = compound.getTagList(NEIGHBOR_LIGHT_CHECKS_KEY, 2);
+
+        if (tagList.tagCount() != FLAG_COUNT) {
+            LOG.warn("Chunk field {} had invalid length, ignoring it (chunk coordinates: {} {})", NEIGHBOR_LIGHT_CHECKS_KEY, chunk.x, chunk.z);
+            return;
+        }
+
+        ((IChunkLightingData) chunk).alfheim$initNeighborLightChecks();
+
+        final short[] neighborLightChecks = ((IChunkLightingData) chunk).alfheim$getNeighborLightChecks();
+
+        for (int i = 0; i < FLAG_COUNT; ++i)
+            neighborLightChecks[i] = ((NBTTagShort) tagList.get(i)).getShort();
+    }
+
+    @Unique
+    private static void alfheim$writeNeighborLightChecksToNBT(final Chunk chunk, final NBTTagCompound compound) {
+        final short[] neighborLightChecks = ((IChunkLightingData) chunk).alfheim$getNeighborLightChecks();
+
+        if (neighborLightChecks == null)
+            return;
+
+        boolean empty = true;
+
+        final NBTTagList list = new NBTTagList();
+
+        for (final short flags : neighborLightChecks) {
+            list.appendTag(new NBTTagShort(flags));
+
+            if (flags != 0)
+                empty = false;
+        }
+
+        if (!empty)
+            compound.setTag(NEIGHBOR_LIGHT_CHECKS_KEY, list);
     }
 }

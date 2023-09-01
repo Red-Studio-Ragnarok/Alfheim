@@ -1,6 +1,6 @@
 package io.redstudioragnarok.alfheim.lighting;
 
-import io.redstudioragnarok.alfheim.api.IChunkLighting;
+import io.redstudioragnarok.alfheim.api.IChunkLightingData;
 import io.redstudioragnarok.alfheim.utils.PooledLongQueue;
 import io.redstudioragnarok.redcore.utils.MathUtil;
 import net.minecraft.block.state.IBlockState;
@@ -528,7 +528,7 @@ public final class LightingEngine {
     }
 
     private byte getCursorCachedLight(final EnumSkyBlock lightType) {
-        return ((IChunkLighting) currentChunk).alfheim$getCachedLightFor(lightType, currentPos);
+        return ((IChunkLightingData) currentChunk).alfheim$getCachedLightFor(lightType, currentPos);
     }
 
     /**
@@ -542,7 +542,7 @@ public final class LightingEngine {
                 return 0;
         }
 
-        return (byte) MathUtil.clampMaxFirst(LightingEngineHelpers.getLightValueForState(state, world, currentPos), 0, MAX_LIGHT_LEVEL);
+        return (byte) MathUtil.clampMaxFirst(LightUtil.getLightValueForState(state, world, currentPos), 0, MAX_LIGHT_LEVEL);
     }
 
     private byte getPosOpacity(final BlockPos blockPos, final IBlockState blockState) {

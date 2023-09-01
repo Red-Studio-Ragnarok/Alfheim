@@ -8,11 +8,10 @@ import net.minecraftforge.fml.common.Loader;
 
 /**
  * @author Luna Lage (Desoroxxx)
- * @author kappa-maintainer
  * @author embeddedt
  * @since 0.1
  */
-public final class LightingEngineHelpers {
+public final class LightUtil {
 
     private static final boolean DYNAMIC_LIGHTS_LOADED = Loader.isModLoaded("dynamiclights");
 
