@@ -58,12 +58,12 @@ public abstract class WorldMixin implements ILightingEngineProvider, ILightLevel
 
     @Inject(method = "getLight(Lnet/minecraft/util/math/BlockPos;Z)I", at = @At("HEAD"), cancellable = true)
     private void getLight(final BlockPos blockPos, final boolean checkNeighbors, final CallbackInfoReturnable<Integer> callbackInfoReturnable) {
+        if (!checkNeighbors)
+            callbackInfoReturnable.setReturnValue(getLight(blockPos));
+
         final IBlockState blockState = getBlockState(blockPos);
 
-        if (checkNeighbors)
-            callbackInfoReturnable.setReturnValue(Math.max(((ILightInfoProvider) blockState).alfheim$getLightFor(((World) (Object) this), EnumSkyBlock.BLOCK, blockPos), ((ILightInfoProvider) blockState).alfheim$getLightFor(((World) (Object) this), EnumSkyBlock.SKY, blockPos) - skylightSubtracted));
-        else
-            callbackInfoReturnable.setReturnValue(getLight(blockPos));
+        callbackInfoReturnable.setReturnValue(Math.max(((ILightInfoProvider) blockState).alfheim$getLightFor(((World) (Object) this), EnumSkyBlock.BLOCK, blockPos), ((ILightInfoProvider) blockState).alfheim$getLightFor(((World) (Object) this), EnumSkyBlock.SKY, blockPos) - skylightSubtracted));
     }
 
     @Inject(method = "getLightFromNeighborsFor", at = @At("HEAD"), cancellable = true)
