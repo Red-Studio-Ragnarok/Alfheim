@@ -14,7 +14,7 @@ Alfheim is a fork *(or a rewrite depending on your views on the [ship of theseus
 
 ## What benefit does this have over [Phosphor]/[Hesperus]?
 
-Alfheim aims to be compatible in all scenarios, and if for any reasons a something is fundamentally incompatible, a warning screen will tell you what is happening instead of crashing with hardly any information.
+Alfheim aims to be compatible in all scenarios, and if for any reasons a something is fundamentally incompatible, a warning will tell you what is happening instead of crashing with hardly any information.
 
 Alfheim also has a lot of optimizations of all sizes over [Phosphor] it uses slightly less memory overall.
 
