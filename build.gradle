@@ -34,7 +34,7 @@ minecraft {
 
     username = "Desoroxxx"
 
-    extraRunJvmArguments.addAll("-Xmx4G", "-Dforge.logging.console.level=debug", "-Dmixin.hotSwap=true", "-Dmixin.checks.interfaces=true", "-Dmixin.debug.export=true", "-Dfml.coreMods.load=io.redstudioragnarok.${project.id}.asm.AlfheimPlugin")
+    extraRunJvmArguments.addAll("-Xmx4G", "-Dforge.logging.console.level=debug", "-Dmixin.hotSwap=true", "-Dmixin.checks.interfaces=true", "-Dmixin.debug.export=true", "-Dfml.coreMods.load=dev.redstudio.${project.id}.asm.AlfheimPlugin")
 
     injectedTags.put("ID", project.id)
     injectedTags.put("VERSION", project.version)
@@ -42,7 +42,7 @@ minecraft {
 
 // Generate a my.project.Tags class with the version number as a field
 tasks.injectTags.configure {
-    outputClassName.set("io.redstudioragnarok.${project.id}.Tags")
+    outputClassName.set("dev.redstudio.${project.id}.Tags")
 }
 
 configurations {
@@ -109,8 +109,7 @@ processResources {
 jar {
     manifest.attributes([
             "ModSide"                    : "BOTH",
-            "FMLAT"                      : "${project.id}_at.cfg",
-            "FMLCorePlugin"              : "io.redstudioragnarok.${project.id}.asm.AlfheimPlugin",
+            "FMLCorePlugin"              : "dev.redstudio.${project.id}.asm.AlfheimPlugin",
             "FMLCorePluginContainsFMLMod": true,
             "ForceLoadAsMod"             : true
     ])

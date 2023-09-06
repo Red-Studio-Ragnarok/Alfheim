@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "io.redstudioragnarok.alfheim.mixin",
+  "package": "dev.redstudio.alfheim.mixin",
   "compatibilityLevel": "JAVA_8",
   "refmap": "mixins.alfheim.refmap.json",
   "injectors": {
