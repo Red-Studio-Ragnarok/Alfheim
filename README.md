@@ -16,15 +16,15 @@ Alfheim is a fork *(or a rewrite depending on your views on the [ship of theseus
 
 Alfheim aims to be compatible in all scenarios, and if for any reasons a something is fundamentally incompatible, a warning will tell you what is happening instead of crashing with hardly any information.
 
-Alfheim also has a lot of optimizations of all sizes over [Phosphor] it uses slightly less memory overall.
+Alfheim also has a lot of optimizations of all sizes over [Phosphor]/[Hesperus] it uses slightly less memory overall.
 
-Alfheim also improves client side performance unlike [Phosphor], by reducing by lighting related block updates by a factor of 27.
+Alfheim also improves client side performance unlike [Phosphor]/[Hesperus], by reducing by lighting related block updates by a factor of 27.
 To improve client side performance, Alfheim also limits how much lighting updates are performed each frame.
-In addition, [Phosphor] unnecessarily forces lights to be updates before each frame which Alfheim doesn't.
+In addition, [Phosphor]/[Hesperus] unnecessarily forces lights to be updates before each frame which Alfheim doesn't.
 
-Alfheim also fixes more vanilla lighting issues than [Phosphor], here is a list of all fixes and where they come from:
+Alfheim also fixes more vanilla lighting issues than [Phosphor]/[Hesperus], here is a list of all fixes and where they come from:
 
-Fixed in [Phosphor]:
+Fixed in [Phosphor]/[Hesperus]:
 - Fixes [MC-3329](https://bugs.mojang.com/browse/MC-3329)
 - Fixes [MC-102162](https://bugs.mojang.com/browse/MC-102162)
 - Fixes [MC-116690](https://bugs.mojang.com/browse/MC-116690)
@@ -38,6 +38,14 @@ Fixed in Alfheim:
 - Fixes [MC-95515](https://bugs.mojang.com/browse/MC-95515)
 - Fixes [MC-104532](https://bugs.mojang.com/browse/MC-104532)
 - Fixes [MC-249343](https://bugs.mojang.com/browse/MC-249343)
+
+### Why not just PR to [Hesperus]? 
+
+Fair question, the reason is simple, Alfheim compared to [Hesperus] isn't just a fork to fix bugs, it is my continuation of it.
+And as seen in the past, my continuations of mods aren't just modifying some things, they are pretty invasive and basically change everything internally.
+
+It wasn't this way at first, I wanted to PR some stuff to [Hesperus] but after doing parts of it, it became clear that it had grown bigger than a PR.
+So then I decided to do Alfheim, for now it includes optimizations, bug fixes and compatibility fixes, but later down the line I have more plans.
 
 [Hesperus]: https://www.curseforge.com/minecraft/mc-mods/hesperus
 [Phosphor]: https://www.curseforge.com/minecraft/mc-mods/phosphor-forge
