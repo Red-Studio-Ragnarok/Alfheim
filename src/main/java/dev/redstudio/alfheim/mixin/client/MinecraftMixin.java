@@ -25,10 +25,13 @@ public abstract class MinecraftMixin {
     
     @Shadow public RenderGlobal renderGlobal;
 
+    @Shadow private boolean isGamePaused;
+
     @Inject(method = "runTick", at = @At(value = "CONSTANT", args = "stringValue=level", shift = At.Shift.BEFORE))
     private void onRunTick(final CallbackInfo callbackInfo) {
         profiler.endStartSection("processRenderGlobalLightUpdates");
 
-        ((ILightUpdatesProcessor) renderGlobal).alfheim$processLightUpdates();
+        if (!isGamePaused)
+            ((ILightUpdatesProcessor) renderGlobal).alfheim$processLightUpdates();
     }
 }
