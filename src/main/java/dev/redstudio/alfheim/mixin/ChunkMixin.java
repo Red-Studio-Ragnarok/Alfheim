@@ -141,7 +141,7 @@ public abstract class ChunkMixin implements IChunkLightingData, ILightingEngineP
      * @author Angeline (@jellysquid)
      */
     @Overwrite
-    private void relightBlock(final int x, final int y, final int z) {
+    public void relightBlock(final int x, final int y, final int z) {
         int heightMapY = heightMap[z << 4 | x] & 255;
         int newHeightMapY = heightMapY;
 

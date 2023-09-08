@@ -93,7 +93,11 @@ dependencies {
     annotationProcessor(mixin) { transitive = false }
 }
 
-// Replace version and id in `mcmod.info`
+def at = project.files("src/main/resources/META-INF/${project.id}_at.cfg")
+
+tasks.deobfuscateMergedJarToSrg.accessTransformerFiles.from(at)
+tasks.srgifyBinpatchedJar.accessTransformerFiles.from(at)
+
 processResources {
     inputs.property "id", project.id
     inputs.property "version", project.version
