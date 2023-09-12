@@ -15,6 +15,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import java.util.Iterator;
 import java.util.Set;
 
+import static dev.redstudio.alfheim.Alfheim.IS_NOTHIRIUM_LOADED;
+
 /**
  * @author Luna Lage (Desoroxxx)
  * @since 1.0
@@ -50,7 +52,7 @@ public abstract class RenderGlobalMixin implements ILightUpdatesProcessor {
      */
     @Override
     public void alfheim$processLightUpdates() {
-        if (setLightUpdates.isEmpty() || renderDispatcher.hasNoFreeRenderBuilders())
+        if (setLightUpdates.isEmpty() || (!IS_NOTHIRIUM_LOADED && renderDispatcher.hasNoFreeRenderBuilders()))
             return;
 
         final Iterator<BlockPos> iterator = setLightUpdates.iterator();
