@@ -143,10 +143,7 @@ public abstract class ChunkMixin implements IChunkLightingData, ILightingEngineP
     @Overwrite
     public void relightBlock(final int x, final int y, final int z) {
         int heightMapY = heightMap[z << 4 | x] & 255;
-        int newHeightMapY = heightMapY;
-
-        if (y > heightMapY)
-            newHeightMapY = y;
+        int newHeightMapY = Math.max(y, heightMapY);
 
         while (newHeightMapY > 0 && getBlockLightOpacity(x, newHeightMapY - 1, z) == 0)
             --newHeightMapY;
