@@ -14,6 +14,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fluids.BlockFluidBase;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -31,6 +33,7 @@ public abstract class BlockMixin implements ILitBlock {
 
     @Shadow @Deprecated public abstract int getLightValue(final IBlockState blockState);
 
+    @SideOnly(Side.CLIENT)
     @Inject(method = "getPackedLightmapCoords", at = @At("HEAD"), cancellable = true)
     private void getCorrectPackedLightmapCoords(final IBlockState blockState, final IBlockAccess source, final BlockPos blockPos, final CallbackInfoReturnable<Integer> callbackInfoReturnable) {
         callbackInfoReturnable.setReturnValue(source.getCombinedLight(blockPos, blockState.getLightValue(source, blockPos)));
@@ -46,6 +49,7 @@ public abstract class BlockMixin implements ILitBlock {
         flag.set(result);
     }
 
+    @SideOnly(Side.CLIENT)
     @Inject(method = "getAmbientOcclusionLightValue", at = @At(value = "HEAD"), cancellable = true)
     private void getCorrectOcclusionLightValue(final IBlockState blockState, final CallbackInfoReturnable<Float> callbackInfoReturnable) {
         final byte lightValue = (byte) MathUtil.clampMinFirst(blockState.getLightValue() -1, 0, 15);

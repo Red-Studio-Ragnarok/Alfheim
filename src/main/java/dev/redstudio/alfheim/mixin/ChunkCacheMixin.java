@@ -6,6 +6,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ChunkCache;
 import net.minecraft.world.EnumSkyBlock;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,10 +21,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ChunkCache.class)
 public abstract class ChunkCacheMixin implements ILightLevelProvider {
 
-    @Shadow public abstract int getLightFor(final EnumSkyBlock lightType, final BlockPos blockPos);
+    @SideOnly(Side.CLIENT) @Shadow public abstract int getLightFor(final EnumSkyBlock lightType, final BlockPos blockPos);
 
     @Shadow public abstract IBlockState getBlockState(BlockPos pos);
 
+    @SideOnly(Side.CLIENT)
     @Inject(method = "getLightForExt", at = @At("HEAD"), cancellable = true)
     private void getLightForExt(final EnumSkyBlock lightType, final BlockPos blockPos, final CallbackInfoReturnable<Integer> callbackInfoReturnable) {
         callbackInfoReturnable.setReturnValue(((ILightInfoProvider) getBlockState(blockPos)).alfheim$getLightFor(((ChunkCache) (Object) this), lightType, blockPos));

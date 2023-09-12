@@ -1,13 +1,15 @@
 package dev.redstudio.alfheim.mixin;
 
+import dev.redstudio.alfheim.api.ILightInfoProvider;
 import dev.redstudio.alfheim.api.ILightLevelProvider;
 import dev.redstudio.alfheim.api.ILightingEngineProvider;
 import dev.redstudio.alfheim.lighting.LightingEngine;
-import dev.redstudio.alfheim.api.ILightInfoProvider;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -62,6 +64,7 @@ public abstract class WorldMixin implements ILightingEngineProvider, ILightLevel
         callbackInfoReturnable.setReturnValue(Math.max(((ILightInfoProvider) blockState).alfheim$getLightFor(((World) (Object) this), EnumSkyBlock.BLOCK, blockPos), ((ILightInfoProvider) blockState).alfheim$getLightFor(((World) (Object) this), EnumSkyBlock.SKY, blockPos) - skylightSubtracted));
     }
 
+    @SideOnly(Side.CLIENT)
     @Inject(method = "getLightFromNeighborsFor", at = @At("HEAD"), cancellable = true)
     private void getLightFromNeighborsFor(final EnumSkyBlock lightType, final BlockPos blockPos, final CallbackInfoReturnable<Integer> callbackInfoReturnable) {
         callbackInfoReturnable.setReturnValue(((ILightInfoProvider) getBlockState(blockPos)).alfheim$getLightFor(((World) (Object) this), lightType, blockPos));
