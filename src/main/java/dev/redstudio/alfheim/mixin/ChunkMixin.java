@@ -204,45 +204,6 @@ public abstract class ChunkMixin implements IChunkLightingData, ILightingEngineP
         chunk.setLightPopulated(true);
     }
 
-    @Unique
-    private static void alfheim$initChunkLighting(final Chunk chunk, final World world) {
-        final int xBase = chunk.x << 4;
-        final int zBase = chunk.z << 4;
-
-        final BlockPos.PooledMutableBlockPos mutableBlockPos = BlockPos.PooledMutableBlockPos.retain(xBase, 0, zBase);
-
-        if (world.isAreaLoaded(mutableBlockPos.add(-16, 0, -16), mutableBlockPos.add(31, 255, 31), false)) {
-            final ExtendedBlockStorage[] extendedBlockStorage = chunk.getBlockStorageArray();
-
-            for (int i = 0; i < extendedBlockStorage.length; ++i) {
-                final ExtendedBlockStorage storage = extendedBlockStorage[i];
-
-                if (storage == Chunk.NULL_BLOCK_STORAGE)
-                    continue;
-
-                int yBase = i * 16;
-
-                for (int y = 0; y < 16; y++) {
-                    for (int z = 0; z < 16; z++) {
-                        for (int x = 0; x < 16; x++) {
-                            mutableBlockPos.setPos(xBase + x, yBase + y, zBase + z);
-
-                            if (LightUtil.getLightValueForState(storage.getData().get(x, y, z), world, mutableBlockPos) > 0)
-                                world.checkLightFor(EnumSkyBlock.BLOCK, mutableBlockPos);
-                        }
-                    }
-                }
-            }
-
-            if (world.provider.hasSkyLight())
-                ((IChunkLightingData) chunk).alfheim$setSkylightUpdatedPublic();
-
-            ((IChunkLightingData) chunk).alfheim$setLightInitialized(true);
-        }
-
-        mutableBlockPos.release();
-    }
-
     /**
      * @reason Avoids chunk fetches as much as possible.
      * @author Angeline (@jellysquid), Luna Lage (Desoroxxx)
@@ -265,59 +226,6 @@ public abstract class ChunkMixin implements IChunkLightingData, ILightingEngineP
         }
 
         isGapLightingUpdated = false;
-    }
-
-    @Unique
-    private void alfheim$relightSkylightColumn(final int x, final int z, final int height1, final int height2) {
-        final int yMin = Math.min(height1, height2);
-        final int yMax = Math.max(height1, height2) - 1;
-
-        final Chunk chunk = ((Chunk) (Object) this);
-
-        final ExtendedBlockStorage[] sections = chunk.getBlockStorageArray();
-
-        final int xBase = (chunk.x << 4) + x;
-        final int zBase = (chunk.z << 4) + z;
-
-        alfheim$scheduleRelightChecksForColumn(EnumSkyBlock.SKY, xBase, zBase, yMin, yMax);
-
-        if (sections[yMin >> 4] == Chunk.NULL_BLOCK_STORAGE && yMin > 0) {
-            world.checkLightFor(EnumSkyBlock.SKY, new BlockPos(xBase, yMin - 1, zBase));
-        }
-
-        short emptySections = 0;
-
-        for (int sec = yMax >> 4; sec >= yMin >> 4; --sec) {
-            if (sections[sec] == Chunk.NULL_BLOCK_STORAGE) {
-                emptySections |= (short) (1 << sec);
-            }
-        }
-
-        if (emptySections != 0) {
-            for (final EnumFacing facing : EnumFacing.HORIZONTALS) {
-                final int xOffset = facing.getXOffset();
-                final int zOffset = facing.getZOffset();
-
-                final boolean neighborColumnExists =
-                        (((x + xOffset) | (z + zOffset)) & 16) == 0
-                                //Checks whether the position is at the specified border (the 16 bit is set for both 15+1 and 0-1)
-                                || world.getChunkProvider().getLoadedChunk(chunk.x + xOffset, chunk.z + zOffset) != null;
-
-                if (neighborColumnExists) {
-                    for (int sec = yMax >> 4; sec >= yMin >> 4; --sec) {
-                        if ((emptySections & (1 << sec)) != 0)
-                            alfheim$scheduleRelightChecksForColumn(EnumSkyBlock.SKY, xBase + xOffset, zBase + zOffset, sec << 4, (sec << 4) + 15);
-                    }
-                } else {
-                    ((IChunkLightingData) chunk).alfheim$initNeighborLightChecks();
-
-                    final EnumFacing.AxisDirection axisDirection = ((facing.getAxis() == EnumFacing.Axis.X ? z : x) & 15) < 8 ? EnumFacing.AxisDirection.NEGATIVE : EnumFacing.AxisDirection.POSITIVE;
-                    ((IChunkLightingData) chunk).alfheim$getNeighborLightChecks()[alfheim$getFlagIndex(EnumSkyBlock.SKY, facing, axisDirection, EnumBoundaryFacing.OUT)] |= emptySections;
-
-                    chunk.markDirty();
-                }
-            }
-        }
     }
 
     /**
@@ -550,6 +458,98 @@ public abstract class ChunkMixin implements IChunkLightingData, ILightingEngineP
     @Unique
     private static int alfheim$getFlagIndex(final EnumSkyBlock lightType, final EnumFacing facing, final EnumFacing.AxisDirection axisDirection, final EnumBoundaryFacing boundaryFacing) {
         return alfheim$getFlagIndex(lightType, facing.getXOffset(), facing.getZOffset(), axisDirection, boundaryFacing);
+    }
+
+    @Unique
+    private static void alfheim$initChunkLighting(final Chunk chunk, final World world) {
+        final int xBase = chunk.x << 4;
+        final int zBase = chunk.z << 4;
+
+        final BlockPos.PooledMutableBlockPos mutableBlockPos = BlockPos.PooledMutableBlockPos.retain(xBase, 0, zBase);
+
+        if (world.isAreaLoaded(mutableBlockPos.add(-16, 0, -16), mutableBlockPos.add(31, 255, 31), false)) {
+            final ExtendedBlockStorage[] extendedBlockStorage = chunk.getBlockStorageArray();
+
+            for (int i = 0; i < extendedBlockStorage.length; ++i) {
+                final ExtendedBlockStorage storage = extendedBlockStorage[i];
+
+                if (storage == Chunk.NULL_BLOCK_STORAGE)
+                    continue;
+
+                int yBase = i * 16;
+
+                for (int y = 0; y < 16; y++) {
+                    for (int z = 0; z < 16; z++) {
+                        for (int x = 0; x < 16; x++) {
+                            mutableBlockPos.setPos(xBase + x, yBase + y, zBase + z);
+
+                            if (LightUtil.getLightValueForState(storage.getData().get(x, y, z), world, mutableBlockPos) > 0)
+                                world.checkLightFor(EnumSkyBlock.BLOCK, mutableBlockPos);
+                        }
+                    }
+                }
+            }
+
+            if (world.provider.hasSkyLight())
+                ((IChunkLightingData) chunk).alfheim$setSkylightUpdatedPublic();
+
+            ((IChunkLightingData) chunk).alfheim$setLightInitialized(true);
+        }
+
+        mutableBlockPos.release();
+    }
+
+    @Unique
+    private void alfheim$relightSkylightColumn(final int x, final int z, final int height1, final int height2) {
+        final int yMin = Math.min(height1, height2);
+        final int yMax = Math.max(height1, height2) - 1;
+
+        final Chunk chunk = ((Chunk) (Object) this);
+
+        final ExtendedBlockStorage[] sections = chunk.getBlockStorageArray();
+
+        final int xBase = (chunk.x << 4) + x;
+        final int zBase = (chunk.z << 4) + z;
+
+        alfheim$scheduleRelightChecksForColumn(EnumSkyBlock.SKY, xBase, zBase, yMin, yMax);
+
+        if (sections[yMin >> 4] == Chunk.NULL_BLOCK_STORAGE && yMin > 0) {
+            world.checkLightFor(EnumSkyBlock.SKY, new BlockPos(xBase, yMin - 1, zBase));
+        }
+
+        short emptySections = 0;
+
+        for (int sec = yMax >> 4; sec >= yMin >> 4; --sec) {
+            if (sections[sec] == Chunk.NULL_BLOCK_STORAGE) {
+                emptySections |= (short) (1 << sec);
+            }
+        }
+
+        if (emptySections != 0) {
+            for (final EnumFacing facing : EnumFacing.HORIZONTALS) {
+                final int xOffset = facing.getXOffset();
+                final int zOffset = facing.getZOffset();
+
+                final boolean neighborColumnExists =
+                        (((x + xOffset) | (z + zOffset)) & 16) == 0
+                                //Checks whether the position is at the specified border (the 16 bit is set for both 15+1 and 0-1)
+                                || world.getChunkProvider().getLoadedChunk(chunk.x + xOffset, chunk.z + zOffset) != null;
+
+                if (neighborColumnExists) {
+                    for (int sec = yMax >> 4; sec >= yMin >> 4; --sec) {
+                        if ((emptySections & (1 << sec)) != 0)
+                            alfheim$scheduleRelightChecksForColumn(EnumSkyBlock.SKY, xBase + xOffset, zBase + zOffset, sec << 4, (sec << 4) + 15);
+                    }
+                } else {
+                    ((IChunkLightingData) chunk).alfheim$initNeighborLightChecks();
+
+                    final EnumFacing.AxisDirection axisDirection = ((facing.getAxis() == EnumFacing.Axis.X ? z : x) & 15) < 8 ? EnumFacing.AxisDirection.NEGATIVE : EnumFacing.AxisDirection.POSITIVE;
+                    ((IChunkLightingData) chunk).alfheim$getNeighborLightChecks()[alfheim$getFlagIndex(EnumSkyBlock.SKY, facing, axisDirection, EnumBoundaryFacing.OUT)] |= emptySections;
+
+                    chunk.markDirty();
+                }
+            }
+        }
     }
 
     @Override

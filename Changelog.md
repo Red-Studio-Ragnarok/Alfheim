@@ -11,6 +11,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Fixed crash on world load with Nothirium
 - Fixed crashes on dedicated servers
 
+### Internal
+
+- Reorganized `ChunkMixin`
+
 ## Alfheim Version 1.0.1 Changelog - 2023-09-08
 
 ### Fixed
