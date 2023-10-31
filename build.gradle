@@ -85,7 +85,7 @@ dependencies {
 
     implementation rfg.deobf("curse.maven:dynamic-lights-227874:2563244")
 
-    String mixin = modUtils.enableMixins("zone.rong:mixinbooter:8.4", "mixins.${project.id}.refmap.json")
+    String mixin = modUtils.enableMixins("zone.rong:mixinbooter:8.8", "mixins.${project.id}.refmap.json")
     api(mixin) { transitive = false }
     annotationProcessor "org.ow2.asm:asm-debug-all:5.2"
     annotationProcessor "com.google.guava:guava:24.1.1-jre"
