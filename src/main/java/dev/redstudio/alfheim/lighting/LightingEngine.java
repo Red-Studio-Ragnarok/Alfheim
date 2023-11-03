@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-import static dev.redstudio.alfheim.utils.ModReference.LOG;
+import static dev.redstudio.alfheim.ProjectConstants.LOGGER;
 
 /**
  * @author Luna Lage (Desoroxxx)
@@ -207,7 +207,7 @@ public final class LightingEngine {
         if (current != ownerThread) {
             final IllegalAccessException illegalAccessException = new IllegalAccessException(String.format("World is owned by '%s' (ID: %s)," + " but was accessed from thread '%s' (ID: %s)", ownerThread.getName(), ownerThread.getId(), current.getName(), current.getId()));
 
-            LOG.warn(
+            LOGGER.warn(
                     "Something (likely another mod) has attempted to modify the world's state from the wrong thread!\n" +
                             "This is *bad practice* and can cause severe issues in your game.\n" +
                             "Alfheim has done as best as it can to mitigate this violation, but it may negatively impact performance or introduce stalls.\n" +

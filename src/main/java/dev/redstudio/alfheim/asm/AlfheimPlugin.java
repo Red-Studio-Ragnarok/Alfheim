@@ -7,7 +7,7 @@ import zone.rong.mixinbooter.IEarlyMixinLoader;
 import java.util.List;
 import java.util.Map;
 
-import static dev.redstudio.alfheim.utils.ModReference.LOG;
+import static dev.redstudio.alfheim.ProjectConstants.LOGGER;
 
 /**
  * @author Luna Lage (Desoroxxx)
@@ -51,7 +51,7 @@ public final class AlfheimPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader
         switch (mixinConfig) {
             case "mixins.alfheim.json":
                 if (isCubicChunksInstalled()) {
-                    LOG.warn("Cubic Chunks was detected, it uses it's own lighting engine, Alfheim will not load");
+                    LOGGER.warn("Cubic Chunks was detected, it uses it's own lighting engine, Alfheim will not load");
                     return false;
                 }
 

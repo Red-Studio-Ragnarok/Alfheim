@@ -1,7 +1,6 @@
 package dev.redstudio.alfheim.mixin;
 
 import dev.redstudio.alfheim.Alfheim;
-import dev.redstudio.alfheim.utils.ModReference;
 import dev.redstudio.alfheim.api.IChunkLightingData;
 import dev.redstudio.alfheim.api.ILightingEngineProvider;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,6 +15,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import static dev.redstudio.alfheim.ProjectConstants.LOGGER;
 
 /**
  * @author Luna Lage (Desoroxxx)
@@ -71,7 +72,7 @@ public abstract class AnvilChunkLoaderMixin {
         final NBTTagList tagList = compound.getTagList(NEIGHBOR_LIGHT_CHECKS_KEY, 2);
 
         if (tagList.tagCount() != Alfheim.FLAG_COUNT) {
-            ModReference.LOG.warn("Chunk field {} had invalid length, ignoring it (chunk coordinates: {} {})", NEIGHBOR_LIGHT_CHECKS_KEY, chunk.x, chunk.z);
+            LOGGER.warn("Chunk field {} had invalid length, ignoring it (chunk coordinates: {} {})", NEIGHBOR_LIGHT_CHECKS_KEY, chunk.x, chunk.z);
             return;
         }
 

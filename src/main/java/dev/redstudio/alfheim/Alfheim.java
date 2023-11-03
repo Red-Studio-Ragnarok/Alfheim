@@ -3,9 +3,7 @@ package dev.redstudio.alfheim;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 
-import static dev.redstudio.alfheim.utils.ModReference.ID;
-import static dev.redstudio.alfheim.utils.ModReference.NAME;
-import static dev.redstudio.alfheim.utils.ModReference.VERSION;
+import static dev.redstudio.alfheim.ProjectConstants.ID;
 
 //    /$$$$$$  /$$  /$$$$$$  /$$                 /$$
 //   /$$__  $$| $$ /$$__  $$| $$                |__/
@@ -15,7 +13,7 @@ import static dev.redstudio.alfheim.utils.ModReference.VERSION;
 //  | $$  | $$| $$| $$      | $$  | $$| $$_____/| $$| $$ | $$ | $$
 //  | $$  | $$| $$| $$      | $$  | $$|  $$$$$$$| $$| $$ | $$ | $$
 //  |__/  |__/|__/|__/      |__/  |__/ \_______/|__/|__/ |__/ |__/
-@Mod(modid = ID, name = NAME, version = VERSION, dependencies = "required-after:mixinbooter@[8.4,);required-after:redcore@[0.4,)", updateJSON = "https://raw.githubusercontent.com/Red-Studio-Ragnarok/Alfheim/main/update.json")
+@Mod(modid = ID, useMetadata = true, dependencies = "required-after:mixinbooter@[8.9,);required-after:redcore@[0.5,)")
 public final class Alfheim {
 
     public static final int FLAG_COUNT = 32; // 2 light types * 4 directions * 2 halves * (inwards + outwards)
