@@ -47,7 +47,7 @@ public abstract class WorldMixin implements ILightingEngineProvider, ILightLevel
     /**
      * Directs the light update to the lighting engine and always returns a success value.
      */
-    @Inject(method = "checkLightFor", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;isAreaLoaded(Lnet/minecraft/util/math/BlockPos;IZ)Z", ordinal = 1, shift = At.Shift.BEFORE), cancellable = true)
+    @Inject(method = "checkLightFor", at = @At(value = "HEAD"), cancellable = true)
     private void redirectLightUpdate(final EnumSkyBlock lightType, final BlockPos blockPos, final CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
         alfheim$lightingEngine.scheduleLightUpdate(lightType, blockPos);
 
