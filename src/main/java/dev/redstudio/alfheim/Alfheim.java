@@ -13,7 +13,7 @@ import static dev.redstudio.alfheim.ProjectConstants.ID;
 //  | $$  | $$| $$| $$      | $$  | $$| $$_____/| $$| $$ | $$ | $$
 //  | $$  | $$| $$| $$      | $$  | $$|  $$$$$$$| $$| $$ | $$ | $$
 //  |__/  |__/|__/|__/      |__/  |__/ \_______/|__/|__/ |__/ |__/
-@Mod(modid = ID, useMetadata = true, dependencies = "required-after:mixinbooter@[8.9,);required-after:redcore@[0.5,)")
+@Mod(modid = ID, useMetadata = true, dependencies = "required-after:mixinbooter@[8.6,);required-after:redcore@[0.5,)")
 public final class Alfheim {
 
     public static final int FLAG_COUNT = 32; // 2 light types * 4 directions * 2 halves * (inwards + outwards)

@@ -44,6 +44,8 @@ public abstract class WorldMixin implements ILightingEngineProvider, ILightLevel
         alfheim$lightingEngine = new LightingEngine((World) (Object) this);
     }
 
+    // Todo: We should be the only ones overwriting theses methods, cancelling like that is just a bad overwrite, in Dev 2 try to overwrite them and see if chaos unfolds
+
     /**
      * Directs the light update to the lighting engine and always returns a success value.
      */
