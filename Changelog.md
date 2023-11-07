@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Fixed
 
 - Fixed a crash at start on Mohist (Probably any Bukkit implementation)
+- Fixed skins not working with Alfheim paired with some other mod (we don't know which)
 - Fixed unescaped unicode characters in the description
 
 ### Internal
