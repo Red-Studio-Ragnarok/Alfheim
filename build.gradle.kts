@@ -73,7 +73,7 @@ dependencies {
     annotationProcessor("com.google.guava", "guava", "32.1.2-jre")
     annotationProcessor("com.google.code.gson", "gson", "2.8.9")
 
-    val mixinBooter: String = modUtils.enableMixins("zone.rong:mixinbooter:8.9", "mixins.${id}.refmap.json") as String
+    val mixinBooter: String = modUtils.enableMixins("zone.rong:mixinbooter:8.6", "mixins.${id}.refmap.json") as String
     api(mixinBooter) {
         isTransitive = false
     }
