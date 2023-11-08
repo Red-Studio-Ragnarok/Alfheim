@@ -137,6 +137,9 @@ public abstract class ChunkMixin implements IChunkLightingData, ILightingEngineP
     }
 
     /**
+     * Explicitly making this method we overwrite public to prevent access level conflicts at runtime.
+     * Mods may adjust the visibility of this method to public, causing a crash if our overwritten method has different scope.
+     *
      * @reason Overwrites relightBlock with a more efficient implementation.
      * @author Angeline (@jellysquid)
      */
@@ -202,11 +205,14 @@ public abstract class ChunkMixin implements IChunkLightingData, ILightingEngineP
     }
 
     /**
+     * Explicitly making this method we overwrite public to prevent access level conflicts at runtime.
+     * Mods may adjust the visibility of this method to public, causing a crash if our overwritten method has different scope.
+     *
      * @reason Avoids chunk fetches as much as possible.
      * @author Angeline (@jellysquid), Luna Lage (Desoroxxx)
      */
     @Overwrite
-    private void recheckGaps(final boolean onlyOne) {
+    public void recheckGaps(final boolean onlyOne) {
         if (!world.isAreaLoaded(new BlockPos((x << 4) + 8, 0, (z << 4) + 8), 16))
             return;
 

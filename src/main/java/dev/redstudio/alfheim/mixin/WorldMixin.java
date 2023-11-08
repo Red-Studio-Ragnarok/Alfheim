@@ -11,12 +11,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
  * @author Luna Lage (Desoroxxx)
@@ -44,32 +44,39 @@ public abstract class WorldMixin implements ILightingEngineProvider, ILightLevel
         alfheim$lightingEngine = new LightingEngine((World) (Object) this);
     }
 
-    // Todo: We should be the only ones overwriting theses methods, cancelling like that is just a bad overwrite, in Dev 2 try to overwrite them and see if chaos unfolds
-
     /**
-     * Directs the light update to the lighting engine and always returns a success value.
+     * @reason Redirect to our lighting engine.
+     * @author Luna Lage (Desoroxxx)
      */
-    @Inject(method = "checkLightFor", at = @At(value = "HEAD"), cancellable = true)
-    private void redirectLightUpdate(final EnumSkyBlock lightType, final BlockPos blockPos, final CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
+    @Overwrite
+    public boolean checkLightFor(final EnumSkyBlock lightType, final BlockPos blockPos) {
         alfheim$lightingEngine.scheduleLightUpdate(lightType, blockPos);
 
-        callbackInfoReturnable.setReturnValue(true);
+        return true;
     }
 
-    @Inject(method = "getLight(Lnet/minecraft/util/math/BlockPos;Z)I", at = @At("HEAD"), cancellable = true)
-    private void getLight(final BlockPos blockPos, final boolean checkNeighbors, final CallbackInfoReturnable<Integer> callbackInfoReturnable) {
+    /**
+     * @reason Redirect to our lighting engine.
+     * @author Luna Lage (Desoroxxx)
+     */
+    @Overwrite
+    public int getLight(final BlockPos blockPos, final boolean checkNeighbors) {
         if (!checkNeighbors)
-            callbackInfoReturnable.setReturnValue(getLight(blockPos));
+            return getLight(blockPos);
 
         final IBlockState blockState = getBlockState(blockPos);
 
-        callbackInfoReturnable.setReturnValue(Math.max(((ILightInfoProvider) blockState).alfheim$getLightFor(((World) (Object) this), EnumSkyBlock.BLOCK, blockPos), ((ILightInfoProvider) blockState).alfheim$getLightFor(((World) (Object) this), EnumSkyBlock.SKY, blockPos) - skylightSubtracted));
+        return Math.max(((ILightInfoProvider) blockState).alfheim$getLightFor(((World) (Object) this), EnumSkyBlock.BLOCK, blockPos), ((ILightInfoProvider) blockState).alfheim$getLightFor(((World) (Object) this), EnumSkyBlock.SKY, blockPos) - skylightSubtracted);
     }
 
+    /**
+     * @reason Redirect to our lighting engine.
+     * @author Luna Lage (Desoroxxx)
+     */
+    @Overwrite
     @SideOnly(Side.CLIENT)
-    @Inject(method = "getLightFromNeighborsFor", at = @At("HEAD"), cancellable = true)
-    private void getLightFromNeighborsFor(final EnumSkyBlock lightType, final BlockPos blockPos, final CallbackInfoReturnable<Integer> callbackInfoReturnable) {
-        callbackInfoReturnable.setReturnValue(((ILightInfoProvider) getBlockState(blockPos)).alfheim$getLightFor(((World) (Object) this), lightType, blockPos));
+    public int getLightFromNeighborsFor(final EnumSkyBlock lightType, final BlockPos blockPos) {
+        return ((ILightInfoProvider) getBlockState(blockPos)).alfheim$getLightFor(((World) (Object) this), lightType, blockPos);
     }
 
     @Override

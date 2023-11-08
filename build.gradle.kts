@@ -151,15 +151,6 @@ tasks.processResources.configure {
     }
 }
 
-val at = project.files("src/main/resources/META-INF/${id}_at.cfg")
-
-tasks.deobfuscateMergedJarToSrg.configure {
-    accessTransformerFiles.from(at)
-}
-tasks.srgifyBinpatchedJar.configure {
-    accessTransformerFiles.from(at)
-}
-
 tasks.named<Jar>("jar") {
     manifest {
         attributes(

@@ -17,11 +17,11 @@ import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 /**
@@ -33,10 +33,14 @@ public abstract class BlockMixin implements ILitBlock {
 
     @Shadow @Deprecated public abstract int getLightValue(final IBlockState blockState);
 
+    /**
+     * @reason Part of non-full block lighting fix
+     * @author Luna Lage (Desoroxxx)
+     */
+    @Overwrite
     @SideOnly(Side.CLIENT)
-    @Inject(method = "getPackedLightmapCoords", at = @At("HEAD"), cancellable = true)
-    private void getCorrectPackedLightmapCoords(final IBlockState blockState, final IBlockAccess source, final BlockPos blockPos, final CallbackInfoReturnable<Integer> callbackInfoReturnable) {
-        callbackInfoReturnable.setReturnValue(source.getCombinedLight(blockPos, blockState.getLightValue(source, blockPos)));
+    public int getPackedLightmapCoords(final IBlockState blockState, final IBlockAccess source, final BlockPos blockPos) {
+        return source.getCombinedLight(blockPos, blockState.getLightValue(source, blockPos));
     }
 
     @Inject(method = "registerBlocks", at = @At(value = "FIELD", target = "Lnet/minecraft/block/Block;useNeighborBrightness:Z", ordinal = 1, shift = At.Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
@@ -49,15 +53,19 @@ public abstract class BlockMixin implements ILitBlock {
         flag.set(result);
     }
 
+    /**
+     * @reason Part of non-full block lighting fix
+     * @author Luna Lage (Desoroxxx)
+     */
+    @Overwrite
     @SideOnly(Side.CLIENT)
-    @Inject(method = "getAmbientOcclusionLightValue", at = @At(value = "HEAD"), cancellable = true)
-    private void getCorrectOcclusionLightValue(final IBlockState blockState, final CallbackInfoReturnable<Float> callbackInfoReturnable) {
+    public float getAmbientOcclusionLightValue(final IBlockState blockState) {
         final byte lightValue = (byte) MathUtil.clampMinFirst(blockState.getLightValue() -1, 0, 15);
 
         if (lightValue == 0)
-            callbackInfoReturnable.setReturnValue(blockState.isBlockNormalCube() ? 0.2F : 1);
+            return blockState.isBlockNormalCube() ? 0.2F : 1;
         else
-            callbackInfoReturnable.setReturnValue(1F);
+            return 1F; // Todo: Cleanup
     }
 
     @Override
