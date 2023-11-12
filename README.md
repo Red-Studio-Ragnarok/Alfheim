@@ -10,7 +10,7 @@
 
 # Alfheim
 
-Alfheim is a fork *(or a rewrite depending on your views on the [ship of theseus](https://en.wikipedia.org/wiki/Ship_of_Theseus))* of [Hesperus] which is a fork of [Phosphor]
+Alfheim is a fork *(or a rewrite depending on your views on the [ship of Theseus](https://en.wikipedia.org/wiki/Ship_of_Theseus))* of [Hesperus] which is a fork of [Phosphor]
 
 ## What benefit does this have over [Phosphor]/[Hesperus]?
 
