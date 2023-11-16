@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import static dev.redstudio.alfheim.Alfheim.IS_NOTHIRIUM_LOADED;
+import static dev.redstudio.alfheim.ProjectConstants.LOGGER;
 
 /**
  * @author Luna Lage (Desoroxxx)
@@ -56,10 +57,12 @@ public abstract class RenderGlobalMixin implements ILightUpdatesProcessor {
             return;
 
         final Iterator<BlockPos> iterator = setLightUpdates.iterator();
-        final float lightUpdateLimitRatio = (float) setLightUpdates.size() / 1000;
-        short lightUpdatesProcessed = 0;
+        final float lightUpdateLimit = 2048 + ((float) setLightUpdates.size() / 4);
 
-        while (iterator.hasNext() && lightUpdatesProcessed < (128 * lightUpdateLimitRatio)) {
+        LOGGER.info(lightUpdateLimit);
+
+        short lightUpdatesProcessed = 0;
+        while (iterator.hasNext() && lightUpdatesProcessed < lightUpdateLimit) {
             final BlockPos blockpos = iterator.next();
 
             iterator.remove();

@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Changed
 
 - Lighting engine will now schedule updates no matter if that chunk is loaded, which is different from vanilla but potentially fix areas lighting being weird when going far away
+- Made the logic for capping the client updates per frame dumber which should fix performance drops on lower end hardware
 - Made all head-cancels overwrite instead
 - All overwrites now make the scope of the overwritten methods `public` to prevent access level conflicts at runtime
 - Updated the in game description to the new short description
