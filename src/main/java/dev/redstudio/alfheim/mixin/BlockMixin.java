@@ -5,7 +5,7 @@ import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
 import dev.redstudio.alfheim.api.ILightInfoProvider;
 import dev.redstudio.alfheim.api.ILightLevelProvider;
 import dev.redstudio.alfheim.api.ILitBlock;
-import io.redstudioragnarok.redcore.utils.MathUtil;
+import dev.redstudio.redcore.math.ClampUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
@@ -60,7 +60,7 @@ public abstract class BlockMixin implements ILitBlock {
     @Overwrite
     @SideOnly(Side.CLIENT)
     public float getAmbientOcclusionLightValue(final IBlockState blockState) {
-        final byte lightValue = (byte) MathUtil.clampMinFirst(blockState.getLightValue() -1, 0, 15);
+        final byte lightValue = (byte) ClampUtil.clampMinFirst(blockState.getLightValue() -1, 0, 15);
 
         if (lightValue == 0)
             return blockState.isBlockNormalCube() ? 0.2F : 1;

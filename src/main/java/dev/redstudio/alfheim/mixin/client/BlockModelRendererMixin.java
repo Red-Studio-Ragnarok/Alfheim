@@ -1,6 +1,6 @@
 package dev.redstudio.alfheim.mixin.client;
 
-import io.redstudioragnarok.redcore.utils.MathUtil;
+import dev.redstudio.redcore.math.ClampUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.BlockModelRenderer;
 import net.minecraft.util.math.BlockPos;
@@ -30,7 +30,7 @@ public abstract class BlockModelRendererMixin {
             require = 0
     )
     private int adjustGetLightValue(final IBlockState blockState, final IBlockAccess blockAccess, final BlockPos blockPos) {
-        return MathUtil.clampMinFirst(blockState.getLightValue(blockAccess, blockPos) -1, 0, 15);
+        return ClampUtil.clampMinFirst(blockState.getLightValue(blockAccess, blockPos) -1, 0, 15);
     }
 
     /**
@@ -44,6 +44,6 @@ public abstract class BlockModelRendererMixin {
             require = 0
     )
     private int adjustGetLightValueOptiFine(final IBlockState blockState, final IBlockAccess blockAccess, final BlockPos blockPos) {
-        return MathUtil.clampMinFirst(blockState.getLightValue(blockAccess, blockPos) -1, 0, 15);
+        return ClampUtil.clampMinFirst(blockState.getLightValue(blockAccess, blockPos) -1, 0, 15);
     }
 }

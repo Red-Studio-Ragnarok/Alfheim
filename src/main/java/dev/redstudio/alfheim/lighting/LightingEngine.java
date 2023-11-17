@@ -2,7 +2,7 @@ package dev.redstudio.alfheim.lighting;
 
 import dev.redstudio.alfheim.api.IChunkLightingData;
 import dev.redstudio.alfheim.utils.PooledLongQueue;
-import io.redstudioragnarok.redcore.utils.MathUtil;
+import dev.redstudio.redcore.math.ClampUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.profiler.Profiler;
@@ -518,11 +518,11 @@ public final class LightingEngine {
                 return 0;
         }
 
-        return (byte) MathUtil.clampMaxFirst(LightUtil.getLightValueForState(state, world, currentPos), 0, MAX_LIGHT_LEVEL);
+        return (byte) ClampUtil.clampMaxFirst(LightUtil.getLightValueForState(state, world, currentPos), 0, MAX_LIGHT_LEVEL);
     }
 
     private byte getPosOpacity(final BlockPos blockPos, final IBlockState blockState) {
-        return (byte) MathUtil.clampMaxFirst(blockState.getLightOpacity(world, blockPos), 1, MAX_LIGHT_LEVEL);
+        return (byte) ClampUtil.clampMaxFirst(blockState.getLightOpacity(world, blockPos), 1, MAX_LIGHT_LEVEL);
     }
 
     private Chunk getChunk(final BlockPos blockPos) {
