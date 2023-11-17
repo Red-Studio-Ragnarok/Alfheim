@@ -12,6 +12,7 @@ import java.util.Deque;
  * @author Angeline (@jellysquid)
  * @since 1.0
  */
+@Deprecated // Todo: This is cool when memory is the problem but raw CPU speed would be better
 public final class PooledLongQueue {
 
     private static final int CACHED_QUEUE_SEGMENTS_COUNT = 4096;
