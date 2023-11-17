@@ -62,7 +62,7 @@ My commissions are currently open and I would be happy to create a custom mod to
 [Commissions]
 
 You can also support me on a monthly basis by becoming a member.
-To thank you will have the possibility to access exlcusive post and messages, Discord channel for WIP content, and even access to unreleased Prototypes or WIP Projects.
+To thank you will have the possibility to access exclusive post and messages, Discord channel for WIP content, and even access to unreleased Prototypes or WIP Projects.
 
 [Membership]
 

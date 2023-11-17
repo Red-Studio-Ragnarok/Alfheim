@@ -29,6 +29,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Switched to Gradle Kotlin DSL
 - Switched to Adoptium
 - Moved logo to the root of the resources module
+- General cleanup
 
 ### Removed
 

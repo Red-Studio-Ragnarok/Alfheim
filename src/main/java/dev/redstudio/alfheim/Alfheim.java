@@ -4,6 +4,7 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 
 import static dev.redstudio.alfheim.ProjectConstants.ID;
+import static dev.redstudio.alfheim.ProjectConstants.VERSION;
 
 //    /$$$$$$  /$$  /$$$$$$  /$$                 /$$
 //   /$$__  $$| $$ /$$__  $$| $$                |__/
@@ -13,12 +14,12 @@ import static dev.redstudio.alfheim.ProjectConstants.ID;
 //  | $$  | $$| $$| $$      | $$  | $$| $$_____/| $$| $$ | $$ | $$
 //  | $$  | $$| $$| $$      | $$  | $$|  $$$$$$$| $$| $$ | $$ | $$
 //  |__/  |__/|__/|__/      |__/  |__/ \_______/|__/|__/ |__/ |__/
-@Mod(modid = ID, useMetadata = true, dependencies = "required-after:mixinbooter@[8.6,);required-after:redcore@[0.5,)")
+@Mod(modid = ID, version = VERSION, updateJSON = "https://forge.curseupdate.com/910715/alfheim-lighting-engine", useMetadata = true, dependencies = "required-after:mixinbooter@[8.6,);required-after:redcore@[0.5,)")
 public final class Alfheim {
 
     // Todo: Separate bugfixes and lighting engine
 
-    public static final int FLAG_COUNT = 32; // 2 light types * 4 directions * 2 halves * (inwards + outwards)
+    public static final byte FLAG_COUNT = 32; // 2 light types * 4 directions * 2 halves * (inwards + outwards)
 
     public static final boolean IS_NOTHIRIUM_LOADED = Loader.isModLoaded("nothirium");
 }
