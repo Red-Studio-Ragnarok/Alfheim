@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [UNRELEASED] Alfheim Version 1.1 Changelog
 
+#### Now depends on Red Core 0.5
+#### Now depends on MixinBooter 8.6
+
 ### Changed
 
 - Lighting engine will now schedule updates no matter if that chunk is loaded, which is different from vanilla but potentially fix areas lighting being weird when going far away
@@ -13,8 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Made all head-cancels overwrite instead
 - All overwrites now make the scope of the overwritten methods `public` to prevent access level conflicts at runtime
 - Updated the in game description to the new short description
-- Now depends on Red Core 0.5
-- Now depends on MixinBooter 8.6
+- Updated to Red Core 0.5
 
 ### Fixed
 
@@ -30,6 +32,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Switched to Adoptium
 - Moved logo to the root of the resources module
 - General cleanup
+- General typo fixing
+- Added missing since tags
+- Deprecated `PooledLongQueue`
 
 ### Removed
 
