@@ -243,9 +243,9 @@ public final class LightingEngine {
             final byte newLight = calculateNewLightFromCursor(lightType);
 
             if (oldLight < newLight)
-                initialBrightenings.add(((long) newLight << S_L) | currentData); // Don't enqueue directly for brightening in order to avoid duplicate scheduling
+                initialBrightenings.add(((long) newLight << S_L) | currentData); // Don't enqueue directly for brightening to avoid duplicate scheduling
             else if (oldLight > newLight)
-                initialDarkenings.add(currentData); // Don't enqueue directly for darkening in order to avoid duplicate scheduling
+                initialDarkenings.add(currentData); // Don't enqueue directly for darkening to avoid duplicate scheduling
         }
 
         profiler.endStartSection("enqueueBrightening");
