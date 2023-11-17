@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project follows to [Ragnarök Versioning Convention](https://shor.cz/ragnarok_versioning_convention).
 
-## [UNRELEASED] Alfheim Version 1.1 Changelog
+## Alfheim Version 1.1 Changelog - 2023-11-18
 
 #### Now depends on Red Core 0.5
 #### Now depends on MixinBooter 8.6
