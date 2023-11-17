@@ -17,7 +17,7 @@ version = "1.1-Dev-3" // Versioning must follow Ragnarök versioning convention:
 val id = project.name.lowercase()
 val plugin = "asm.${project.name}Plugin"
 
-val redCoreVersion = "MC-1.7-1.12-" + "0.5-Dev-5"
+val redCoreVersion = "MC-1.7-1.12-" + "0.5"
 
 minecraft {
     mcVersion = "1.12.2"
