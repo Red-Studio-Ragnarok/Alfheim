@@ -22,7 +22,7 @@ public abstract class BlockModelRendererMixin {
     /**
      * This fixes <a href="https://bugs.mojang.com/browse/MC-225516">MC-225516</a> the original intent was that block that emit lights shouldn't have an ambient occlusion applied to them which is logical.
      * But some light-emitting blocks have very low light values which are barely visible for these blocks ambient occlusion should still be applied.
-     * In Vanilla, I found that theses low light values emitting blocks have a value of one which allows us to fix the issue by subtracting one to the light value check and then clamping it to 0-15.
+     * In Vanilla, I found that these low light values emitting blocks have a value of one which allows us to fix the issue by subtracting one to the light value check and then clamping it to 0-15.
      */
     @Redirect(
             method = "renderModel(Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/client/renderer/block/model/IBakedModel;Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/client/renderer/BufferBuilder;ZJ)Z",
@@ -36,7 +36,7 @@ public abstract class BlockModelRendererMixin {
     /**
      * This fixes <a href="https://bugs.mojang.com/browse/MC-225516">MC-225516</a> for OptiFine, the original intent was that block that emit lights shouldn't have an ambient occlusion applied to them which is logical.
      * But some light-emitting blocks have very low light values which are barely visible for these blocks ambient occlusion should still be applied.
-     * In Vanilla, I found that theses low light values emitting blocks have a value of one which allows us to fix the issue by subtracting one to the light value check and then clamping it to 0-15.
+     * In Vanilla, I found that these low light values emitting blocks have a value of one which allows us to fix the issue by subtracting one to the light value check and then clamping it to 0-15.
      */
     @Redirect(
             method = "renderModel(Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/client/renderer/block/model/IBakedModel;Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/client/renderer/BufferBuilder;ZJ)Z",

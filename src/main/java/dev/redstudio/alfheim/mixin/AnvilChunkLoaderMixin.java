@@ -53,7 +53,7 @@ public abstract class AnvilChunkLoaderMixin {
     }
 
     /**
-     * Injects the serialization logic for chunk data on save so we can store whether or not we've populated light yet.
+     * Injects the serialization logic for chunk data on save, so we can store whether or not we've populated light yet.
      *
      * @author Angeline (@jellysquid)
      */
