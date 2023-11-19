@@ -59,8 +59,6 @@ public abstract class RenderGlobalMixin implements ILightUpdatesProcessor {
         final Iterator<BlockPos> iterator = setLightUpdates.iterator();
         final float lightUpdateLimit = 2048 + ((float) setLightUpdates.size() / 4);
 
-        LOGGER.info(lightUpdateLimit);
-
         short lightUpdatesProcessed = 0;
         while (iterator.hasNext() && lightUpdatesProcessed < lightUpdateLimit) {
             final BlockPos blockpos = iterator.next();
