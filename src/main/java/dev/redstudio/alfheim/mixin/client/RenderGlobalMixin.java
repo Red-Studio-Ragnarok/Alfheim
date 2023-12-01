@@ -57,7 +57,13 @@ public abstract class RenderGlobalMixin implements ILightUpdatesProcessor {
             return;
 
         final Iterator<BlockPos> iterator = setLightUpdates.iterator();
-        final float lightUpdateLimit = 2048 + ((float) setLightUpdates.size() / 4);
+        final float lightUpdateLimit = 2048 + ((float) setLightUpdates.size() / 4); // Todo: Rework this once again, this is currently pretty dumb.
+                                                                                    //       It fixed the issue where the FPS on lower end hardware would plummet for a few seconds.
+                                                                                    //       But it also reduced how smooth the frame rate was on higher end hardware.
+                                                                                    //       Updating blocks is costly and will take a long time, this is why lower end hardware plummets for a few seconds.
+                                                                                    //       Higher end hardware instead has somewhat of a FPS "buffer" which can handle it fine over multiple frames thus reducing frame-time spikes.
+                                                                                    //       The technically the best way to do this (that I hadn't though of before) was to add current "FPS" to the equation.
+                                                                                    //       If the FPS is low more updates would be done in one frame if it is high we can afford spreading light updates over multiple frames.
 
         short lightUpdatesProcessed = 0;
         while (iterator.hasNext() && lightUpdatesProcessed < lightUpdateLimit) {
