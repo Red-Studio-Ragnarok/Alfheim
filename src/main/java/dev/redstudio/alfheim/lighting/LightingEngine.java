@@ -1,8 +1,8 @@
 package dev.redstudio.alfheim.lighting;
 
 import dev.redstudio.alfheim.api.IChunkLightingData;
-import dev.redstudio.alfheim.utils.PooledLongQueue;
 import dev.redstudio.redcore.math.ClampUtil;
+import it.unimi.dsi.fastutil.longs.LongArrayFIFOQueue;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.profiler.Profiler;
@@ -39,16 +39,16 @@ public final class LightingEngine {
     private final Profiler profiler;
 
     // Layout of longs: [padding(4)] [y(8)] [x(26)] [z(26)]
-    private final PooledLongQueue[] lightUpdateQueue = new PooledLongQueue[EnumSkyBlock.values().length];
+    private final LongArrayFIFOQueue[] lightUpdateQueue = new LongArrayFIFOQueue[EnumSkyBlock.values().length];
 
     // Layout of longs: see above
-    private final PooledLongQueue[] darkeningQueue = new PooledLongQueue[MAX_LIGHT_LEVEL + 1];
-    private final PooledLongQueue[] brighteningQueue = new PooledLongQueue[MAX_LIGHT_LEVEL + 1];
+    private final LongArrayFIFOQueue[] darkeningQueue = new LongArrayFIFOQueue[MAX_LIGHT_LEVEL + 1];
+    private final LongArrayFIFOQueue[] brighteningQueue = new LongArrayFIFOQueue[MAX_LIGHT_LEVEL + 1];
 
     // Layout of longs: [newLight(4)] [pos(60)]
-    private final PooledLongQueue initialBrightenings;
+    private final LongArrayFIFOQueue initialBrightenings;
     // Layout of longs: [padding(4)] [pos(60)]
-    private final PooledLongQueue initialDarkenings;
+    private final LongArrayFIFOQueue initialDarkenings;
 
     private boolean updating = false;
 
@@ -101,7 +101,7 @@ public final class LightingEngine {
     private boolean isNeighborDataValid = false;
 
     private final NeighborInfo[] neighborInfos = new NeighborInfo[6];
-    private PooledLongQueue.LongQueueIterator currentQueueIterator;
+    private LongArrayFIFOQueue currentQueue;
 
     private final ReentrantLock lock = new ReentrantLock();
 
@@ -109,19 +109,17 @@ public final class LightingEngine {
         this.world = world;
         profiler = world.profiler;
 
-        final PooledLongQueue.Pool pool = new PooledLongQueue.Pool();
-
-        initialBrightenings = new PooledLongQueue(pool);
-        initialDarkenings = new PooledLongQueue(pool);
+        initialBrightenings = new LongArrayFIFOQueue();
+        initialDarkenings = new LongArrayFIFOQueue();
 
         for (int i = 0; i < EnumSkyBlock.values().length; ++i)
-            lightUpdateQueue[i] = new PooledLongQueue(pool);
+            lightUpdateQueue[i] = new LongArrayFIFOQueue();
 
         for (int i = 0; i < darkeningQueue.length; ++i)
-            darkeningQueue[i] = new PooledLongQueue(pool);
+            darkeningQueue[i] = new LongArrayFIFOQueue();
 
         for (int i = 0; i < brighteningQueue.length; ++i)
-            brighteningQueue[i] = new PooledLongQueue(pool);
+            brighteningQueue[i] = new LongArrayFIFOQueue();
 
         for (int i = 0; i < neighborInfos.length; ++i)
             neighborInfos[i] = new NeighborInfo();
@@ -144,7 +142,7 @@ public final class LightingEngine {
      * Schedules a light update for the specified light type and position to be processed later by {@link LightingEngine#processLightUpdates()}
      */
     private void scheduleLightUpdate(final EnumSkyBlock lightType, final long blockPos) {
-        lightUpdateQueue[lightType.ordinal()].add(blockPos);
+        lightUpdateQueue[lightType.ordinal()].enqueue(blockPos);
     }
 
     /**
@@ -171,7 +169,7 @@ public final class LightingEngine {
         if (world.isRemote && !isCallingFromMainThread())
             return;
 
-        final PooledLongQueue queue = lightUpdateQueue[lightType.ordinal()];
+        final LongArrayFIFOQueue queue = lightUpdateQueue[lightType.ordinal()];
 
         // Quickly check if the queue is empty before we acquire a more expensive lock.
         if (queue.isEmpty())
@@ -221,7 +219,7 @@ public final class LightingEngine {
         lock.lock();
     }
 
-    private void processLightUpdatesForTypeInner(final EnumSkyBlock lightType, final PooledLongQueue queue) {
+    private void processLightUpdatesForTypeInner(final EnumSkyBlock lightType, final LongArrayFIFOQueue queue) {
         // Avoid nested calls
         if (updating)
             throw new IllegalStateException("Already processing updates!");
@@ -230,7 +228,7 @@ public final class LightingEngine {
 
         currentChunkIdentifier = -1; // Reset chunk cache
 
-        currentQueueIterator = queue.iterator();
+        currentQueue = queue;
 
         profiler.startSection("prepare");
 
@@ -243,14 +241,14 @@ public final class LightingEngine {
             final byte newLight = calculateNewLightFromCursor(lightType);
 
             if (oldLight < newLight)
-                initialBrightenings.add(((long) newLight << S_L) | currentData); // Don't enqueue directly for brightening to avoid duplicate scheduling
+                initialBrightenings.enqueue(((long) newLight << S_L) | currentData); // Don't enqueue directly for brightening to avoid duplicate scheduling
             else if (oldLight > newLight)
-                initialDarkenings.add(currentData); // Don't enqueue directly for darkening to avoid duplicate scheduling
+                initialDarkenings.enqueue(currentData); // Don't enqueue directly for darkening to avoid duplicate scheduling
         }
 
         profiler.endStartSection("enqueueBrightening");
 
-        currentQueueIterator = initialBrightenings.iterator();
+        currentQueue = initialBrightenings;
 
         while (nextItem()) {
             final byte newLight = (byte) (currentData >> S_L & M_L);
@@ -261,7 +259,7 @@ public final class LightingEngine {
 
         profiler.endStartSection("enqueueDarkening");
 
-        currentQueueIterator = initialDarkenings.iterator();
+        currentQueue = initialDarkenings;
 
         while (nextItem()) {
             final byte oldLight = getCursorCachedLight(lightType);
@@ -274,7 +272,7 @@ public final class LightingEngine {
 
         // Iterate through enqueued updates (brightening and darkening in parallel) from brightest to darkest so that we only need to iterate once
         for (byte currentLight = MAX_LIGHT_LEVEL; currentLight >= 0; --currentLight) {
-            currentQueueIterator = darkeningQueue[currentLight].iterator();
+            currentQueue = darkeningQueue[currentLight];
 
             while (nextItem()) {
                 // Don't darken if we got brighter due to some other change
@@ -325,7 +323,7 @@ public final class LightingEngine {
                 }
             }
 
-            currentQueueIterator = brighteningQueue[currentLight].iterator();
+            currentQueue = brighteningQueue[currentLight];
 
             while (nextItem()) {
                 final byte oldLight = getCursorCachedLight(lightType);
@@ -453,7 +451,7 @@ public final class LightingEngine {
      * Enqueues the blockPos for brightening and sets its light value to newLight
      */
     private void enqueueBrightening(final BlockPos blockPos, final long longPos, final byte newLight, final Chunk chunk, final EnumSkyBlock lightType) {
-        brighteningQueue[newLight].add(longPos);
+        brighteningQueue[newLight].enqueue(longPos);
 
         chunk.setLightFor(lightType, blockPos, newLight);
     }
@@ -462,7 +460,7 @@ public final class LightingEngine {
      * Enqueues the blockPos for darkening and sets its light value to 0
      */
     private void enqueueDarkening(final BlockPos blockPos, final long longPos, final byte oldLight, final Chunk chunk, final EnumSkyBlock lightType) {
-        darkeningQueue[oldLight].add(longPos);
+        darkeningQueue[oldLight].enqueue(longPos);
 
         chunk.setLightFor(lightType, blockPos, 0);
     }
@@ -476,19 +474,18 @@ public final class LightingEngine {
     }
 
     /**
-     * Polls a new item from {@link #currentQueueIterator} and fills in state data members
+     * Polls a new item from {@link #currentQueue} and fills in state data members
      *
      * @return If there was an item to poll
      */
     private boolean nextItem() {
-        if (!currentQueueIterator.hasNext()) {
-            currentQueueIterator.finish();
-            currentQueueIterator = null;
+        if (currentQueue.isEmpty()) {
+            currentQueue = null;
 
             return false;
         }
 
-        currentData = currentQueueIterator.next();
+        currentData = currentQueue.dequeueLong();
         isNeighborDataValid = false;
 
         decodeWorldCoord(currentPos, currentData);

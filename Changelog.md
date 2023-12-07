@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [UNRELEASED] Alfheim Version 1.2 Changelog
 
+### Changed
+
+- Stopped using `PooledLongQueue` using `LongArrayFIFOQueue` instead, should be more optimized (Lower memory usage, faster & lighter lighting updates)
+
 ### Internal
 
 - Updated RFG
