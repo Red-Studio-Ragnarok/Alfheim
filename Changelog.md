@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Changed
 
 - Stopped using `PooledLongQueue` using `LongArrayFIFOQueue` instead, should be more optimized (Lower memory usage, faster & lighter lighting updates)
+- Skip spreading light neighbor checks early if the current light is lower than the neighbor light
 - Made minor changes to clamping (Shouldn't cause a difference)
 
 ### Internal

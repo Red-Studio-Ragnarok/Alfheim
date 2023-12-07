@@ -431,7 +431,7 @@ public final class LightingEngine {
         for (final NeighborInfo neighborInfo : neighborInfos) {
             final Chunk neighborChunk = neighborInfo.chunk;
 
-            if (neighborChunk == null)
+            if (neighborChunk == null || currentLight < neighborInfo.light)
                 continue;
 
             final BlockPos neighborBlockPos = neighborInfo.mutableBlockPos;
