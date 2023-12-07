@@ -373,7 +373,7 @@ public final class LightingEngine {
                 neighborChunk = neighborInfo.chunk = getChunk(neighborPos);
 
             if (neighborChunk != null) {
-                ExtendedBlockStorage neighborSection = neighborChunk.getBlockStorageArray()[neighborPos.getY() >> 4];
+                final ExtendedBlockStorage neighborSection = neighborChunk.getBlockStorageArray()[neighborPos.getY() >> 4];
 
                 neighborInfo.light = getCachedLightFor(neighborChunk, neighborSection, neighborPos, lightType);
             }

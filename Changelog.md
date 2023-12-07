@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Updated RFG
 - Updated Gradle
 - Fixed the names of the arrays of queues
+- Cleaned up `LightingEngine`
 
 ## Alfheim Version 1.1.1 Changelog - 2023-11-19
 
