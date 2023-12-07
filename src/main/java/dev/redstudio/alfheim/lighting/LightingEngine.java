@@ -39,11 +39,11 @@ public final class LightingEngine {
     private final Profiler profiler;
 
     // Layout of longs: [padding(4)] [y(8)] [x(26)] [z(26)]
-    private final LongArrayFIFOQueue[] lightUpdateQueue = new LongArrayFIFOQueue[EnumSkyBlock.values().length];
+    private final LongArrayFIFOQueue[] lightUpdateQueues = new LongArrayFIFOQueue[EnumSkyBlock.values().length];
 
     // Layout of longs: see above
-    private final LongArrayFIFOQueue[] darkeningQueue = new LongArrayFIFOQueue[MAX_LIGHT_LEVEL + 1];
-    private final LongArrayFIFOQueue[] brighteningQueue = new LongArrayFIFOQueue[MAX_LIGHT_LEVEL + 1];
+    private final LongArrayFIFOQueue[] darkeningQueues = new LongArrayFIFOQueue[MAX_LIGHT_LEVEL + 1];
+    private final LongArrayFIFOQueue[] brighteningQueues = new LongArrayFIFOQueue[MAX_LIGHT_LEVEL + 1];
 
     // Layout of longs: [newLight(4)] [pos(60)]
     private final LongArrayFIFOQueue initialBrightenings;
@@ -113,13 +113,13 @@ public final class LightingEngine {
         initialDarkenings = new LongArrayFIFOQueue(128);
 
         for (int i = 0; i < EnumSkyBlock.values().length; ++i)
-            lightUpdateQueue[i] = new LongArrayFIFOQueue(128);
+            lightUpdateQueues[i] = new LongArrayFIFOQueue(128);
 
-        for (int i = 0; i < darkeningQueue.length; ++i)
-            darkeningQueue[i] = new LongArrayFIFOQueue(128);
+        for (int i = 0; i < darkeningQueues.length; ++i)
+            darkeningQueues[i] = new LongArrayFIFOQueue(128);
 
-        for (int i = 0; i < brighteningQueue.length; ++i)
-            brighteningQueue[i] = new LongArrayFIFOQueue(128);
+        for (int i = 0; i < brighteningQueues.length; ++i)
+            brighteningQueues[i] = new LongArrayFIFOQueue(128);
 
         for (int i = 0; i < neighborInfos.length; ++i)
             neighborInfos[i] = new NeighborInfo();
@@ -142,7 +142,7 @@ public final class LightingEngine {
      * Schedules a light update for the specified light type and position to be processed later by {@link LightingEngine#processLightUpdates()}
      */
     private void scheduleLightUpdate(final EnumSkyBlock lightType, final long blockPos) {
-        lightUpdateQueue[lightType.ordinal()].enqueue(blockPos);
+        lightUpdateQueues[lightType.ordinal()].enqueue(blockPos);
     }
 
     /**
@@ -169,7 +169,7 @@ public final class LightingEngine {
         if (world.isRemote && !isCallingFromMainThread())
             return;
 
-        final LongArrayFIFOQueue queue = lightUpdateQueue[lightType.ordinal()];
+        final LongArrayFIFOQueue queue = lightUpdateQueues[lightType.ordinal()];
 
         // Quickly check if the queue is empty before we acquire a more expensive lock.
         if (queue.isEmpty())
@@ -272,7 +272,7 @@ public final class LightingEngine {
 
         // Iterate through enqueued updates (brightening and darkening in parallel) from brightest to darkest so that we only need to iterate once
         for (byte currentLight = MAX_LIGHT_LEVEL; currentLight >= 0; --currentLight) {
-            currentQueue = darkeningQueue[currentLight];
+            currentQueue = darkeningQueues[currentLight];
 
             while (nextItem()) {
                 // Don't darken if we got brighter due to some other change
@@ -323,7 +323,7 @@ public final class LightingEngine {
                 }
             }
 
-            currentQueue = brighteningQueue[currentLight];
+            currentQueue = brighteningQueues[currentLight];
 
             while (nextItem()) {
                 final byte oldLight = getCursorCachedLight(lightType);
@@ -451,7 +451,7 @@ public final class LightingEngine {
      * Enqueues the blockPos for brightening and sets its light value to newLight
      */
     private void enqueueBrightening(final BlockPos blockPos, final long longPos, final byte newLight, final Chunk chunk, final EnumSkyBlock lightType) {
-        brighteningQueue[newLight].enqueue(longPos);
+        brighteningQueues[newLight].enqueue(longPos);
 
         chunk.setLightFor(lightType, blockPos, newLight);
     }
@@ -460,7 +460,7 @@ public final class LightingEngine {
      * Enqueues the blockPos for darkening and sets its light value to 0
      */
     private void enqueueDarkening(final BlockPos blockPos, final long longPos, final byte oldLight, final Chunk chunk, final EnumSkyBlock lightType) {
-        darkeningQueue[oldLight].enqueue(longPos);
+        darkeningQueues[oldLight].enqueue(longPos);
 
         chunk.setLightFor(lightType, blockPos, 0);
     }
