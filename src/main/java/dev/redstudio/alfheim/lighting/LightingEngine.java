@@ -109,17 +109,17 @@ public final class LightingEngine {
         this.world = world;
         profiler = world.profiler;
 
-        initialBrightenings = new LongArrayFIFOQueue(128);
-        initialDarkenings = new LongArrayFIFOQueue(128);
+        initialBrightenings = new LongArrayFIFOQueue(16384);
+        initialDarkenings = new LongArrayFIFOQueue(16384);
 
         for (int i = 0; i < EnumSkyBlock.values().length; ++i)
-            lightUpdateQueues[i] = new LongArrayFIFOQueue(128);
+            lightUpdateQueues[i] = new LongArrayFIFOQueue(16384);
 
         for (int i = 0; i < darkeningQueues.length; ++i)
-            darkeningQueues[i] = new LongArrayFIFOQueue(128);
+            darkeningQueues[i] = new LongArrayFIFOQueue(16384);
 
         for (int i = 0; i < brighteningQueues.length; ++i)
-            brighteningQueues[i] = new LongArrayFIFOQueue(128);
+            brighteningQueues[i] = new LongArrayFIFOQueue(16384);
 
         for (int i = 0; i < neighborInfos.length; ++i)
             neighborInfos[i] = new NeighborInfo();
