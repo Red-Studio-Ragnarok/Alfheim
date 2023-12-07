@@ -515,11 +515,11 @@ public final class LightingEngine {
                 return 0;
         }
 
-        return (byte) ClampUtil.clampMaxFirst(LightUtil.getLightValueForState(state, world, currentPos), 0, MAX_LIGHT_LEVEL);
+        return (byte) LightUtil.getLightValueForState(state, world, currentPos);
     }
 
     private byte getPosOpacity(final BlockPos blockPos, final IBlockState blockState) {
-        return (byte) ClampUtil.clampMaxFirst(blockState.getLightOpacity(world, blockPos), 1, MAX_LIGHT_LEVEL);
+        return (byte) ClampUtil.clampMinFirst(blockState.getLightOpacity(world, blockPos), 1, MAX_LIGHT_LEVEL);
     }
 
     private Chunk getChunk(final BlockPos blockPos) {
