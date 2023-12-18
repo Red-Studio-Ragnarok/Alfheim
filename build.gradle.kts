@@ -7,7 +7,7 @@ plugins {
     id("com.gtnewhorizons.retrofuturagradle") version "1.3.26"
     id("org.jetbrains.gradle.plugin.idea-ext") version "1.1.7"
     id("com.matthewprenger.cursegradle") version "1.4.0"
-    id("com.github.gmazzo.buildconfig") version "4.2.0"
+    id("com.github.gmazzo.buildconfig") version "5.1.0"
     id("io.freefair.lombok") version "8.4"
 }
 
