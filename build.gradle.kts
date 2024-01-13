@@ -37,11 +37,6 @@ repositories {
     }
 
     maven {
-        name = "SpongePowered"
-        url = uri("https://repo.spongepowered.org/maven")
-    }
-
-    maven {
         name = "Curse Maven"
         url = uri("https://cursemaven.com")
         content {
@@ -85,6 +80,7 @@ dependencies {
 buildConfig {
     packageName("${project.group}.${id}")
     className("ProjectConstants")
+    documentation.set("This class defines constants for ${project.name}.\n<p>\nThey are automatically updated by Gradle, except for the name as Gradle would remove spaces.")
 
     useJavaOutput()
     buildConfigField("String", "ID", provider { """"${id}"""" })
@@ -155,7 +151,6 @@ tasks.named<Jar>("jar") {
     manifest {
         attributes(
             "ModSide" to "CLIENT",
-            "FMLAT" to "${id}_at.cfg",
             "FMLCorePlugin" to "${project.group}.${id}.${plugin}",
             "FMLCorePluginContainsFMLMod" to "true",
             "ForceLoadAsMod" to "true"
