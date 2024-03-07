@@ -16,7 +16,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import static dev.redstudio.alfheim.Alfheim.IS_NOTHIRIUM_LOADED;
-import static dev.redstudio.alfheim.ProjectConstants.LOGGER;
+import static dev.redstudio.alfheim.Alfheim.IS_VINTAGIUM_LOADED;
 
 /**
  * @author Luna Lage (Desoroxxx)
@@ -53,7 +53,7 @@ public abstract class RenderGlobalMixin implements ILightUpdatesProcessor {
      */
     @Override
     public void alfheim$processLightUpdates() {
-        if (setLightUpdates.isEmpty() || (!IS_NOTHIRIUM_LOADED && renderDispatcher.hasNoFreeRenderBuilders()))
+        if (setLightUpdates.isEmpty() || (!IS_NOTHIRIUM_LOADED && !IS_VINTAGIUM_LOADED && renderDispatcher.hasNoFreeRenderBuilders()))
             return;
 
         final Iterator<BlockPos> iterator = setLightUpdates.iterator();
