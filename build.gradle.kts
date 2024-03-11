@@ -8,7 +8,7 @@ plugins {
     id("org.jetbrains.gradle.plugin.idea-ext") version "1.1.7"
     id("com.matthewprenger.cursegradle") version "1.4.0"
     id("com.github.gmazzo.buildconfig") version "5.3.5"
-    id("io.freefair.lombok") version "8.4"
+    id("io.freefair.lombok") version "8.6"
 }
 
 group = "dev.redstudio"
