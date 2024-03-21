@@ -515,7 +515,7 @@ public final class LightingEngine {
                 return 0;
         }
 
-        return (byte) LightUtil.getLightValueForState(state, world, currentPos);
+        return (byte) ClampUtil.clampMinFirst(LightUtil.getLightValueForState(state, world, currentPos), 0, MAX_LIGHT_LEVEL);
     }
 
     private byte getPosOpacity(final BlockPos blockPos, final IBlockState blockState) {
