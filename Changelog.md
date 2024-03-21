@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project follows the [Ragnarök Versioning Convention](https://shor.cz/ragnarok_versioning_convention).
 
+## Alfheim Version 1.3 Changelog - 2024-03-21
+
+
+
+### Internal
+
+- Cleaned up the buildscript
+- Now uses the Red Studio maven for Red Core
+- Updated [RetroFuturaGradle](https://github.com/GTNewHorizons/RetroFuturaGradle) to version 1.3.33
+- Updated [foojay-resolver](https://github.com/gradle/foojay-toolchains) to version 0.8.0
+- Updated [io.freefair.lombok](https://plugins.gradle.org/plugin/io.freefair.lombok) to version 8.6
+- Updated [org.jetbrains.gradle.plugin.idea-ext](https://plugins.gradle.org/plugin/org.jetbrains.gradle.plugin.idea-ext) to version 1.1.8
+
 ## Alfheim Version 1.2 Changelog - 2023-12-11
 
 ### Changed
