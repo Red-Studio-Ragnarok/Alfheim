@@ -4,30 +4,24 @@ import org.jetbrains.gradle.ext.Gradle
 import org.jetbrains.gradle.ext.runConfigurations
 
 plugins {
-    id("com.gtnewhorizons.retrofuturagradle") version "1.3.26"
+    id("com.gtnewhorizons.retrofuturagradle") version "1.3.33"
     id("org.jetbrains.gradle.plugin.idea-ext") version "1.1.8"
-    id("com.matthewprenger.cursegradle") version "1.4.0"
     id("com.github.gmazzo.buildconfig") version "5.3.5"
     id("io.freefair.lombok") version "8.6"
 }
 
 group = "dev.redstudio"
-version = "1.2" // Versioning must follow Ragnarök versioning convention: https://shor.cz/ragnarok_versioning_convention
+version = "1.3-Dev-2" // Versioning must follow Ragnarök versioning convention: https://shor.cz/ragnarok_versioning_convention
 
 val id = project.name.lowercase()
-val plugin = "asm.${project.name}Plugin"
+val plugin = "${project.group}.${id}.asm.${project.name}Plugin"
 
-val redCoreVersion = "MC-1.7-1.12-" + "0.5"
+val redCoreVersion = "MC-1.8-1.12-" + "0.6-Dev-3"
 
 minecraft {
     mcVersion = "1.12.2"
     username = "Desoroxxx"
-    extraRunJvmArguments = listOf("-Dforge.logging.console.level=debug", "-Dfml.coreMods.load=${project.group}.${id}.${plugin}", "-Dmixin.hotSwap=true", "-Dmixin.checks.mixininterfaces=true", "-Dmixin.debug.export=true")
-    javaToolchain.get().vendor.set(JvmVendorSpec.ADOPTIUM)
-}
-
-configurations {
-    create("sources") // Define a configuration to download and attach sources
+    extraRunJvmArguments = listOf("-Dforge.logging.console.level=debug", "-Dfml.coreMods.load=${plugin}", "-Dmixin.hotSwap=true", "-Dmixin.checks.mixininterfaces=true", "-Dmixin.debug.export=true")
 }
 
 repositories {
@@ -36,31 +30,28 @@ repositories {
         url = uri("https://maven.cleanroommc.com")
     }
 
-    maven {
-        name = "Curse Maven"
-        url = uri("https://cursemaven.com")
-        content {
-            includeGroup("curse.maven")
+    listOf("release", "beta", "dev").forEach { repoType ->
+        maven {
+            name = "Red Studio - ${repoType.capitalize()}"
+            url = uri("https://repo.redstudio.dev/$repoType")
         }
     }
 
-    ivy {
-        name = "Red Studio GitHub Releases"
-        url = uri("https://github.com/")
-
-        patternLayout {
-            artifact("[organisation]/[module]/releases/download/[revision]/[module]-[revision](-[classifier]).[ext]")
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Curse Maven"
+                url = uri("https://cursemaven.com")
+            }
         }
-
-        metadataSources {
-            artifact()
+        filter {
+            includeGroup("curse.maven")
         }
     }
 }
 
 dependencies {
-    implementation("Red-Studio-Ragnarok", "Red-Core", redCoreVersion)
-    add("sources", "Red-Studio-Ragnarok:Red-Core:${redCoreVersion}:sources@jar")
+    implementation("dev.redstudio", "Red-Core", redCoreVersion)
 
     implementation(rfg.deobf("curse.maven:dynamic-lights-227874:2563244"))
 
@@ -80,7 +71,7 @@ dependencies {
 buildConfig {
     packageName("${project.group}.${id}")
     className("ProjectConstants")
-    documentation.set("This class defines constants for ${project.name}.\n<p>\nThey are automatically updated by Gradle, except for the name as Gradle would remove spaces.")
+    documentation.set("This class defines constants for ${project.name}.")
 
     useJavaOutput()
     buildConfigField("String", "ID", provider { """"${id}"""" })
@@ -151,7 +142,7 @@ tasks.named<Jar>("jar") {
     manifest {
         attributes(
             "ModSide" to "CLIENT",
-            "FMLCorePlugin" to "${project.group}.${id}.${plugin}",
+            "FMLCorePlugin" to "${plugin}",
             "FMLCorePluginContainsFMLMod" to "true",
             "ForceLoadAsMod" to "true"
         )
