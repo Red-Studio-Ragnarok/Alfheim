@@ -22,4 +22,5 @@ public final class Alfheim {
     public static final byte FLAG_COUNT = 32; // 2 light types * 4 directions * 2 halves * (inwards + outwards)
 
     public static final boolean IS_NOTHIRIUM_LOADED = Loader.isModLoaded("nothirium");
+    public static final boolean IS_VINTAGIUM_LOADED = Loader.isModLoaded("vintagium");
 }
