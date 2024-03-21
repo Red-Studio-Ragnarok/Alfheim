@@ -6,7 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Alfheim Version 1.3 Changelog - 2024-03-21
 
+### Fixed
 
+- Fixed compatibility with Vintagium (Thanks to [Asek3](https://github.com/Asek3) in [#41](https://github.com/Red-Studio-Ragnarok/Alfheim/pull/41))
 
 ### Internal
 
