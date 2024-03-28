@@ -15,7 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Cleaned up the buildscript
 - Now uses the Red Studio maven for Red Core
-- Updated [RetroFuturaGradle](https://github.com/GTNewHorizons/RetroFuturaGradle) to version 1.3.33
+- Updated [RetroFuturaGradle](https://github.com/GTNewHorizons/RetroFuturaGradle) to version 1.3.34
 - Updated [foojay-resolver](https://github.com/gradle/foojay-toolchains) to version 0.8.0
 - Updated [io.freefair.lombok](https://plugins.gradle.org/plugin/io.freefair.lombok) to version 8.6
 - Updated [org.jetbrains.gradle.plugin.idea-ext](https://plugins.gradle.org/plugin/org.jetbrains.gradle.plugin.idea-ext) to version 1.1.8
