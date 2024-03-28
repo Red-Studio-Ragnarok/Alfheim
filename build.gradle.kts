@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "dev.redstudio"
-version = "1.3-Dev-2" // Versioning must follow Ragnarök versioning convention: https://shor.cz/ragnarok_versioning_convention
+version = "1.3" // Versioning must follow Ragnarök versioning convention: https://shor.cz/ragnarok_versioning_convention
 
 val id = project.name.lowercase()
 val plugin = "${project.group}.${id}.asm.${project.name}Plugin"
