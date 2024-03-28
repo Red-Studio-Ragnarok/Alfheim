@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [UNRELEASED] Alfheim Version 1.3 Changelog
 
+### Changed
+
+- Queues are now deduplicated, meaning that the lighting engine won't update a position multiple times in a row, improving performance
+
 ### Fixed
 
 - Fixed compatibility with Vintagium (Thanks to [Asek3](https://github.com/Asek3) in [#41](https://github.com/Red-Studio-Ragnarok/Alfheim/pull/41))

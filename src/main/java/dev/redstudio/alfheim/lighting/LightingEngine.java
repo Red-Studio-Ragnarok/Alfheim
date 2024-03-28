@@ -1,8 +1,8 @@
 package dev.redstudio.alfheim.lighting;
 
 import dev.redstudio.alfheim.api.IChunkLightingData;
+import dev.redstudio.alfheim.utils.DeduplicatedLongQueue;
 import dev.redstudio.redcore.math.ClampUtil;
-import it.unimi.dsi.fastutil.longs.LongArrayFIFOQueue;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.profiler.Profiler;
@@ -39,16 +39,16 @@ public final class LightingEngine {
     private final Profiler profiler;
 
     // Layout of longs: [padding(4)] [y(8)] [x(26)] [z(26)]
-    private final LongArrayFIFOQueue[] lightUpdateQueues = new LongArrayFIFOQueue[EnumSkyBlock.values().length];
+    private final DeduplicatedLongQueue[] lightUpdateQueues = new DeduplicatedLongQueue[EnumSkyBlock.values().length];
 
     // Layout of longs: see above
-    private final LongArrayFIFOQueue[] darkeningQueues = new LongArrayFIFOQueue[MAX_LIGHT_LEVEL + 1];
-    private final LongArrayFIFOQueue[] brighteningQueues = new LongArrayFIFOQueue[MAX_LIGHT_LEVEL + 1];
+    private final DeduplicatedLongQueue[] darkeningQueues = new DeduplicatedLongQueue[MAX_LIGHT_LEVEL + 1];
+    private final DeduplicatedLongQueue[] brighteningQueues = new DeduplicatedLongQueue[MAX_LIGHT_LEVEL + 1];
 
     // Layout of longs: [newLight(4)] [pos(60)]
-    private final LongArrayFIFOQueue initialBrightenings;
+    private final DeduplicatedLongQueue initialBrightenings;
     // Layout of longs: [padding(4)] [pos(60)]
-    private final LongArrayFIFOQueue initialDarkenings;
+    private final DeduplicatedLongQueue initialDarkenings;
 
     private boolean updating = false;
 
@@ -101,7 +101,7 @@ public final class LightingEngine {
     private boolean isNeighborDataValid = false;
 
     private final NeighborInfo[] neighborInfos = new NeighborInfo[6];
-    private LongArrayFIFOQueue currentQueue;
+    private DeduplicatedLongQueue currentQueue;
 
     private final ReentrantLock lock = new ReentrantLock();
 
@@ -109,17 +109,17 @@ public final class LightingEngine {
         this.world = world;
         profiler = world.profiler;
 
-        initialBrightenings = new LongArrayFIFOQueue(16384);
-        initialDarkenings = new LongArrayFIFOQueue(16384);
+        initialBrightenings = new DeduplicatedLongQueue(16384);
+        initialDarkenings = new DeduplicatedLongQueue(16384);
 
         for (int i = 0; i < EnumSkyBlock.values().length; ++i)
-            lightUpdateQueues[i] = new LongArrayFIFOQueue(16384);
+            lightUpdateQueues[i] = new DeduplicatedLongQueue(16384);
 
         for (int i = 0; i < darkeningQueues.length; ++i)
-            darkeningQueues[i] = new LongArrayFIFOQueue(16384);
+            darkeningQueues[i] = new DeduplicatedLongQueue(16384);
 
         for (int i = 0; i < brighteningQueues.length; ++i)
-            brighteningQueues[i] = new LongArrayFIFOQueue(16384);
+            brighteningQueues[i] = new DeduplicatedLongQueue(16384);
 
         for (int i = 0; i < neighborInfos.length; ++i)
             neighborInfos[i] = new NeighborInfo();
@@ -169,7 +169,7 @@ public final class LightingEngine {
         if (world.isRemote && !isCallingFromMainThread())
             return;
 
-        final LongArrayFIFOQueue queue = lightUpdateQueues[lightType.ordinal()];
+        final DeduplicatedLongQueue queue = lightUpdateQueues[lightType.ordinal()];
 
         // Quickly check if the queue is empty before we acquire a more expensive lock.
         if (queue.isEmpty())
@@ -219,7 +219,7 @@ public final class LightingEngine {
         lock.lock();
     }
 
-    private void processLightUpdatesForTypeInner(final EnumSkyBlock lightType, final LongArrayFIFOQueue queue) {
+    private void processLightUpdatesForTypeInner(final EnumSkyBlock lightType, final DeduplicatedLongQueue queue) {
         // Avoid nested calls
         if (updating)
             throw new IllegalStateException("Already processing updates!");
@@ -229,6 +229,9 @@ public final class LightingEngine {
         currentChunkIdentifier = -1; // Reset chunk cache
 
         currentQueue = queue;
+
+        if (currentQueue != null)
+            currentQueue.clearSet();
 
         profiler.startSection("prepare");
 
@@ -250,6 +253,9 @@ public final class LightingEngine {
 
         currentQueue = initialBrightenings;
 
+        if (currentQueue != null)
+            currentQueue.clearSet();
+
         while (nextItem()) {
             final byte newLight = (byte) (currentData >> S_L & M_L);
 
@@ -260,6 +266,9 @@ public final class LightingEngine {
         profiler.endStartSection("enqueueDarkening");
 
         currentQueue = initialDarkenings;
+
+        if (currentQueue != null)
+            currentQueue.clearSet();
 
         while (nextItem()) {
             final byte oldLight = getCursorCachedLight(lightType);
@@ -273,6 +282,9 @@ public final class LightingEngine {
         // Iterate through enqueued updates (brightening and darkening in parallel) from brightest to darkest so that we only need to iterate once
         for (byte currentLight = MAX_LIGHT_LEVEL; currentLight >= 0; --currentLight) {
             currentQueue = darkeningQueues[currentLight];
+
+            if (currentQueue != null)
+                currentQueue.clearSet();
 
             while (nextItem()) {
                 // Don't darken if we got brighter due to some other change
@@ -324,6 +336,9 @@ public final class LightingEngine {
             }
 
             currentQueue = brighteningQueues[currentLight];
+
+            if (currentQueue != null)
+                currentQueue.clearSet();
 
             while (nextItem()) {
                 final byte oldLight = getCursorCachedLight(lightType);
@@ -485,7 +500,7 @@ public final class LightingEngine {
             return false;
         }
 
-        currentData = currentQueue.dequeueLong();
+        currentData = currentQueue.dequeue();
         isNeighborDataValid = false;
 
         decodeWorldCoord(currentPos, currentData);
