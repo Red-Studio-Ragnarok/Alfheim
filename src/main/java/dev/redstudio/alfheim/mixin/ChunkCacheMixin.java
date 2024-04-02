@@ -24,15 +24,12 @@ public abstract class ChunkCacheMixin implements ILightLevelProvider {
     @Shadow public abstract IBlockState getBlockState(BlockPos pos);
 
     /**
-     * Explicitly making this method we overwrite public to prevent access level conflicts at runtime.
-     * Mods may adjust the visibility of this method to public, causing a crash if our overwritten method has different scope.
-     *
      * @reason Redirect to our lighting engine.
      * @author Luna Lage (Desoroxxx)
      */
     @Overwrite
     @SideOnly(Side.CLIENT)
-    public int getLightForExt(final EnumSkyBlock lightType, final BlockPos blockPos) {
+    private int getLightForExt(final EnumSkyBlock lightType, final BlockPos blockPos) {
         return ((ILightInfoProvider) getBlockState(blockPos)).alfheim$getLightFor(((ChunkCache) (Object) this), lightType, blockPos);
     }
 
