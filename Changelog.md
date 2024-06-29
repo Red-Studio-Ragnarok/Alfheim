@@ -11,6 +11,10 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 
 - Overwrites now do not enforce the scope of methods to prevent crashes, using `conformVisibility` option instead
 
+### Fixed
+
+- Fixed version checking
+
 ## Alfheim Version 1.3 Changelog - 2024-03-28
 
 ### Changed
