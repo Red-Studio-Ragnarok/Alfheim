@@ -22,6 +22,7 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 - Remade the build script
 - Switched to the new standard `gradle.properties`
 - Updated to [Gradle](https://gradle.org) 8.8
+- Updated to [RetroFuturaGradle](https://github.com/GTNewHorizons/RetroFuturaGradle) 1.4.1
 
 ## Alfheim Version 1.3 Changelog - 2024-03-28
 
