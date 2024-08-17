@@ -18,7 +18,7 @@ val plugin = "${project.group}.${id}.asm.${project.name}Plugin"
 
 val redCoreVersion = "MC-1.8-1.12-" + "0.6-Dev-5"
 
-val mixinBooterVersion = "8.6"
+val mixinBooterVersion = "9.0"
 
 minecraft {
     mcVersion = "1.12.2"
