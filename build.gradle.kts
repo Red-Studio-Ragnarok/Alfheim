@@ -103,8 +103,17 @@ tasks {
         inputs.properties(expandProperties)
 
         filesMatching("**/*.*") {
-            if (!path.endsWith(".png"))
-                expand(expandProperties)
+            if (!path.endsWith(".png")) {
+                if (path.endsWith("mixins.alfheim.json")) {
+                    filter { line ->
+                        expandProperties.entries.fold(line) { acc, (key, value) ->
+                            acc.replace("\${$key}", value.toString())
+                        }
+                    }
+                } else {
+                    expand(expandProperties)
+                }
+            }
         }
     }
 
