@@ -16,6 +16,7 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 ### Fixed
 
 - Fixed version checking
+- Fixed Alfheim not loading on dedicated servers
 
 ### Internal
 
