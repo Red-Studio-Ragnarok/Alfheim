@@ -16,7 +16,7 @@ version = "1.4-Dev-1" // Versioning must follow Ragnarök versioning convention:
 val id = project.name.lowercase()
 val plugin = "${project.group}.${id}.asm.${project.name}Plugin"
 
-val redCoreVersion = "MC-1.8-1.12-" + "0.6-Dev-5"
+val redCoreVersion = "MC-1.8-1.12-" + "0.6-Dev-7"
 
 val mixinBooterVersion = "9.0"
 
