@@ -62,10 +62,11 @@ public abstract class BlockMixin implements ILitBlock {
     public float getAmbientOcclusionLightValue(final IBlockState blockState) {
         final byte lightValue = (byte) ClampUtil.clampMinFirst(blockState.getLightValue() -1, 0, 15);
 
-        if (lightValue == 0)
+        if (lightValue == 0) {
             return blockState.isBlockNormalCube() ? 0.2F : 1;
-        else
-            return 1F; // Todo: Cleanup
+        } else {
+            return 1;
+        }
     }
 
     @Override

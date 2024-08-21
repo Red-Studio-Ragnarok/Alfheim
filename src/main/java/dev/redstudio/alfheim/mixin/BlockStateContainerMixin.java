@@ -1,7 +1,7 @@
 package dev.redstudio.alfheim.mixin;
 
-import dev.redstudio.alfheim.api.ILitBlock;
 import dev.redstudio.alfheim.api.ILightInfoProvider;
+import dev.redstudio.alfheim.api.ILitBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;

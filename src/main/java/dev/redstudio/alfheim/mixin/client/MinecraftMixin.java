@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MinecraftMixin {
 
     @Shadow @Final public Profiler profiler;
-    
+
     @Shadow public RenderGlobal renderGlobal;
 
     @Shadow private boolean isGamePaused;

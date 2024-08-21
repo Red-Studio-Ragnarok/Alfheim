@@ -2,9 +2,9 @@ package dev.redstudio.alfheim.mixin;
 
 import dev.redstudio.alfheim.api.IChunkLightingData;
 import dev.redstudio.alfheim.api.ILightingEngineProvider;
-import dev.redstudio.alfheim.utils.EnumBoundaryFacing;
-import dev.redstudio.alfheim.lighting.LightingEngine;
 import dev.redstudio.alfheim.lighting.LightUtil;
+import dev.redstudio.alfheim.lighting.LightingEngine;
+import dev.redstudio.alfheim.utils.EnumBoundaryFacing;
 import dev.redstudio.alfheim.utils.WorldChunkSlice;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;

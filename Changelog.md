@@ -33,6 +33,7 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 - Updated to [RetroFuturaGradle](https://github.com/GTNewHorizons/RetroFuturaGradle) 1.4.1
 - Updated to [MixinBooter](https://github.com/CleanroomMC/MixinBooter) 9.0
 - Set a minimum Gradle Daemon JVM version requirement
+- General cleanup
 
 ## Alfheim Version 1.3 Changelog - 2024-03-28
 
