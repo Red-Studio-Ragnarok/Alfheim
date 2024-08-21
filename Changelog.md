@@ -19,6 +19,10 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 - Fixed version checking
 - Fixed Alfheim not loading on dedicated servers
 
+### Removed
+
+- Removed line asking to report a threading issue which is caused by other mods
+
 ### Internal
 
 - Updated to [gradle-buildconfig-plugin](https://github.com/gmazzo/gradle-buildconfig-plugin) 5.4.0

@@ -209,8 +209,7 @@ public final class LightingEngine {
                     "Something (likely another mod) has attempted to modify the world's state from the wrong thread!\n" +
                             "This is *bad practice* and can cause severe issues in your game.\n" +
                             "Alfheim has done as best as it can to mitigate this violation, but it may negatively impact performance or introduce stalls.\n" +
-                            "In a future release, this violation may result in a hard crash instead of the current soft warning.\n" +
-                            "You should report this issue to our issue tracker with the following stacktrace information."
+                            "In a future release, this violation may result in a hard crash instead of the current soft warning.\n"
                     , illegalAccessException);
 
         }
