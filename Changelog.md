@@ -11,7 +11,7 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 
 - Overwrites now do not enforce the scope of methods to prevent crashes, using `conformVisibility` option instead
 - Updated dependencies:
-  - Requires MixinBooter 9.0 and up
+  - Requires MixinBooter 8.8 and up
 
 ### Fixed
 
