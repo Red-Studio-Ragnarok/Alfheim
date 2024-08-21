@@ -7,14 +7,16 @@ import zone.rong.mixinbooter.IEarlyMixinLoader;
 import java.util.List;
 import java.util.Map;
 
+import static dev.redstudio.alfheim.ProjectConstants.ID;
 import static dev.redstudio.alfheim.ProjectConstants.LOGGER;
+import static dev.redstudio.alfheim.ProjectConstants.NAME;
 
 /**
  * @author Luna Lage (Desoroxxx)
  * @since 1.0
  */
 @IFMLLoadingPlugin.MCVersion("1.12.2")
-@IFMLLoadingPlugin.TransformerExclusions("dev.redstudio.alfheim.asm")
+@IFMLLoadingPlugin.TransformerExclusions("dev.redstudio." + ID + ".asm")
 public final class AlfheimPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
 
     @Override
@@ -43,13 +45,13 @@ public final class AlfheimPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader
 
     @Override
     public List<String> getMixinConfigs() {
-        return ImmutableList.of("mixins.alfheim.json");
+        return ImmutableList.of("mixins." + ID +".json");
     }
 
     @Override
     public boolean shouldMixinConfigQueue(final String mixinConfig) {
         switch (mixinConfig) {
-            case "mixins.alfheim.json":
+            case "mixins." + ID +".json":
                 return !isCubicChunksInstalled();
             default:
                 return true;
@@ -68,8 +70,7 @@ public final class AlfheimPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader
             return false;
         }
 
-        LOGGER.warn("Cubic Chunks was detected, it uses it's own lighting engine, Alfheim will not load");
-
+        LOGGER.warn("Cubic Chunks was detected, it uses it's own lighting engine, {} will not load", NAME);
         return true;
     }
 }

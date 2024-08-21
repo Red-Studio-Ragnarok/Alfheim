@@ -1,9 +1,9 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "dev.redstudio.alfheim.mixin",
+  "package": "dev.redstudio.${id}.mixin",
   "compatibilityLevel": "JAVA_8",
-  "refmap": "mixins.alfheim.refmap.json",
+  "refmap": "mixins.${id}.refmap.json",
   "injectors": {
     "defaultRequire": 1
   },

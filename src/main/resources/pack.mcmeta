@@ -1,6 +1,6 @@
 {
   "pack": {
-    "description": "Alfheim resources",
+    "description": "${name} resources",
     "pack_format": 3
   }
 }

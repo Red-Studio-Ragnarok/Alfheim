@@ -20,6 +20,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.concurrent.locks.ReentrantLock;
 
 import static dev.redstudio.alfheim.ProjectConstants.LOGGER;
+import static dev.redstudio.alfheim.ProjectConstants.NAME;
 
 /**
  * @author Luna Lage (Desoroxxx)
@@ -208,7 +209,7 @@ public final class LightingEngine {
             LOGGER.warn(
                     "Something (likely another mod) has attempted to modify the world's state from the wrong thread!\n" +
                             "This is *bad practice* and can cause severe issues in your game.\n" +
-                            "Alfheim has done as best as it can to mitigate this violation, but it may negatively impact performance or introduce stalls.\n" +
+                            NAME + " has done as best as it can to mitigate this violation, but it may negatively impact performance or introduce stalls.\n" +
                             "In a future release, this violation may result in a hard crash instead of the current soft warning.\n"
                     , illegalAccessException);
 
