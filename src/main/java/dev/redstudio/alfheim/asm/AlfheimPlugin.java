@@ -50,12 +50,7 @@ public final class AlfheimPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader
     public boolean shouldMixinConfigQueue(final String mixinConfig) {
         switch (mixinConfig) {
             case "mixins.alfheim.json":
-                if (isCubicChunksInstalled()) {
-                    LOGGER.warn("Cubic Chunks was detected, it uses it's own lighting engine, Alfheim will not load");
-                    return false;
-                }
-
-                return true;
+                return !isCubicChunksInstalled();
             default:
                 return true;
         }
@@ -72,6 +67,8 @@ public final class AlfheimPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader
         } catch (final ClassNotFoundException ignored) {
             return false;
         }
+
+        LOGGER.warn("Cubic Chunks was detected, it uses it's own lighting engine, Alfheim will not load");
 
         return true;
     }
