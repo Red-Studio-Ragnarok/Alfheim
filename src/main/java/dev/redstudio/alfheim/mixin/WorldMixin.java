@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
  * @author Luna Lage (Desoroxxx)
@@ -37,10 +37,10 @@ public abstract class WorldMixin implements ILightingEngineProvider, ILightLevel
     @Shadow public abstract IBlockState getBlockState(final BlockPos blockPos);
 
     /**
-     * Initialize the lighting engine on world construction.
+     * Initialize the lighting engine when init() called.
      */
-    @Inject(method = "<init>", at = @At("RETURN"))
-    private void onConstructed(final CallbackInfo callbackInfo) {
+    @Inject(method = "init", at = @At("HEAD"))
+    private void onConstructed(final CallbackInfoReturnable<World> cir) {
         alfheim$lightingEngine = new LightingEngine((World) (Object) this);
     }
 
