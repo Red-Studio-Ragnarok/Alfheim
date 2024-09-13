@@ -14,9 +14,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
  * @author Luna Lage (Desoroxxx)
@@ -37,21 +34,12 @@ public abstract class WorldMixin implements ILightingEngineProvider, ILightLevel
     @Shadow public abstract IBlockState getBlockState(final BlockPos blockPos);
 
     /**
-     * Initialize the lighting engine when init() called.
-     */
-    @Inject(method = "init", at = @At("HEAD"))
-    private void onConstructed(final CallbackInfoReturnable<World> cir) {
-        alfheim$lightingEngine = new LightingEngine((World) (Object) this);
-    }
-
-    /**
      * @reason Redirect to our lighting engine.
      * @author Luna Lage (Desoroxxx)
      */
     @Overwrite
     public boolean checkLightFor(final EnumSkyBlock lightType, final BlockPos blockPos) {
-        alfheim$lightingEngine.scheduleLightUpdate(lightType, blockPos);
-
+        alfheim$getLightingEngine().scheduleLightUpdate(lightType, blockPos);
         return true;
     }
 
@@ -81,6 +69,10 @@ public abstract class WorldMixin implements ILightingEngineProvider, ILightLevel
 
     @Override
     public LightingEngine alfheim$getLightingEngine() {
+        // Lazy Init
+        if (alfheim$lightingEngine == null) {
+            alfheim$lightingEngine = new LightingEngine((World) (Object) this);
+        }
         return alfheim$lightingEngine;
     }
 
