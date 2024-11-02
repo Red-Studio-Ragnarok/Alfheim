@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com),
 and this project follows the [Ragnarök Versioning Convention](https://github.com/Red-Studio-Ragnarok/Commons/blob/main/Ragnar%C3%B6k%20Versioning%20Convention.md).
 
+## [UNRELEASED] Alfheim Version 1.5 Changelog
+
+### Internal
+
+- Updated to [org.jetbrains.gradle.plugin.idea-ext](https://github.com/JetBrains/gradle-idea-ext-plugin) 1.1.9
+- Updated to [MixinBooter](https://github.com/CleanroomMC/MixinBooter) 9.4
+- Updated to [gradle-buildconfig-plugin](https://github.com/gmazzo/gradle-buildconfig-plugin) 5.5.0
+
 ## Alfheim Version 1.4 Changelog - 2024-08-21
 
 ### Changed
