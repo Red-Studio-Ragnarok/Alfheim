@@ -76,9 +76,9 @@ buildConfig {
     documentation.set("This class defines constants for ${project.name}.\n<p>\nThey are automatically updated by Gradle.")
 
     useJavaOutput()
-    buildConfigField("String", "ID", provider { """"$id"""" })
-    buildConfigField("String", "NAME", provider { """"${project.name}"""" })
-    buildConfigField("String", "VERSION", provider { """"${project.version}"""" })
+    buildConfigField("ID", id)
+    buildConfigField("NAME", project.name)
+    buildConfigField("VERSION", project.version.toString())
     buildConfigField("org.apache.logging.log4j.Logger", "LOGGER", "org.apache.logging.log4j.LogManager.getLogger(NAME)")
     buildConfigField("dev.redstudio.redcore.logging.RedLogger", "RED_LOGGER", """new RedLogger(NAME, "https://linkify.cz/AlfheimBugReport", LOGGER)""")
 }

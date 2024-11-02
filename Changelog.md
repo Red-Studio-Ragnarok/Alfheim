@@ -12,6 +12,7 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 - Updated to [org.jetbrains.gradle.plugin.idea-ext](https://github.com/JetBrains/gradle-idea-ext-plugin) 1.1.9
 - Updated to [MixinBooter](https://github.com/CleanroomMC/MixinBooter) 9.4
 - Updated to [gradle-buildconfig-plugin](https://github.com/gmazzo/gradle-buildconfig-plugin) 5.5.0
+- Cleaned up buildscript
 
 ## Alfheim Version 1.4 Changelog - 2024-08-21
 
