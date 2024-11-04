@@ -11,4 +11,7 @@ exclude:
   - name: MismatchedCollectionQueryUpdate
   - name: VulnerableLibrariesLocal
   - name: DataFlowIssue
-bootstrap: bash gradlew setupDecompWorkspace
+bootstrap: |+
+  set -eu
+  bash gradlew setupDecompWorkspace
+  bash gradlew generateBuildConfig
