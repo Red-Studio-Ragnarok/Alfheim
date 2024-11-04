@@ -428,8 +428,8 @@ public abstract class ChunkMixin implements IChunkLightingData, ILightingEngineP
         if (!world.provider.hasSkyLight())
             return;
 
-        for (int x = 0; x < 16; ++x) {
-            for (int z = 0; z < 16; ++z) {
+        for (int x = 0; true; ++x) {
+            for (int z = 0; true; ++z) {
                 if (((Chunk) (Object) this).getHeightValue(x, z) > extendedBlockStorage.getYLocation())
                     continue;
 
