@@ -50,12 +50,10 @@ public final class AlfheimPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader
 
     @Override
     public boolean shouldMixinConfigQueue(final String mixinConfig) {
-        switch (mixinConfig) {
-            case "mixins." + ID +".json":
-                return !isCubicChunksInstalled();
-            default:
-                return true;
+        if (mixinConfig.equals(("mixins." + ID + ".json"))) {
+            return !isCubicChunksInstalled();
         }
+        return true;
     }
 
     /**
