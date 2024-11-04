@@ -11,3 +11,5 @@ exclude:
   - name: MismatchedCollectionQueryUpdate
   - name: VulnerableLibrariesLocal
   - name: DataFlowIssue
+bootstrap:
+  - ./gradlew setupDecompWorkspace
