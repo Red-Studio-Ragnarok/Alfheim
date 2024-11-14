@@ -13,8 +13,8 @@ import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
  */
 public final class DeduplicatedLongQueue {
 
-    private final LongOpenHashSet set;
     private final LongArrayFIFOQueue queue;
+    private LongOpenHashSet set;
 
     /**
      * Creates a new deduplicated queue with the given capacity.
@@ -55,9 +55,9 @@ public final class DeduplicatedLongQueue {
     }
 
     /**
-     * Clears the deduplication set.
+     * Creates a new deduplication set.
      */
-    public void clearSet() {
-        set.clear();
+    public void newDeduplicationSet() {
+        set = new LongOpenHashSet(queue.size());
     }
 }

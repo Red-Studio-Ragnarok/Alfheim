@@ -7,6 +7,10 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 
 ## [UNRELEASED] Alfheim Version 1.5 Changelog
 
+### Changed
+
+- `DeduplicatedLongQueue` now creates a new deduplication set instead of clearing it
+
 ### Internal
 
 - Updated to [org.jetbrains.gradle.plugin.idea-ext](https://github.com/JetBrains/gradle-idea-ext-plugin) 1.1.9

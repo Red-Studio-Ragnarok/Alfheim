@@ -231,7 +231,7 @@ public final class LightingEngine {
         currentQueue = queue;
 
         if (currentQueue != null)
-            currentQueue.clearSet();
+            currentQueue.newDeduplicationSet();
 
         profiler.startSection("prepare");
 
@@ -254,7 +254,7 @@ public final class LightingEngine {
         currentQueue = initialBrightenings;
 
         if (currentQueue != null)
-            currentQueue.clearSet();
+            currentQueue.newDeduplicationSet();
 
         while (nextItem()) {
             final byte newLight = (byte) (currentData >> S_L & M_L);
@@ -268,7 +268,7 @@ public final class LightingEngine {
         currentQueue = initialDarkenings;
 
         if (currentQueue != null)
-            currentQueue.clearSet();
+            currentQueue.newDeduplicationSet();
 
         while (nextItem()) {
             final byte oldLight = getCursorCachedLight(lightType);
@@ -284,7 +284,7 @@ public final class LightingEngine {
             currentQueue = darkeningQueues[currentLight];
 
             if (currentQueue != null)
-                currentQueue.clearSet();
+                currentQueue.newDeduplicationSet();
 
             while (nextItem()) {
                 // Don't darken if we got brighter due to some other change
@@ -338,7 +338,7 @@ public final class LightingEngine {
             currentQueue = brighteningQueues[currentLight];
 
             if (currentQueue != null)
-                currentQueue.clearSet();
+                currentQueue.newDeduplicationSet();
 
             while (nextItem()) {
                 final byte oldLight = getCursorCachedLight(lightType);
