@@ -16,7 +16,7 @@ version = "1.5-Dev-1" // Versioning must follow Ragnarök versioning convention:
 val id = project.name.lowercase()
 val plugin = "${project.group}.${id}.asm.${project.name}Plugin"
 
-val redCoreVersion = "MC-1.8-1.12-" + "0.6-Dev-7"
+val redCoreVersion = "MC-1.8-1.12-" + "0.6-Dev-8"
 
 val mixinBooterVersion = "10.2"
 
@@ -76,9 +76,13 @@ buildConfig {
     documentation.set("This class defines constants for ${project.name}.\n<p>\nThey are automatically updated by Gradle.")
 
     useJavaOutput()
+
+    // Details
     buildConfigField("ID", id)
     buildConfigField("NAME", project.name)
     buildConfigField("VERSION", project.version.toString())
+
+    // Loggers
     buildConfigField("org.apache.logging.log4j.Logger", "LOGGER", "org.apache.logging.log4j.LogManager.getLogger(NAME)")
     buildConfigField("dev.redstudio.redcore.logging.RedLogger", "RED_LOGGER", """new RedLogger(NAME, "https://linkify.cz/AlfheimBugReport", LOGGER)""")
 }
@@ -131,7 +135,7 @@ tasks {
     withType<JavaCompile>().configureEach {
         options.encoding = "UTF-8"
         options.isFork = true
-        options.forkOptions.jvmArgs = listOf("-Xmx4G")
+        options.forkOptions.jvmArgs = listOf("-Xmx4G", "-XX:+UseStringDeduplication")
     }
 }
 
