@@ -75,7 +75,7 @@ public abstract class RenderGlobalMixin implements ILightUpdatesProcessor {
             final int y = blockpos.getY();
             final int z = blockpos.getZ();
 
-            markBlocksForUpdate(x, y, z, x, y, z, false);
+            markBlocksForUpdate(x - 1, y - 1, z - 1, x + 1, y + 1, z + 1, false);
 
             lightUpdatesProcessed++;
         }

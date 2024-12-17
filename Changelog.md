@@ -61,6 +61,7 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 
 - Fixed compatibility with Vintagium (Thanks to [Asek3](https://github.com/Asek3) in [#41](https://github.com/Red-Studio-Ragnarok/Alfheim/pull/41))
 - Fixed `ArrayIndexOutOfBoundsException` crashes
+- Fixed client lighting not updating past render chunk boundaries [#40](https://github.com/Red-Studio-Ragnarok/Alfheim/issues/40)
 
 ### Internal
 
