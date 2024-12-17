@@ -10,6 +10,7 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 ### Changed
 
 - `DeduplicatedLongQueue` now creates a new deduplication set instead of clearing it
+- Client light processing now uses a queue which improves performance of light updates
 
 ### Fixed
 
