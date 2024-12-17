@@ -17,6 +17,7 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 - Updated to [MixinBooter](https://github.com/CleanroomMC/MixinBooter) 9.4
 - Updated to [gradle-buildconfig-plugin](https://github.com/gmazzo/gradle-buildconfig-plugin) 5.5.0
 - Cleaned up buildscript
+- Updated [RetroFuturaGradle](https://github.com/GTNewHorizons/RetroFuturaGradle) to version 1.4.2
 
 ## Alfheim Version 1.4 Changelog - 2024-08-21
 
