@@ -11,6 +11,10 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 
 - `DeduplicatedLongQueue` now creates a new deduplication set instead of clearing it
 
+### Fixed
+
+- Fixed client lighting not updating past render chunk boundaries [#40](https://github.com/Red-Studio-Ragnarok/Alfheim/issues/40)
+
 ### Internal
 
 - Updated to [org.jetbrains.gradle.plugin.idea-ext](https://github.com/JetBrains/gradle-idea-ext-plugin) 1.1.9
@@ -61,7 +65,6 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 
 - Fixed compatibility with Vintagium (Thanks to [Asek3](https://github.com/Asek3) in [#41](https://github.com/Red-Studio-Ragnarok/Alfheim/pull/41))
 - Fixed `ArrayIndexOutOfBoundsException` crashes
-- Fixed client lighting not updating past render chunk boundaries [#40](https://github.com/Red-Studio-Ragnarok/Alfheim/issues/40)
 
 ### Internal
 
