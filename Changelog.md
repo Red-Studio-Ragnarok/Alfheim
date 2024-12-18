@@ -11,6 +11,7 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 
 - `DeduplicatedLongQueue` now creates a new deduplication set instead of clearing it
 - Client light processing now uses a queue which improves performance of light updates
+- Improved client light processing performance by using a `DeduplicatedLongQueue` instead of a `Set` of `BlockPos` objects
 
 ### Fixed
 

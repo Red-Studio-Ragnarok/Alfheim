@@ -13,6 +13,8 @@ import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
  */
 public final class DeduplicatedLongQueue {
 
+    // TODO: Fully Implement my own implementation to get rid of the downsides of reduce etc...
+
     private final LongArrayFIFOQueue queue;
     private LongOpenHashSet set;
 

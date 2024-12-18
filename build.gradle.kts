@@ -97,6 +97,12 @@ java {
 }
 
 tasks {
+    listOf(deobfuscateMergedJarToSrg, srgifyBinpatchedJar).forEach {
+        it.configure {
+            accessTransformerFiles.from(project.files("src/main/resources/META-INF/${id}_at.cfg"))
+        }
+    }
+
     processResources {
         val expandProperties = mapOf(
             "version" to project.version,

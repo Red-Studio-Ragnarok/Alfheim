@@ -1,34 +1,49 @@
 package dev.redstudio.alfheim.mixin.client;
 
 import dev.redstudio.alfheim.api.ILightUpdatesProcessor;
+import dev.redstudio.alfheim.utils.DeduplicatedLongQueue;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.chunk.ChunkRenderDispatcher;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import java.util.*;
+import java.util.Set;
 
 import static dev.redstudio.alfheim.Alfheim.IS_NOTHIRIUM_LOADED;
 import static dev.redstudio.alfheim.Alfheim.IS_VINTAGIUM_LOADED;
+import static net.minecraft.util.math.BlockPos.*;
 
 /**
  * @author Luna Lage (Desoroxxx)
+ * @version 2024-12-18
  * @since 1.0
  */
 @SideOnly(Side.CLIENT)
 @Mixin(RenderGlobal.class)
 public abstract class RenderGlobalMixin implements ILightUpdatesProcessor {
 
+    @Unique private final DeduplicatedLongQueue alfheim$lightUpdatesQueue = new DeduplicatedLongQueue(8192);
+
     @Shadow private ChunkRenderDispatcher renderDispatcher;
-    @Shadow @Final private Set<BlockPos> setLightUpdates;
 
     @Shadow protected abstract void markBlocksForUpdate(int minX, int minY, int minZ, int maxX, int maxY, int maxZ, boolean updateImmediately);
+
+    /**
+     * @author Luna Lage (Desoroxxx)
+     * @reason Use a deduplicated long queue instead of a set
+     * @since 1.5
+     */
+    @Overwrite
+    public void notifyLightSet(final BlockPos blockPos) {
+        alfheim$lightUpdatesQueue.enqueue(blockPos.toLong());
+    }
 
     /**
      * Disable vanilla code to replace it with {@link #alfheim$processLightUpdates}
@@ -43,27 +58,29 @@ public abstract class RenderGlobalMixin implements ILightUpdatesProcessor {
     /**
      * Fixes <a href="https://bugs.mojang.com/browse/MC-80966">MC-80966</a> by not checking if the chunk is empty or not.
      * <p>
-     * Also improves performance by updating only the blocks in the set instead of every block in a 3x3 radius around each block in the set.
-     * Another performance improvement is using || instead of && allowing to skip earlier when there is nothing to update.
+     * It also improves performance by using a {@link DeduplicatedLongQueue} instead of a set.
+     * This removes the need to use an expensive iterator.
+     * It also reduces memory usage and GC pressure by using long primitives instead of a {@link BlockPos} object.
      * <p>
-     * This also limits how many light updates are processed at once.
+     * Another performance improvement is using || instead of && allowing to skip earlier when there is nothing to update.
      *
      * @since 1.0
      */
     @Override
     public void alfheim$processLightUpdates() {
-        if (setLightUpdates.isEmpty() || (!IS_NOTHIRIUM_LOADED && !IS_VINTAGIUM_LOADED && renderDispatcher.hasNoFreeRenderBuilders()))
+        if (alfheim$lightUpdatesQueue.isEmpty() || (!IS_NOTHIRIUM_LOADED && !IS_VINTAGIUM_LOADED && renderDispatcher.hasNoFreeRenderBuilders()))
             return;
 
-        final Queue<BlockPos> queue = new ArrayDeque<>(setLightUpdates);
-        BlockPos blockpos;
+        while (!alfheim$lightUpdatesQueue.isEmpty()) {
+            final long longPos = alfheim$lightUpdatesQueue.dequeue();
 
-        while ((blockpos = queue.poll()) != null) {
-            final int x = blockpos.getX();
-            final int y = blockpos.getY();
-            final int z = blockpos.getZ();
+            final int x = (int) (longPos << 64 - X_SHIFT - NUM_X_BITS >> 64 - NUM_X_BITS);
+            final int y = (int) (longPos << 64 - Y_SHIFT - NUM_Y_BITS >> 64 - NUM_Y_BITS);
+            final int z = (int) (longPos << 64 - NUM_Z_BITS >> 64 - NUM_Z_BITS);
 
             markBlocksForUpdate(x - 1, y - 1, z - 1, x + 1, y + 1, z + 1, false);
         }
+
+        alfheim$lightUpdatesQueue.newDeduplicationSet();
     }
 }
