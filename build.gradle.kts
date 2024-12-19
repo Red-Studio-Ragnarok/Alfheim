@@ -131,6 +131,7 @@ tasks {
         manifest {
             attributes(
                 "ModSide" to "BOTH",
+                "FMLAT" to "${id}_at.cfg",
                 "FMLCorePlugin" to plugin,
                 "FMLCorePluginContainsFMLMod" to "true",
                 "ForceLoadAsMod" to "true"
