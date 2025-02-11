@@ -27,15 +27,21 @@ minecraft {
 }
 
 repositories {
+    arrayOf("Release", "Beta", "Dev").forEach { repoType ->
+        maven {
+            name = "Red Studio - $repoType"
+            url = uri("https://repo.redstudio.dev/${repoType.lowercase()}")
+            content {
+                includeGroup("dev.redstudio")
+            }
+        }
+    }
+
     maven {
         name = "Cleanroom"
         url = uri("https://maven.cleanroommc.com")
-    }
-
-    listOf("release", "beta", "dev").forEach { repoType ->
-        maven {
-            name = "Red Studio - ${repoType.replaceFirstChar { it.uppercase() }}"
-            url = uri("https://repo.redstudio.dev/$repoType")
+        content {
+            includeGroup("zone.rong")
         }
     }
 
@@ -74,7 +80,6 @@ buildConfig {
     packageName("${project.group}.${id}")
     className("ProjectConstants")
     documentation.set("This class defines constants for ${project.name}.\n<p>\nThey are automatically updated by Gradle.")
-
     useJavaOutput()
 
     // Details
@@ -97,7 +102,7 @@ java {
 }
 
 tasks {
-    listOf(deobfuscateMergedJarToSrg, srgifyBinpatchedJar).forEach {
+    arrayOf(deobfuscateMergedJarToSrg, srgifyBinpatchedJar).forEach {
         it.configure {
             accessTransformerFiles.from(project.files("src/main/resources/META-INF/${id}_at.cfg"))
         }
@@ -127,7 +132,7 @@ tasks {
         }
     }
 
-    named<Jar>("jar") {
+    withType<Jar> {
         manifest {
             attributes(
                 "ModSide" to "BOTH",
@@ -139,8 +144,9 @@ tasks {
         }
     }
 
-    withType<JavaCompile>().configureEach {
+    withType<JavaCompile> {
         options.encoding = "UTF-8"
+
         options.isFork = true
         options.forkOptions.jvmArgs = listOf("-Xmx4G", "-XX:+UseStringDeduplication")
     }
@@ -158,11 +164,13 @@ idea {
             languageLevel = IdeaLanguageLevel("JDK_1_8")
 
             runConfigurations {
-                listOf("Client", "Server", "Obfuscated Client", "Obfuscated Server", "Vanilla Client", "Vanilla Server").forEach { name ->
+                arrayOf("Client", "Server", "Obfuscated Client", "Obfuscated Server", "Vanilla Client", "Vanilla Server").forEach { name ->
                     create(name, Gradle::class.java) {
                         val prefix = name.substringBefore(" ").let { if (it == "Obfuscated") "Obf" else it }
                         val suffix = name.substringAfter(" ").takeIf { it != prefix } ?: ""
                         taskNames = setOf("run$prefix$suffix")
+
+                        jvmArgs = "-XX:+UseStringDeduplication"
                     }
                 }
             }
