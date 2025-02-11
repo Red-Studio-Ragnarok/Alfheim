@@ -11,6 +11,8 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 
 - `DeduplicatedLongQueue` now creates a new deduplication set instead of clearing it
 - Improved client light processing performance by using a `DeduplicatedLongQueue` instead of a `Set` of `BlockPos` objects
+- Updated dependencies:
+  - Requires Red Core 0.6 and up
 
 ### Fixed
 
@@ -23,8 +25,12 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 - Updated to [gradle-buildconfig-plugin](https://github.com/gmazzo/gradle-buildconfig-plugin) 5.5.1
 - Cleaned up buildscript
 - Updated to [io.freefair.lombok](https://plugins.gradle.org/plugin/io.freefair.lombok) 8.11
-- Updated [foojay-resolver](https://github.com/gradle/foojay-toolchains) to version 0.9.0
-- Updated [RetroFuturaGradle](https://github.com/GTNewHorizons/RetroFuturaGradle) to version 1.4.2
+- Updated to [foojay-resolver](https://github.com/gradle/foojay-toolchains) 0.9.0
+- Updated to [RetroFuturaGradle](https://github.com/GTNewHorizons/RetroFuturaGradle) 1.4.2
+- Updated to [foojay-resolver](https://github.com/gradle/foojay-toolchains) 0.9.0
+- Updated to [RetroFuturaGradle](https://github.com/GTNewHorizons/RetroFuturaGradle) 1.4.2
+- Reworked buildscript
+- Updated [Red Core](https://www.curseforge.com/minecraft/mc-mods/red-core) dependency to 0.6
 
 ## Alfheim Version 1.4 Changelog - 2024-08-21
 

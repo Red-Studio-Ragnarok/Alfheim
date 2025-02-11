@@ -16,7 +16,7 @@ version = "1.5-Dev-4" // Versioning must follow Ragnarök versioning convention:
 val id = project.name.lowercase()
 val plugin = "${project.group}.${id}.asm.${project.name}Plugin"
 
-val redCoreVersion = "MC-1.8-1.12-" + "0.6-Dev-8"
+val redCoreVersion = "1.8-1.12-" + "0.6"
 
 val mixinBooterVersion = "10.2"
 
@@ -53,7 +53,7 @@ repositories {
 }
 
 dependencies {
-    implementation("dev.redstudio", "Red-Core", redCoreVersion)
+    implementation("dev.redstudio", "Red-Core-MC", redCoreVersion)
 
     implementation(rfg.deobf("curse.maven:dynamic-lights-227874:2563244"))
 
