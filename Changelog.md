@@ -7,6 +7,10 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 
 ## [UNRELEASED] Alfheim Version 1.6 Changelog
 
+### Added
+
+- Alfheim will now attempt to hijack the mixins of Phosphor/Hesperus if it is installed and log a warning
+
 ### Changed
 
 - Now requires MixinBooter 10.5 and up
