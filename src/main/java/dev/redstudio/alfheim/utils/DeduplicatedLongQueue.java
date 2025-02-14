@@ -7,7 +7,7 @@ import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 ///
 /// This is achieved by storing the values in a [LongOpenHashSet] and a [LongArrayFIFOQueue].
 ///
-/// @author Luna Lage (Desoroxxx)
+/// @author Luna Mira Lage (Desoroxxx)
 /// @version 2024-12-18
 /// @since 1.3
 public final class DeduplicatedLongQueue {

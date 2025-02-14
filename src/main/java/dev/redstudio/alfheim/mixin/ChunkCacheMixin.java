@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-/// @author Luna Lage (Desoroxxx)
+/// @author Luna Mira Lage (Desoroxxx)
 /// @version 2024-11-08
 /// @since 1.0
 @Mixin(ChunkCache.class)
@@ -23,7 +23,7 @@ public abstract class ChunkCacheMixin implements ILightLevelProvider {
     @Shadow public abstract IBlockState getBlockState(BlockPos pos);
 
     /// @reason Redirect to our lighting engine.
-    /// @author Luna Lage (Desoroxxx)
+    /// @author Luna Mira Lage (Desoroxxx)
     @Overwrite
     @SideOnly(Side.CLIENT)
     private int getLightForExt(final EnumSkyBlock lightType, final BlockPos blockPos) {

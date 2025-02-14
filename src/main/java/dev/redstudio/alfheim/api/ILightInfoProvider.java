@@ -5,7 +5,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.IBlockAccess;
 
-/// @author Luna Lage (Desoroxxx)
+/// @author Luna Mira Lage (Desoroxxx)
 /// @version 2023-09-06
 /// @since 1.0
 public interface ILightInfoProvider {

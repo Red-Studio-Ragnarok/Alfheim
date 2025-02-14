@@ -22,7 +22,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import static dev.redstudio.alfheim.ProjectConstants.LOGGER;
 import static dev.redstudio.alfheim.ProjectConstants.NAME;
 
-/// @author Luna Lage (Desoroxxx)
+/// @author Luna Mira Lage (Desoroxxx)
 /// @author kappa-maintainer
 /// @author embeddedt
 /// @author Angeline (@jellysquid)

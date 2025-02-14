@@ -23,7 +23,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static dev.redstudio.alfheim.Alfheim.FLAG_COUNT;
 
-/// @author Luna Lage (Desoroxxx)
+/// @author Luna Mira Lage (Desoroxxx)
 /// @author kappa-maintainer
 /// @author embeddedt
 /// @author Angeline (@jellysquid)
@@ -187,7 +187,8 @@ public abstract class ChunkMixin implements IChunkLightingData, ILightingEngineP
     }
 
     /// @reason Avoids chunk fetches as much as possible.
-    /// @author Angeline (@jellysquid), Luna Lage (Desoroxxx)
+    /// @author Luna Mira Lage (Desoroxxx)
+    /// @author Angeline (@jellysquid)
     @Overwrite
     private void recheckGaps(final boolean onlyOne) {
         if (!world.isAreaLoaded(new BlockPos((x << 4) + 8, 0, (z << 4) + 8), 16))
@@ -223,7 +224,8 @@ public abstract class ChunkMixin implements IChunkLightingData, ILightingEngineP
 
     /// Modifies the flag variable of [#setBlockState(BlockPos,IBlockState)] to always be false after it is set, preventing the generation of the sky lightmap.
     ///
-    /// @author Angeline (@jellysquid), Luna Lage (Desoroxxx)
+    /// @author Luna Mira Lage (Desoroxxx)
+    /// @author Angeline (@jellysquid)
     @ModifyVariable(method = "setBlockState", at = @At(value = "STORE", ordinal = 1), name = "flag")
     private boolean preventGenerateSkylightMap(final boolean original) {
         return false;

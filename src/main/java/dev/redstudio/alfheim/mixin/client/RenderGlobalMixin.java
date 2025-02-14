@@ -20,7 +20,7 @@ import static dev.redstudio.alfheim.Alfheim.IS_NOTHIRIUM_LOADED;
 import static dev.redstudio.alfheim.Alfheim.IS_VINTAGIUM_LOADED;
 import static net.minecraft.util.math.BlockPos.*;
 
-/// @author Luna Lage (Desoroxxx)
+/// @author Luna Mira Lage (Desoroxxx)
 /// @version 2024-12-18
 /// @since 1.0
 @SideOnly(Side.CLIENT)
@@ -34,7 +34,7 @@ public abstract class RenderGlobalMixin implements ILightUpdatesProcessor {
     @Shadow protected abstract void markBlocksForUpdate(int minX, int minY, int minZ, int maxX, int maxY, int maxZ, boolean updateImmediately);
 
     /**
-     * @author Luna Lage (Desoroxxx)
+     * @author Luna Mira Lage (Desoroxxx)
      * @reason Use a deduplicated long queue instead of a set
      * @since 1.5
      */

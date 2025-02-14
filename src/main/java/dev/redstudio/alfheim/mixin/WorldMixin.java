@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-/// @author Luna Lage (Desoroxxx)
+/// @author Luna Mira Lage (Desoroxxx)
 /// @author Angeline (@jellysquid)
 /// @version 2023-11-08
 /// @since 1.0
@@ -42,7 +42,7 @@ public abstract class WorldMixin implements ILightingEngineProvider, ILightLevel
     }
 
     /// @reason Redirect to our lighting engine.
-    /// @author Luna Lage (Desoroxxx)
+    /// @author Luna Mira Lage (Desoroxxx)
     @Overwrite
     public boolean checkLightFor(final EnumSkyBlock lightType, final BlockPos blockPos) {
         alfheim$lightingEngine.scheduleLightUpdate(lightType, blockPos);
@@ -51,7 +51,7 @@ public abstract class WorldMixin implements ILightingEngineProvider, ILightLevel
     }
 
     /// @reason Redirect to our lighting engine.
-    /// @author Luna Lage (Desoroxxx)
+    /// @author Luna Mira Lage (Desoroxxx)
     @Overwrite
     public int getLight(final BlockPos blockPos, final boolean checkNeighbors) {
         if (!checkNeighbors)
@@ -63,7 +63,7 @@ public abstract class WorldMixin implements ILightingEngineProvider, ILightLevel
     }
 
     /// @reason Redirect to our lighting engine.
-    /// @author Luna Lage (Desoroxxx)
+    /// @author Luna Mira Lage (Desoroxxx)
     @Overwrite
     @SideOnly(Side.CLIENT)
     public int getLightFromNeighborsFor(final EnumSkyBlock lightType, final BlockPos blockPos) {

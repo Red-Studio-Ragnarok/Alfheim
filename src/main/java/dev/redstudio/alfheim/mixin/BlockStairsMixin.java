@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import static net.minecraft.block.BlockStairs.EnumHalf.TOP;
 
-/// @author Luna Lage (Desoroxxx)
+/// @author Luna Mira Lage (Desoroxxx)
 /// @version 2023-09-06
 /// @since 1.0
 @Mixin(BlockStairs.class)

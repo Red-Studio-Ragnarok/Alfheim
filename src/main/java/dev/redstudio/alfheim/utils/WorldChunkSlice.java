@@ -5,7 +5,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 
 /// Represents a slice of a world containing a collection of chunks.
 ///
-/// @author Luna Lage (Desoroxxx)
+/// @author Luna Mira Lage (Desoroxxx)
 /// @author Angeline (@jellysquid)
 /// @version 2023-09-06
 /// @since 1.0

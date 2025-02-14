@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static dev.redstudio.alfheim.ProjectConstants.LOGGER;
 
-/// @author Luna Lage (Desoroxxx)
+/// @author Luna Mira Lage (Desoroxxx)
 /// @author Angeline (@jellysquid)
 /// @version 2023-11-03
 /// @since 1.0

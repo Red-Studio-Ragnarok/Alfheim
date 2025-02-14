@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
-/// @author Luna Lage (Desoroxxx)
+/// @author Luna Mira Lage (Desoroxxx)
 /// @author Angeline (@jellysquid)
 /// @version 2023-09-06
 /// @since 1.0
@@ -78,7 +78,7 @@ public abstract class ExtendedBlockStorageMixin {
     /// Check light array equality
     ///
     /// @author Angeline (@jellysquid)
-    /// @author Luna Lage (Desoroxxx)
+    /// @author Luna Mira Lage (Desoroxxx)
     @Unique
     private boolean alfheim$checkLightArrayEqual(final NibbleArray storage, final byte targetValue) {
         if (storage == null)
