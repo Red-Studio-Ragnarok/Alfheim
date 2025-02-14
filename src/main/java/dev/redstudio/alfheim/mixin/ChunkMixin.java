@@ -23,13 +23,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static dev.redstudio.alfheim.Alfheim.FLAG_COUNT;
 
-/**
- * @author Luna Lage (Desoroxxx)
- * @author kappa-maintainer
- * @author embeddedt
- * @author Angeline (@jellysquid)
- * @since 1.0
- */
+/// @author Luna Lage (Desoroxxx)
+/// @author kappa-maintainer
+/// @author embeddedt
+/// @author Angeline (@jellysquid)
+/// @version 2024-08-21
+/// @since 1.0
 @Mixin(Chunk.class)
 public abstract class ChunkMixin implements IChunkLightingData, ILightingEngineProvider {
 
@@ -70,31 +69,25 @@ public abstract class ChunkMixin implements IChunkLightingData, ILightingEngineP
 
     @Unique private LightingEngine alfheim$lightingEngine;
 
-    /**
-     * Callback injected into the Chunk ctor to cache a reference to the lighting engine from the world.
-     *
-     * @author Angeline (@jellysquid)
-     */
+    /// Callback injected into the Chunk ctor to cache a reference to the lighting engine from the world.
+    ///
+    /// @author Angeline (@jellysquid)
     @Inject(method = "<init>*", at = @At("RETURN"))
     private void onConstructed(final CallbackInfo callbackInfo) {
         alfheim$lightingEngine = ((ILightingEngineProvider) world).alfheim$getLightingEngine();
     }
 
-    /**
-     * Callback injected to the head of {@link Chunk#getLightSubtracted(BlockPos, int)} to force deferred light updates to be processed.
-     *
-     * @author Angeline (@jellysquid)
-     */
+    /// Callback injected to the head of [#getLightSubtracted(BlockPos,int)] to force deferred light updates to be processed.
+    ///
+    /// @author Angeline (@jellysquid)
     @Inject(method = "getLightSubtracted", at = @At("HEAD"))
     private void onGetLightSubtracted(final BlockPos blockPos, final int amount, final CallbackInfoReturnable<Integer> callbackInfoReturnable) {
         alfheim$lightingEngine.processLightUpdates();
     }
 
-    /**
-     * Callback injected at the end of {@link Chunk#onLoad()} to have previously scheduled light updates scheduled again.
-     *
-     * @author Angeline (@jellysquid)
-     */
+    /// Callback injected at the end of [#onLoad()] to have previously scheduled light updates scheduled again.
+    ///
+    /// @author Angeline (@jellysquid)
     @Inject(method = "onLoad", at = @At("RETURN"))
     private void onLoad(final CallbackInfo callbackInfo) {
         final Chunk chunk = (Chunk) (Object) this;
@@ -126,20 +119,16 @@ public abstract class ChunkMixin implements IChunkLightingData, ILightingEngineP
         }
     }
 
-    /**
-     * Replaces the call in {@link Chunk#setLightFor(EnumSkyBlock, BlockPos, int)} with our hook.
-     *
-     * @author Angeline (@jellysquid)
-     */
+    /// Replaces the call in [#setLightFor(EnumSkyBlock,BlockPos,int)] with our hook.
+    ///
+    /// @author Angeline (@jellysquid)
     @Redirect(method = "setLightFor", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/Chunk;generateSkylightMap()V"), expect = 0)
     private void setLightForRedirectGenerateSkylightMap(final Chunk chunk, final EnumSkyBlock lightType, final BlockPos blockPos, final int value) {
         alfheim$initSkylightForSection(storageArrays[blockPos.getY() >> 4]);
     }
 
-    /**
-     * @reason Overwrites relightBlock with a more efficient implementation.
-     * @author Angeline (@jellysquid)
-     */
+    /// @reason Overwrites relightBlock with a more efficient implementation.
+    /// @author Angeline (@jellysquid)
     @Overwrite
     private void relightBlock(final int x, final int y, final int z) {
         int heightMapY = heightMap[z << 4 | x] & 255;
@@ -162,10 +151,8 @@ public abstract class ChunkMixin implements IChunkLightingData, ILightingEngineP
             heightMapMinimum = heightMapY1;
     }
 
-    /**
-     * @reason Calculate light updates only as needed.
-     * @author Angeline (@jellysquid)
-     */
+    /// @reason Calculate light updates only as needed.
+    /// @author Angeline (@jellysquid)
     @Overwrite
     public int getLightFor(final EnumSkyBlock lightType, final BlockPos pos) {
         alfheim$lightingEngine.processLightUpdatesForType(lightType);
@@ -173,10 +160,8 @@ public abstract class ChunkMixin implements IChunkLightingData, ILightingEngineP
         return alfheim$getCachedLightFor(lightType, pos);
     }
 
-    /**
-     * @reason Check chunk lighting and returns immediately after.
-     * @author Angeline (@jellysquid)
-     */
+    /// @reason Check chunk lighting and returns immediately after.
+    /// @author Angeline (@jellysquid)
     @Overwrite
     public void checkLight() {
         isTerrainPopulated = true;
@@ -201,10 +186,8 @@ public abstract class ChunkMixin implements IChunkLightingData, ILightingEngineP
         chunk.setLightPopulated(true);
     }
 
-    /**
-     * @reason Avoids chunk fetches as much as possible.
-     * @author Angeline (@jellysquid), Luna Lage (Desoroxxx)
-     */
+    /// @reason Avoids chunk fetches as much as possible.
+    /// @author Angeline (@jellysquid), Luna Lage (Desoroxxx)
     @Overwrite
     private void recheckGaps(final boolean onlyOne) {
         if (!world.isAreaLoaded(new BlockPos((x << 4) + 8, 0, (z << 4) + 8), 16))
@@ -225,12 +208,10 @@ public abstract class ChunkMixin implements IChunkLightingData, ILightingEngineP
         isGapLightingUpdated = false;
     }
 
-    /**
-     * Redirects the construction of the ExtendedBlockStorage in {@link Chunk#setBlockState(BlockPos, IBlockState)}.
-     * We need to initialize the skylight data for the constructed section as soon as possible.
-     *
-     * @author Angeline (@jellysquid)
-     */
+    /// Redirects the construction of the ExtendedBlockStorage in [#setBlockState(BlockPos,IBlockState)].
+    /// We need to initialize the skylight data for the constructed section as soon as possible.
+    ///
+    /// @author Angeline (@jellysquid)
     @Redirect(method = "setBlockState", at = @At(value = "NEW", args = "class=net/minecraft/world/chunk/storage/ExtendedBlockStorage"), expect = 0)
     private ExtendedBlockStorage setBlockStateCreateSectionVanilla(final int y, final boolean hasSkyLight) {
         final ExtendedBlockStorage extendedBlockStorage = new ExtendedBlockStorage(y, hasSkyLight);
@@ -240,31 +221,25 @@ public abstract class ChunkMixin implements IChunkLightingData, ILightingEngineP
         return extendedBlockStorage;
     }
 
-    /**
-     * Modifies the flag variable of {@link Chunk#setBlockState(BlockPos, IBlockState)} to always be false after it is set, preventing the generation of the sky lightmap.
-     *
-     * @author Angeline (@jellysquid), Luna Lage (Desoroxxx)
-     */
+    /// Modifies the flag variable of [#setBlockState(BlockPos,IBlockState)] to always be false after it is set, preventing the generation of the sky lightmap.
+    ///
+    /// @author Angeline (@jellysquid), Luna Lage (Desoroxxx)
     @ModifyVariable(method = "setBlockState", at = @At(value = "STORE", ordinal = 1), name = "flag")
     private boolean preventGenerateSkylightMap(final boolean original) {
         return false;
     }
 
-    /**
-     * Prevent propagateSkylightOcclusion from being called.
-     *
-     * @author embeddedt
-     */
+    /// Prevent propagateSkylightOcclusion from being called.
+    ///
+    /// @author embeddedt
     @Redirect(method = "setBlockState", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/Chunk;propagateSkylightOcclusion(II)V"))
     private void doPropagateSkylight(final Chunk chunk, final int x, final int z) {
         /* No-op, we don't want skylight propagated */
     }
 
-    /**
-     * Prevent getLightFor from being called.
-     *
-     * @author embeddedt
-     */
+    /// Prevent [Chunk#getLightFor] from being called.
+    ///
+    /// @author embeddedt
     @Redirect(method = "setBlockState", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/Chunk;getLightFor(Lnet/minecraft/world/EnumSkyBlock;Lnet/minecraft/util/math/BlockPos;)I"))
     private int fakeGetLightFor(final Chunk chunk, final EnumSkyBlock lightType, final BlockPos blockPos) {
         return 0;

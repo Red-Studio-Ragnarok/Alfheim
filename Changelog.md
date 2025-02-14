@@ -20,6 +20,7 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 - Updated to [MixinBooter](https://github.com/CleanroomMC/MixinBooter) 10.5
 - Removed the `comformVisibility` overwrite in `mixins.alfheim.json` as it's no longer require with MixinBooter 9.4 and above
 - Only generate sources jar for releases
+- Switched from Javadoc to Markdowndoc
 
 ## Alfheim Version 1.5 Changelog - 2025-02-11
 

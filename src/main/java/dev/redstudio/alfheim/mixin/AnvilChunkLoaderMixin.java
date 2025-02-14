@@ -18,31 +18,26 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static dev.redstudio.alfheim.ProjectConstants.LOGGER;
 
-/**
- * @author Luna Lage (Desoroxxx)
- * @author Angeline (@jellysquid)
- * @since 1.0
- */
+/// @author Luna Lage (Desoroxxx)
+/// @author Angeline (@jellysquid)
+/// @version 2023-11-03
+/// @since 1.0
 @Mixin(AnvilChunkLoader.class)
 public abstract class AnvilChunkLoaderMixin {
 
     @Unique private static final String NEIGHBOR_LIGHT_CHECKS_KEY = "NeighborLightChecks";
 
-    /**
-     * Injects into the head of saveChunk() to forcefully process all pending light updates. Fail-safe.
-     *
-     * @author Angeline (@jellysquid)
-     */
+    /// Injects into the head of saveChunk() to forcefully process all pending light updates. Fail-safe.
+    ///
+    /// @author Angeline (@jellysquid)
     @Inject(method = "saveChunk", at = @At("HEAD"))
     private void onConstructed(final World world, final Chunk chunk, final CallbackInfo callbackInfo) {
         ((ILightingEngineProvider) world).alfheim$getLightingEngine().processLightUpdates();
     }
 
-    /**
-     * Injects the deserialization logic for chunk data on load so we can extract whether or not we've populated light yet.
-     *
-     * @author Angeline (@jellysquid)
-     */
+    /// Injects the deserialization logic for chunk data on load so we can extract whether or not we've populated light yet.
+    ///
+    /// @author Angeline (@jellysquid)
     @Inject(method = "readChunkFromNBT", at = @At("RETURN"))
     private void onReadChunkFromNBT(final World world, final NBTTagCompound compound, final CallbackInfoReturnable<Chunk> callbackInfoReturnable) {
         final Chunk chunk = callbackInfoReturnable.getReturnValue();
@@ -52,11 +47,9 @@ public abstract class AnvilChunkLoaderMixin {
         ((IChunkLightingData) chunk).alfheim$setLightInitialized(compound.getBoolean("LightPopulated"));
     }
 
-    /**
-     * Injects the serialization logic for chunk data on save, so we can store whether or not we've populated light yet.
-     *
-     * @author Angeline (@jellysquid)
-     */
+    /// Injects the serialization logic for chunk data on save, so we can store whether or not we've populated light yet.
+    ///
+    /// @author Angeline (@jellysquid)
     @Inject(method = "writeChunkToNBT", at = @At("RETURN"))
     private void onWriteChunkToNBT(final Chunk chunk, final World world, final NBTTagCompound compound, final CallbackInfo callbackInfo) {
         alfheim$writeNeighborLightChecksToNBT(chunk, compound);

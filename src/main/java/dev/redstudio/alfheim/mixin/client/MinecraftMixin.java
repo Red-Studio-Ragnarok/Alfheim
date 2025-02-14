@@ -13,10 +13,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-/**
- * @author Luna Lage (Desoroxxx)
- * @since 1.0
- */
+/// @author Luna Lage (Desoroxxx)
+/// @version 2023-09-06
+/// @since 1.0
 @SideOnly(Side.CLIENT)
 @Mixin(Minecraft.class)
 public abstract class MinecraftMixin {

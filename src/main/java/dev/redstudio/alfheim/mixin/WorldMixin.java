@@ -18,11 +18,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-/**
- * @author Luna Lage (Desoroxxx)
- * @author Angeline (@jellysquid)
- * @since 1.0
- */
+/// @author Luna Lage (Desoroxxx)
+/// @author Angeline (@jellysquid)
+/// @version 2023-11-08
+/// @since 1.0
 @Mixin(World.class)
 public abstract class WorldMixin implements ILightingEngineProvider, ILightLevelProvider {
 
@@ -36,18 +35,14 @@ public abstract class WorldMixin implements ILightingEngineProvider, ILightLevel
 
     @Shadow public abstract IBlockState getBlockState(final BlockPos blockPos);
 
-    /**
-     * Initialize the lighting engine on world construction.
-     */
+    /// Initialize the lighting engine on world construction.
     @Inject(method = "<init>", at = @At("RETURN"))
     private void onConstructed(final CallbackInfo callbackInfo) {
         alfheim$lightingEngine = new LightingEngine((World) (Object) this);
     }
 
-    /**
-     * @reason Redirect to our lighting engine.
-     * @author Luna Lage (Desoroxxx)
-     */
+    /// @reason Redirect to our lighting engine.
+    /// @author Luna Lage (Desoroxxx)
     @Overwrite
     public boolean checkLightFor(final EnumSkyBlock lightType, final BlockPos blockPos) {
         alfheim$lightingEngine.scheduleLightUpdate(lightType, blockPos);
@@ -55,10 +50,8 @@ public abstract class WorldMixin implements ILightingEngineProvider, ILightLevel
         return true;
     }
 
-    /**
-     * @reason Redirect to our lighting engine.
-     * @author Luna Lage (Desoroxxx)
-     */
+    /// @reason Redirect to our lighting engine.
+    /// @author Luna Lage (Desoroxxx)
     @Overwrite
     public int getLight(final BlockPos blockPos, final boolean checkNeighbors) {
         if (!checkNeighbors)
@@ -69,10 +62,8 @@ public abstract class WorldMixin implements ILightingEngineProvider, ILightLevel
         return Math.max(((ILightInfoProvider) blockState).alfheim$getLightFor(((World) (Object) this), EnumSkyBlock.BLOCK, blockPos), ((ILightInfoProvider) blockState).alfheim$getLightFor(((World) (Object) this), EnumSkyBlock.SKY, blockPos) - skylightSubtracted);
     }
 
-    /**
-     * @reason Redirect to our lighting engine.
-     * @author Luna Lage (Desoroxxx)
-     */
+    /// @reason Redirect to our lighting engine.
+    /// @author Luna Lage (Desoroxxx)
     @Overwrite
     @SideOnly(Side.CLIENT)
     public int getLightFromNeighborsFor(final EnumSkyBlock lightType, final BlockPos blockPos) {

@@ -6,10 +6,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.IBlockAccess;
 
-/**
- * @author Luna Lage (Desoroxxx)
- * @since 1.0
- */
+/// @author Luna Lage (Desoroxxx)
+/// @version 2023-09-06
+/// @since 1.0
 public interface ILitBlock {
 
     int alfheim$getLightFor(final IBlockState blockState, final IBlockAccess blockAccess, final EnumSkyBlock lightType, final BlockPos blockPos);

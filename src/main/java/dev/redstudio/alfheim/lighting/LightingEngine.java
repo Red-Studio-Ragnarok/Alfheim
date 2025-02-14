@@ -22,13 +22,12 @@ import java.util.concurrent.locks.ReentrantLock;
 import static dev.redstudio.alfheim.ProjectConstants.LOGGER;
 import static dev.redstudio.alfheim.ProjectConstants.NAME;
 
-/**
- * @author Luna Lage (Desoroxxx)
- * @author kappa-maintainer
- * @author embeddedt
- * @author Angeline (@jellysquid)
- * @since 1.0
- */
+/// @author Luna Lage (Desoroxxx)
+/// @author kappa-maintainer
+/// @author embeddedt
+/// @author Angeline (@jellysquid)
+/// @version 2024-11-14
+/// @since 1.0
 public final class LightingEngine {
 
     private static final byte MAX_LIGHT_LEVEL = 15;
@@ -126,9 +125,7 @@ public final class LightingEngine {
             neighborInfos[i] = new NeighborInfo();
     }
 
-    /**
-     * Schedules a light update for the specified light type and position to be processed later by {@link LightingEngine#processLightUpdatesForType(EnumSkyBlock)}
-     */
+    /// Schedules a light update for the specified light type and position to be processed later by [#processLightUpdatesForType(EnumSkyBlock)]
     public void scheduleLightUpdate(final EnumSkyBlock lightType, final BlockPos pos) {
         lock();
 
@@ -139,16 +136,12 @@ public final class LightingEngine {
         }
     }
 
-    /**
-     * Schedules a light update for the specified light type and position to be processed later by {@link LightingEngine#processLightUpdates()}
-     */
+    /// Schedules a light update for the specified light type and position to be processed later by [#processLightUpdates()]
     private void scheduleLightUpdate(final EnumSkyBlock lightType, final long blockPos) {
         lightUpdateQueues[lightType.ordinal()].enqueue(blockPos);
     }
 
-    /**
-     * Calls {@link LightingEngine#processLightUpdatesForType(EnumSkyBlock)} for both light types
-     */
+    /// Calls [#processLightUpdatesForType(EnumSkyBlock)] for both light types
     public void processLightUpdates() {
         profiler.startSection("processSky");
 
@@ -161,9 +154,7 @@ public final class LightingEngine {
         profiler.endSection();
     }
 
-    /**
-     * Processes light updates of the given light type
-     */
+    /// Processes light updates of the given light type
     public void processLightUpdatesForType(final EnumSkyBlock lightType) {
         // We only want to perform updates if we're being called from a tick event on the client.
         // There are many locations in the client code that will end up making calls to this method, usually from other threads.
@@ -358,10 +349,8 @@ public final class LightingEngine {
         updating = false;
     }
 
-    /**
-     * Gets data for neighbors of {@link #currentPos} and saves the results into neighbor state data members.
-     * If a neighbor can't be accessed/doesn't exist, the corresponding entry in neighborChunks is null - others are not reset
-     */
+    /// Gets data for neighbors of [#currentPos] and saves the results into neighbor state data members.
+    /// If a neighbor can't be accessed/doesn't exist, the corresponding entry in neighborChunks is null - others are not reset
     private void fetchNeighborDataFromCursor(final EnumSkyBlock lightType) {
         // Only update if curPos was changed
         if (isNeighborDataValid)
@@ -462,18 +451,14 @@ public final class LightingEngine {
         enqueueBrightening(currentPos, currentData, newLight, currentChunk, lightType);
     }
 
-    /**
-     * Enqueues the blockPos for brightening and sets its light value to newLight
-     */
+    /// Enqueues the blockPos for brightening and sets its light value to newLight
     private void enqueueBrightening(final BlockPos blockPos, final long longPos, final byte newLight, final Chunk chunk, final EnumSkyBlock lightType) {
         brighteningQueues[newLight].enqueue(longPos);
 
         chunk.setLightFor(lightType, blockPos, newLight);
     }
 
-    /**
-     * Enqueues the blockPos for darkening and sets its light value to 0
-     */
+    /// Enqueues the blockPos for darkening and sets its light value to 0
     private void enqueueDarkening(final BlockPos blockPos, final long longPos, final byte oldLight, final Chunk chunk, final EnumSkyBlock lightType) {
         darkeningQueues[oldLight].enqueue(longPos);
 
@@ -488,11 +473,9 @@ public final class LightingEngine {
         return ((long) pos.getY() << S_Y) | ((long) pos.getX() + (1 << L_X - 1) << S_X) | ((long) pos.getZ() + (1 << L_Z - 1) << S_Z);
     }
 
-    /**
-     * Polls a new item from {@link #currentQueue} and fills in state data members
-     *
-     * @return If there was an item to poll
-     */
+    /// Polls a new item from [#currentQueue] and fills in state data members
+    ///
+    /// @return If there was an item to poll
     private boolean nextItem() {
         if (currentQueue.isEmpty()) {
             currentQueue = null;
@@ -519,9 +502,7 @@ public final class LightingEngine {
         return ((IChunkLightingData) currentChunk).alfheim$getCachedLightFor(lightType, currentPos);
     }
 
-    /**
-     * Calculates the luminosity for {@link #currentPos}, taking into account the light type
-     */
+    /// Calculates the luminosity for [#currentPos], taking into account the light type
     private byte getCursorLuminosity(final IBlockState state, final EnumSkyBlock lightType) {
         if (lightType == EnumSkyBlock.SKY) {
             if (currentChunk.canSeeSky(currentPos))

@@ -15,10 +15,9 @@ import static dev.redstudio.alfheim.ProjectConstants.ID;
 import static dev.redstudio.alfheim.ProjectConstants.LOGGER;
 import static dev.redstudio.alfheim.ProjectConstants.NAME;
 
-/**
- * @author Luna Lage (Desoroxxx)
- * @since 1.0
- */
+/// @author Luna Lage (Desoroxxx)
+/// @version 2025-02-14
+/// @since 1.0
 @IFMLLoadingPlugin.MCVersion("1.12.2")
 @IFMLLoadingPlugin.TransformerExclusions("dev.redstudio." + ID + ".asm")
 public final class AlfheimPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader, IMixinConfigHijacker {
@@ -62,11 +61,9 @@ public final class AlfheimPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader
         }
     }
 
-    /**
-     * Checks if Cubic Chunks is installed.
-     *
-     * @return True if Cubic Chunks is installed, false otherwise.
-     */
+    /// Checks if Cubic Chunks is installed.
+    ///
+    /// @return True if Cubic Chunks is installed, false otherwise.
     public static boolean isCubicChunksInstalled() {
         try {
             Class.forName("io.github.opencubicchunks.cubicchunks.core.asm.CubicChunksCoreContainer");

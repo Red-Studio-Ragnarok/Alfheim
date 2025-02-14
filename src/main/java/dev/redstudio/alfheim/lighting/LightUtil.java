@@ -6,11 +6,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.common.Loader;
 
-/**
- * @author Luna Lage (Desoroxxx)
- * @author embeddedt
- * @since 1.0
- */
+/// @author Luna Lage (Desoroxxx)
+/// @author embeddedt
+/// @version 2023-09-06
+/// @since 1.0
 public final class LightUtil {
 
     private static final boolean DYNAMIC_LIGHTS_LOADED = Loader.isModLoaded("dynamiclights");

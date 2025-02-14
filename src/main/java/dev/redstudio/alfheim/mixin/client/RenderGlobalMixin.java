@@ -20,11 +20,9 @@ import static dev.redstudio.alfheim.Alfheim.IS_NOTHIRIUM_LOADED;
 import static dev.redstudio.alfheim.Alfheim.IS_VINTAGIUM_LOADED;
 import static net.minecraft.util.math.BlockPos.*;
 
-/**
- * @author Luna Lage (Desoroxxx)
- * @version 2024-12-18
- * @since 1.0
- */
+/// @author Luna Lage (Desoroxxx)
+/// @version 2024-12-18
+/// @since 1.0
 @SideOnly(Side.CLIENT)
 @Mixin(RenderGlobal.class)
 public abstract class RenderGlobalMixin implements ILightUpdatesProcessor {

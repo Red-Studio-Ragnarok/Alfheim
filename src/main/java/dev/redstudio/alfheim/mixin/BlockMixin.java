@@ -24,19 +24,16 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-/**
- * @author Luna Lage (Desoroxxx)
- * @since 1.0
- */
+/// @author Luna Lage (Desoroxxx)
+/// @version 2024-08-21
+/// @since 1.0
 @Mixin(Block.class)
 public abstract class BlockMixin implements ILitBlock {
 
     @Shadow @Deprecated public abstract int getLightValue(final IBlockState blockState);
 
-    /**
-     * @reason Part of non-full block lighting fix
-     * @author Luna Lage (Desoroxxx)
-     */
+    /// @reason Part of non-full block lighting fix
+    /// @author Luna Lage (Desoroxxx)
     @Overwrite
     @SideOnly(Side.CLIENT)
     public int getPackedLightmapCoords(final IBlockState blockState, final IBlockAccess source, final BlockPos blockPos) {
@@ -53,14 +50,12 @@ public abstract class BlockMixin implements ILitBlock {
         flag.set(result);
     }
 
-    /**
-     * @reason Part of non-full block lighting fix
-     * @author Luna Lage (Desoroxxx)
-     */
+    /// @reason Part of non-full block lighting fix
+    /// @author Luna Lage (Desoroxxx)
     @Overwrite
     @SideOnly(Side.CLIENT)
     public float getAmbientOcclusionLightValue(final IBlockState blockState) {
-        final byte lightValue = (byte) ClampUtil.clampMinFirst(blockState.getLightValue() -1, 0, 15);
+        final byte lightValue = (byte) ClampUtil.clampMinFirst(blockState.getLightValue() - 1, 0, 15);
 
         if (lightValue == 0) {
             return blockState.isBlockNormalCube() ? 0.2F : 1;

@@ -14,12 +14,21 @@ import static dev.redstudio.alfheim.ProjectConstants.VERSION;
 //  | $$  | $$| $$| $$      | $$  | $$| $$_____/| $$| $$ | $$ | $$
 //  | $$  | $$| $$| $$      | $$  | $$|  $$$$$$$| $$| $$ | $$ | $$
 //  |__/  |__/|__/|__/      |__/  |__/ \_______/|__/|__/ |__/ |__/
+
+/// The main class of Alfheim.
+///
+/// This class mainly contains constants and metadata.
+///
+/// @author Luna Mira Lage (Desoroxxx)
+/// @version 2025-02-14
+/// @since 1.0
 @Mod(modid = ID, version = VERSION, updateJSON = "https://forge.curseupdate.com/910715/" + ID, useMetadata = true, dependencies = "required-after:mixinbooter@[10.5,);required-after:redcore@[0.6,)")
 public final class Alfheim {
 
-    // Todo: Separate bugfixes and lighting engine
+    // TODO: Separate bugfixes and lighting engine
 
-    public static final byte FLAG_COUNT = 32; // 2 light types * 4 directions * 2 halves * (inwards + outwards)
+    /// `2 light types * 4 directions * 2 halves * (inwards + outwards)`
+    public static final byte FLAG_COUNT = 32;
 
     public static final boolean IS_NOTHIRIUM_LOADED = Loader.isModLoaded("nothirium");
     public static final boolean IS_VINTAGIUM_LOADED = Loader.isModLoaded("vintagium");

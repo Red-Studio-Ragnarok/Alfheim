@@ -13,10 +13,9 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import static net.minecraft.block.BlockStairs.EnumHalf.TOP;
 
-/**
- * @author Luna Lage (Desoroxxx)
- * @since 1.0
- */
+/// @author Luna Lage (Desoroxxx)
+/// @version 2023-09-06
+/// @since 1.0
 @Mixin(BlockStairs.class)
 public abstract class BlockStairsMixin extends BlockMixin implements ILitBlock {
 

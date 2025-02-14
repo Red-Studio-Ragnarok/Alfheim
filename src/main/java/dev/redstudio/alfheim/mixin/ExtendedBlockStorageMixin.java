@@ -7,11 +7,10 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
-/**
- * @author Luna Lage (Desoroxxx)
- * @author Angeline (@jellysquid)
- * @since 1.0
- */
+/// @author Luna Lage (Desoroxxx)
+/// @author Angeline (@jellysquid)
+/// @version 2023-09-06
+/// @since 1.0
 @Mixin(ExtendedBlockStorage.class)
 public abstract class ExtendedBlockStorageMixin {
 
@@ -22,10 +21,8 @@ public abstract class ExtendedBlockStorageMixin {
 
     @Unique private int alfheim$lightRefCount = -1;
 
-    /**
-     * @reason Reset lightRefCount on call
-     * @author Angeline (@jellysquid)
-     */
+    /// @reason Reset [#alfheim$lightRefCount] on call
+    /// @author Angeline (@jellysquid)
     @Overwrite
     public void setSkyLight(final int x, final int y, final int z, final int value) {
         skyLight.set(x, y, z, value);
@@ -33,10 +30,8 @@ public abstract class ExtendedBlockStorageMixin {
         alfheim$lightRefCount = -1;
     }
 
-    /**
-     * @reason Reset lightRefCount on call
-     * @author Angeline (@jellysquid)
-     */
+    /// @reason Reset [#alfheim$lightRefCount] on call
+    /// @author Angeline (@jellysquid)
     @Overwrite
     public void setBlockLight(final int x, final int y, final int z, final int value) {
         blockLight.set(x, y, z, value);
@@ -44,10 +39,8 @@ public abstract class ExtendedBlockStorageMixin {
         alfheim$lightRefCount = -1;
     }
 
-    /**
-     * @reason Reset lightRefCount on call
-     * @author Angeline (@jellysquid)
-     */
+    /// @reason Reset [#alfheim$lightRefCount] on call
+    /// @author Angeline (@jellysquid)
     @Overwrite
     public void setBlockLight(final NibbleArray array) {
         blockLight = array;
@@ -55,10 +48,8 @@ public abstract class ExtendedBlockStorageMixin {
         alfheim$lightRefCount = -1;
     }
 
-    /**
-     * @reason Reset lightRefCount on call
-     * @author Angeline (@jellysquid)
-     */
+    /// @reason Reset [#alfheim$lightRefCount] on call
+    /// @author Angeline (@jellysquid)
     @Overwrite
     public void setSkyLight(final NibbleArray array) {
         skyLight = array;
@@ -66,10 +57,8 @@ public abstract class ExtendedBlockStorageMixin {
         alfheim$lightRefCount = -1;
     }
 
-    /**
-     * @reason Send light data to clients when lighting is non-trivial
-     * @author Angeline (@jellysquid)
-     */
+    /// @reason Send light data to clients when lighting is non-trivial
+    /// @author Angeline (@jellysquid)
     @Overwrite
     public boolean isEmpty() {
         if (blockRefCount != 0)
@@ -86,12 +75,10 @@ public abstract class ExtendedBlockStorageMixin {
         return alfheim$lightRefCount == 0;
     }
 
-    /**
-     * Check light array equality
-     *
-     * @author Angeline (@jellysquid)
-     * @author Luna Lage (Desoroxxx)
-     */
+    /// Check light array equality
+    ///
+    /// @author Angeline (@jellysquid)
+    /// @author Luna Lage (Desoroxxx)
     @Unique
     private boolean alfheim$checkLightArrayEqual(final NibbleArray storage, final byte targetValue) {
         if (storage == null)
