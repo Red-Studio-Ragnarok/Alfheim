@@ -98,7 +98,8 @@ java {
         languageVersion.set(JavaLanguageVersion.of(8))
         vendor.set(JvmVendorSpec.ADOPTIUM)
     }
-    withSourcesJar() // Generate sources jar
+    if (!project.version.toString().contains("Dev"))
+        withSourcesJar() // Generate sources jar, for releases
 }
 
 tasks {
