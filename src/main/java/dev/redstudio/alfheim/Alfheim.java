@@ -14,7 +14,7 @@ import static dev.redstudio.alfheim.ProjectConstants.VERSION;
 //  | $$  | $$| $$| $$      | $$  | $$| $$_____/| $$| $$ | $$ | $$
 //  | $$  | $$| $$| $$      | $$  | $$|  $$$$$$$| $$| $$ | $$ | $$
 //  |__/  |__/|__/|__/      |__/  |__/ \_______/|__/|__/ |__/ |__/
-@Mod(modid = ID, version = VERSION, updateJSON = "https://forge.curseupdate.com/910715/" + ID, useMetadata = true, dependencies = "required-after:mixinbooter@[8.8,);required-after:redcore@[0.6,)")
+@Mod(modid = ID, version = VERSION, updateJSON = "https://forge.curseupdate.com/910715/" + ID, useMetadata = true, dependencies = "required-after:mixinbooter@[10.5,);required-after:redcore@[0.6,)")
 public final class Alfheim {
 
     // Todo: Separate bugfixes and lighting engine
