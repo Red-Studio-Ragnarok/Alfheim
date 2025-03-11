@@ -14,6 +14,7 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 ### Changed
 
 - Now requires MixinBooter 10.5 and up
+- Changed the url in the mod menu to point to GitHub instead of CurseForge
 
 ### Internal
 
