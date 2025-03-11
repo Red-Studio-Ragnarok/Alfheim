@@ -17,14 +17,16 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 
 ### Internal
 
-- Updated to [MixinBooter](https://github.com/CleanroomMC/MixinBooter) 10.5
 - Removed the `comformVisibility` overwrite in `mixins.alfheim.json` as it's no longer require with MixinBooter 9.4 and above
 - Only generate sources jar for releases
 - Switched from Javadoc to Markdowndoc
-- Updated to [io.freefair.lombok](https://plugins.gradle.org/plugin/io.freefair.lombok) 8.12.1
-- Updated to [org.jetbrains.gradle.plugin.idea-ext](https://github.com/JetBrains/gradle-idea-ext-plugin) 1.1.10
-- Updated to [Gradle](https://gradle.org) 8.13-rc-2
-- Updated to [RetroFuturaGradle](https://github.com/GTNewHorizons/RetroFuturaGradle) 1.4.3
+- Updated dependencies:
+  - Updated to [gradle-buildconfig-plugin](https://github.com/gmazzo/gradle-buildconfig-plugin) 5.5.2
+  - Updated to [gradle-idea-ext-plugin](https://github.com/JetBrains/gradle-idea-ext-plugin) 1.1.10
+  - Updated to [io.freefair.lombok](https://plugins.gradle.org/plugin/io.freefair.lombok) 8.12.2.1
+  - Updated to [RetroFuturaGradle](https://github.com/GTNewHorizons/RetroFuturaGradle) 1.4.5
+  - Updated to [MixinBooter](https://www.curseforge.com/minecraft/mc-mods/mixin-booter) 10.5
+  - Updated to [Gradle](https://gradle.org) 8.13
 
 ## Alfheim Version 1.5 Changelog - 2025-02-11
 
