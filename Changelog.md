@@ -14,12 +14,12 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 ### Changed
 
 - Now requires MixinBooter 10.5 and up
-- Changed the url in the mod menu to point to GitHub instead of CurseForge
+- Changed the URL in the mod menu to point to GitHub instead of CurseForge
 - World's lighting engines are now lazily initialized
 
 ### Internal
 
-- Removed the `comformVisibility` overwrite in `mixins.alfheim.json` as it's no longer require with MixinBooter 9.4 and above
+- Removed the `comformVisibility` overwrite in `mixins.alfheim.json` as it is no longer required with MixinBooter 9.4 and above
 - Only generate sources jar for releases
 - Switched from Javadoc to Markdowndoc
 - Updated dependencies:
