@@ -15,6 +15,7 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 
 - Now requires MixinBooter 10.5 and up
 - Changed the url in the mod menu to point to GitHub instead of CurseForge
+- World's lighting engines are now lazily initialized
 
 ### Internal
 
