@@ -6,6 +6,7 @@ import dev.redstudio.alfheim.lighting.LightUtil;
 import dev.redstudio.alfheim.lighting.LightingEngine;
 import dev.redstudio.alfheim.utils.EnumBoundaryFacing;
 import dev.redstudio.alfheim.utils.WorldChunkSlice;
+import lombok.Getter;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -67,14 +68,14 @@ public abstract class ChunkMixin implements IChunkLightingData, ILightingEngineP
 
     @Unique private short[] alfheim$neighborLightChecks;
 
-    @Unique private LightingEngine alfheim$lightingEngine;
+    @Unique @Getter(onMethod_={@Override}) private LightingEngine alfheim$lightingEngine;
 
     /// Callback injected into the Chunk ctor to cache a reference to the lighting engine from the world.
     ///
     /// @author Angeline (@jellysquid)
     @Inject(method = "<init>*", at = @At("RETURN"))
     private void onConstructed(final CallbackInfo callbackInfo) {
-        alfheim$lightingEngine = ((ILightingEngineProvider) world).alfheim$getLightingEngine();
+        alfheim$lightingEngine = ((ILightingEngineProvider) world).getAlfheim$lightingEngine();
     }
 
     /// Callback injected to the head of [#getLightSubtracted(BlockPos,int)] to force deferred light updates to be processed.
@@ -534,11 +535,6 @@ public abstract class ChunkMixin implements IChunkLightingData, ILightingEngineP
     @Override
     public void alfheim$setNeighborLightChecks(final short[] data) {
         alfheim$neighborLightChecks = data;
-    }
-
-    @Override
-    public LightingEngine alfheim$getLightingEngine() {
-        return alfheim$lightingEngine;
     }
 
     @Override

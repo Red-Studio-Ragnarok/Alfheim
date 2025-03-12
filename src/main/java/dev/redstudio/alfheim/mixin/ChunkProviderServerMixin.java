@@ -24,7 +24,7 @@ public abstract class ChunkProviderServerMixin {
     /// @author Angeline (@jellysquid)
     @Inject(method = "saveChunks", at = @At("HEAD"))
     private void onSaveChunks(final boolean all, final CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
-        ((ILightingEngineProvider) world).alfheim$getLightingEngine().processLightUpdates();
+        ((ILightingEngineProvider) world).getAlfheim$lightingEngine().processLightUpdates();
     }
 
     /// Injects a callback into the start of the tick() method after the save checks to process all pending light updates.
@@ -33,6 +33,6 @@ public abstract class ChunkProviderServerMixin {
     /// @author Angeline (@jellysquid)
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Ljava/util/Set;isEmpty()Z", shift = At.Shift.AFTER))
     private void onTick(final CallbackInfoReturnable<Boolean> callbackInfoReturnable) {
-        ((ILightingEngineProvider) world).alfheim$getLightingEngine().processLightUpdates();
+        ((ILightingEngineProvider) world).getAlfheim$lightingEngine().processLightUpdates();
     }
 }

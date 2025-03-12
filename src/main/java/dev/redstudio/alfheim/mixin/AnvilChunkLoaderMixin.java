@@ -32,7 +32,7 @@ public abstract class AnvilChunkLoaderMixin {
     /// @author Angeline (@jellysquid)
     @Inject(method = "saveChunk", at = @At("HEAD"))
     private void onConstructed(final World world, final Chunk chunk, final CallbackInfo callbackInfo) {
-        ((ILightingEngineProvider) world).alfheim$getLightingEngine().processLightUpdates();
+        ((ILightingEngineProvider) world).getAlfheim$lightingEngine().processLightUpdates();
     }
 
     /// Injects the deserialization logic for chunk data on load so we can extract whether or not we've populated light yet.

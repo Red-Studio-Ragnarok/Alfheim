@@ -4,6 +4,7 @@ import dev.redstudio.alfheim.api.ILightInfoProvider;
 import dev.redstudio.alfheim.api.ILightLevelProvider;
 import dev.redstudio.alfheim.api.ILightingEngineProvider;
 import dev.redstudio.alfheim.lighting.LightingEngine;
+import lombok.Getter;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
@@ -14,9 +15,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /// @author Luna Mira Lage (Desoroxxx)
 /// @author Angeline (@jellysquid)
@@ -25,7 +23,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(World.class)
 public abstract class WorldMixin implements ILightingEngineProvider, ILightLevelProvider {
 
-    @Unique private LightingEngine alfheim$lightingEngine;
+    @Unique @Getter(lazy = true, onMethod_={@Override}) private final LightingEngine alfheim$lightingEngine = new LightingEngine((World) (Object) this);
 
     @Shadow private int skylightSubtracted;
 
@@ -35,17 +33,11 @@ public abstract class WorldMixin implements ILightingEngineProvider, ILightLevel
 
     @Shadow public abstract IBlockState getBlockState(final BlockPos blockPos);
 
-    /// Initialize the lighting engine on world construction.
-    @Inject(method = "<init>", at = @At("RETURN"))
-    private void onConstructed(final CallbackInfo callbackInfo) {
-        alfheim$lightingEngine = new LightingEngine((World) (Object) this);
-    }
-
     /// @reason Redirect to our lighting engine.
     /// @author Luna Mira Lage (Desoroxxx)
     @Overwrite
     public boolean checkLightFor(final EnumSkyBlock lightType, final BlockPos blockPos) {
-        alfheim$lightingEngine.scheduleLightUpdate(lightType, blockPos);
+        getAlfheim$lightingEngine().scheduleLightUpdate(lightType, blockPos);
 
         return true;
     }
@@ -68,11 +60,6 @@ public abstract class WorldMixin implements ILightingEngineProvider, ILightLevel
     @SideOnly(Side.CLIENT)
     public int getLightFromNeighborsFor(final EnumSkyBlock lightType, final BlockPos blockPos) {
         return ((ILightInfoProvider) getBlockState(blockPos)).alfheim$getLightFor(((World) (Object) this), lightType, blockPos);
-    }
-
-    @Override
-    public LightingEngine alfheim$getLightingEngine() {
-        return alfheim$lightingEngine;
     }
 
     @Override
