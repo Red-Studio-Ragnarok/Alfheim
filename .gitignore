@@ -1,9 +1,9 @@
-# Gradle
+### Gradle ###
 .gradle
 build/
 
-# IntelliJ Idea
+### IntelliJ Idea ###
 .idea
 
-# Minecraft
+### Minecraft ###
 run
