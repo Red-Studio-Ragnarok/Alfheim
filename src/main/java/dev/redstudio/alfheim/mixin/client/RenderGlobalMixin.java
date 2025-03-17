@@ -21,7 +21,7 @@ import static dev.redstudio.alfheim.Alfheim.IS_VINTAGIUM_LOADED;
 import static net.minecraft.util.math.BlockPos.*;
 
 /// @author Luna Mira Lage (Desoroxxx)
-/// @version 2024-12-18
+/// @version 2025-03-17
 /// @since 1.0
 @SideOnly(Side.CLIENT)
 @Mixin(RenderGlobal.class)
@@ -36,37 +36,31 @@ public abstract class RenderGlobalMixin implements ILightUpdatesProcessor {
 	@Shadow
 	protected abstract void markBlocksForUpdate(int minX, int minY, int minZ, int maxX, int maxY, int maxZ, boolean updateImmediately);
 
-	/**
-	 * @author Luna Mira Lage (Desoroxxx)
-	 * @reason Use a deduplicated long queue instead of a set
-	 * @since 1.5
-	 */
+	/// @author Luna Mira Lage (Desoroxxx)
+	/// @reason Use a deduplicated long queue instead of a set
+	/// @since 1.5
 	@Overwrite
 	public void notifyLightSet(final BlockPos blockPos) {
 		alfheim$lightUpdatesQueue.enqueue(blockPos.toLong());
 	}
 
-	/**
-	 * Disable vanilla code to replace it with {@link #alfheim$processLightUpdates}
-	 *
-	 * @since 1.0
-	 */
+	/// Disable vanilla code to replace it with [#alfheim$processLightUpdates]
+	///
+	/// @since 1.0
 	@Redirect(method = "updateClouds", at = @At(value = "INVOKE", target = "Ljava/util/Set;isEmpty()Z", ordinal = 0))
 	private boolean disableVanillaLightUpdates(final Set<BlockPos> instance) {
 		return true;
 	}
 
-	/**
-	 * Fixes <a href="https://bugs.mojang.com/browse/MC-80966">MC-80966</a> by not checking if the chunk is empty or not.
-	 * <p>
-	 * It also improves performance by using a {@link DeduplicatedLongQueue} instead of a set.
-	 * This removes the need to use an expensive iterator.
-	 * It also reduces memory usage and GC pressure by using long primitives instead of a {@link BlockPos} object.
-	 * <p>
-	 * Another performance improvement is using || instead of && allowing to skip earlier when there is nothing to update.
-	 *
-	 * @since 1.0
-	 */
+	/// Fixes [MC-80966](https://bugs.mojang.com/browse/MC-80966) by not checking if the chunk is empty or not.
+	///
+	/// It also improves performance by using a [DeduplicatedLongQueue] instead of a set.
+	/// This removes the need to use an expensive iterator.
+	/// It also reduces memory usage and GC pressure by using long primitives instead of a [BlockPos] object.
+	///
+	/// Another performance improvement is using || instead of && allowing to skip earlier when there is nothing to update.
+	///
+	/// @since 1.0
 	@Override
 	public void alfheim$processLightUpdates() {
 		if (alfheim$lightUpdatesQueue.isEmpty() || (!IS_NOTHIRIUM_LOADED && !IS_VINTAGIUM_LOADED && renderDispatcher.hasNoFreeRenderBuilders())) {
