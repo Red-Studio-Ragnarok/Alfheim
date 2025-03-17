@@ -61,7 +61,7 @@ repositories {
 dependencies {
 	implementation("dev.redstudio", "Red-Core-MC", redCoreVersion)
 
-	implementation(rfg.deobf("curse.maven:dynamic-lights-227874:2563244"))
+	compileOnly(rfg.deobf("curse.maven:dynamic-lights-227874:2563244"))
 
 	annotationProcessor("org.ow2.asm", "asm-debug-all", "5.2")
 	annotationProcessor("com.google.guava", "guava", "32.1.2-jre")
