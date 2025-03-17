@@ -10,9 +10,9 @@ import net.minecraft.world.IBlockAccess;
 /// @since 1.0
 public interface ILightInfoProvider {
 
-    int alfheim$getLightFor(final IBlockAccess iBlockAccess, final EnumSkyBlock lightType, final BlockPos blockPos);
+	int alfheim$getLightFor(final IBlockAccess iBlockAccess, final EnumSkyBlock lightType, final BlockPos blockPos);
 
-    boolean alfheim$useNeighborBrightness(final EnumFacing facing, final IBlockAccess blockAccess, final BlockPos blockPos);
+	boolean alfheim$useNeighborBrightness(final EnumFacing facing, final IBlockAccess blockAccess, final BlockPos blockPos);
 
-    int alfheim$getLightOpacity(final EnumFacing facing, final IBlockAccess blockAccess, final BlockPos blockPos);
+	int alfheim$getLightOpacity(final EnumFacing facing, final IBlockAccess blockAccess, final BlockPos blockPos);
 }

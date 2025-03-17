@@ -5,5 +5,5 @@ package dev.redstudio.alfheim.api;
 /// @since 1.0
 public interface ILightUpdatesProcessor {
 
-    void alfheim$processLightUpdates();
+	void alfheim$processLightUpdates();
 }

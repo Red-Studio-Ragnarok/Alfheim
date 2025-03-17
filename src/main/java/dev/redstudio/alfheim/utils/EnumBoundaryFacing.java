@@ -1,6 +1,6 @@
 package dev.redstudio.alfheim.utils;
 
 public enum EnumBoundaryFacing {
-    IN,
-    OUT
+	IN,
+	OUT
 }

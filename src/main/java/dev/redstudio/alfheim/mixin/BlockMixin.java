@@ -30,75 +30,81 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 @Mixin(Block.class)
 public abstract class BlockMixin implements ILitBlock {
 
-    @Shadow @Deprecated public abstract int getLightValue(final IBlockState blockState);
+	@Shadow
+	@Deprecated
+	public abstract int getLightValue(final IBlockState blockState);
 
-    /// @reason Part of non-full block lighting fix
-    /// @author Luna Mira Lage (Desoroxxx)
-    @Overwrite
-    @SideOnly(Side.CLIENT)
-    public int getPackedLightmapCoords(final IBlockState blockState, final IBlockAccess source, final BlockPos blockPos) {
-        return source.getCombinedLight(blockPos, blockState.getLightValue(source, blockPos));
-    }
+	/// @reason Part of non-full block lighting fix
+	/// @author Luna Mira Lage (Desoroxxx)
+	@Overwrite
+	@SideOnly(Side.CLIENT)
+	public int getPackedLightmapCoords(final IBlockState blockState, final IBlockAccess source, final BlockPos blockPos) {
+		return source.getCombinedLight(blockPos, blockState.getLightValue(source, blockPos));
+	}
 
-    @Inject(method = "registerBlocks", at = @At(value = "FIELD", target = "Lnet/minecraft/block/Block;useNeighborBrightness:Z", ordinal = 1, shift = At.Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
-    private static void checkForLiquid(final CallbackInfo callbackInfo, @Local(ordinal = 15) final Block block, @Local(ordinal = 0) LocalBooleanRef flag) {
-        boolean result = flag.get();
+	@Inject(method = "registerBlocks", at = @At(value = "FIELD", target = "Lnet/minecraft/block/Block;useNeighborBrightness:Z", ordinal = 1, shift = At.Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
+	private static void checkForLiquid(final CallbackInfo callbackInfo, @Local(ordinal = 15) final Block block, @Local(ordinal = 0) LocalBooleanRef flag) {
+		boolean result = flag.get();
 
-        result |= block instanceof BlockFluidBase;
-        result |= block instanceof BlockLiquid;
+		result |= block instanceof BlockFluidBase;
+		result |= block instanceof BlockLiquid;
 
-        flag.set(result);
-    }
+		flag.set(result);
+	}
 
-    /// @reason Part of non-full block lighting fix
-    /// @author Luna Mira Lage (Desoroxxx)
-    @Overwrite
-    @SideOnly(Side.CLIENT)
-    public float getAmbientOcclusionLightValue(final IBlockState blockState) {
-        final byte lightValue = (byte) ClampUtil.clampMinFirst(blockState.getLightValue() - 1, 0, 15);
+	/// @reason Part of non-full block lighting fix
+	/// @author Luna Mira Lage (Desoroxxx)
+	@Overwrite
+	@SideOnly(Side.CLIENT)
+	public float getAmbientOcclusionLightValue(final IBlockState blockState) {
+		final byte lightValue = (byte) ClampUtil.clampMinFirst(blockState.getLightValue() - 1, 0, 15);
 
-        if (lightValue == 0) {
-            return blockState.isBlockNormalCube() ? 0.2F : 1;
-        } else {
-            return 1;
-        }
-    }
+		if (lightValue == 0) {
+			return blockState.isBlockNormalCube() ? 0.2F : 1;
+		} else {
+			return 1;
+		}
+	}
 
-    @Override
-    public int alfheim$getLightFor(final IBlockState blockState, final IBlockAccess blockAccess, final EnumSkyBlock lightType, final BlockPos blockPos) {
-        int lightLevel = ((ILightLevelProvider) blockAccess).alfheim$getLight(lightType, blockPos);
+	@Override
+	public int alfheim$getLightFor(final IBlockState blockState, final IBlockAccess blockAccess, final EnumSkyBlock lightType, final BlockPos blockPos) {
+		int lightLevel = ((ILightLevelProvider) blockAccess).alfheim$getLight(lightType, blockPos);
 
-        if (lightLevel == 15)
-            return lightLevel;
+		if (lightLevel == 15) {
+			return lightLevel;
+		}
 
-        if (!blockState.useNeighborBrightness())
-            return lightLevel;
+		if (!blockState.useNeighborBrightness()) {
+			return lightLevel;
+		}
 
-        for (EnumFacing facing : EnumFacing.VALUES) {
-            if (((ILightInfoProvider) blockState).alfheim$useNeighborBrightness(facing, blockAccess, blockPos)) {
-                int opacity = ((ILightInfoProvider) blockState).alfheim$getLightOpacity(facing, blockAccess, blockPos);
-                final int neighborLightLevel = ((ILightLevelProvider) blockAccess).alfheim$getLight(lightType, blockPos.offset(facing));
+		for (EnumFacing facing : EnumFacing.VALUES) {
+			if (((ILightInfoProvider) blockState).alfheim$useNeighborBrightness(facing, blockAccess, blockPos)) {
+				int opacity = ((ILightInfoProvider) blockState).alfheim$getLightOpacity(facing, blockAccess, blockPos);
+				final int neighborLightLevel = ((ILightLevelProvider) blockAccess).alfheim$getLight(lightType, blockPos.offset(facing));
 
-                if (opacity == 0 && (lightType != EnumSkyBlock.SKY || neighborLightLevel != EnumSkyBlock.SKY.defaultLightValue))
-                    opacity = 1;
+				if (opacity == 0 && (lightType != EnumSkyBlock.SKY || neighborLightLevel != EnumSkyBlock.SKY.defaultLightValue)) {
+					opacity = 1;
+				}
 
-                lightLevel = Math.max(lightLevel, neighborLightLevel - opacity);
+				lightLevel = Math.max(lightLevel, neighborLightLevel - opacity);
 
-                if (lightLevel == 15)
-                    return lightLevel;
-            }
-        }
+				if (lightLevel == 15) {
+					return lightLevel;
+				}
+			}
+		}
 
-        return lightLevel;
-    }
+		return lightLevel;
+	}
 
-    @Override
-    public boolean alfheim$useNeighborBrightness(final IBlockState blockState, final EnumFacing facing, final IBlockAccess blockAccess, final BlockPos blockPos) {
-        return facing == EnumFacing.UP;
-    }
+	@Override
+	public boolean alfheim$useNeighborBrightness(final IBlockState blockState, final EnumFacing facing, final IBlockAccess blockAccess, final BlockPos blockPos) {
+		return facing == EnumFacing.UP;
+	}
 
-    @Override
-    public int alfheim$getLightOpacity(final IBlockState blockState, final EnumFacing facing, final IBlockAccess blockAccess, final BlockPos blockPos) {
-        return 0;
-    }
+	@Override
+	public int alfheim$getLightOpacity(final IBlockState blockState, final EnumFacing facing, final IBlockAccess blockAccess, final BlockPos blockPos) {
+		return 0;
+	}
 }

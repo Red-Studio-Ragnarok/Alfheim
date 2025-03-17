@@ -9,17 +9,17 @@ import net.minecraft.world.EnumSkyBlock;
 /// @since 1.0
 public interface IChunkLightingData {
 
-    short[] alfheim$getNeighborLightChecks();
+	short[] alfheim$getNeighborLightChecks();
 
-    void alfheim$setNeighborLightChecks(final short[] data);
+	void alfheim$setNeighborLightChecks(final short[] data);
 
-    boolean alfheim$isLightInitialized();
+	boolean alfheim$isLightInitialized();
 
-    void alfheim$setLightInitialized(final boolean lightInitialized);
+	void alfheim$setLightInitialized(final boolean lightInitialized);
 
-    void alfheim$setSkylightUpdatedPublic();
+	void alfheim$setSkylightUpdatedPublic();
 
-    void alfheim$initNeighborLightChecks();
+	void alfheim$initNeighborLightChecks();
 
-    byte alfheim$getCachedLightFor(final EnumSkyBlock enumSkyBlock, final BlockPos pos);
+	byte alfheim$getCachedLightFor(final EnumSkyBlock enumSkyBlock, final BlockPos pos);
 }

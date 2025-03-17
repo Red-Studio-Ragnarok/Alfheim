@@ -14,11 +14,11 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(SPacketChunkData.class)
 public abstract class SPacketChunkDataMixin {
 
-    /// Redirect a call to [Chunk#getWorld()] in the ctor to force light updates to be processed before creating the client payload.
-    @Redirect(method = "<init>(Lnet/minecraft/world/chunk/Chunk;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/Chunk;getWorld()Lnet/minecraft/world/World;"))
-    private World processLightUpdates(final Chunk chunk) {
-        ((ILightingEngineProvider) chunk).getAlfheim$lightingEngine().processLightUpdates();
+	/// Redirect a call to [Chunk#getWorld()] in the ctor to force light updates to be processed before creating the client payload.
+	@Redirect(method = "<init>(Lnet/minecraft/world/chunk/Chunk;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/Chunk;getWorld()Lnet/minecraft/world/World;"))
+	private World processLightUpdates(final Chunk chunk) {
+		((ILightingEngineProvider) chunk).getAlfheim$lightingEngine().processLightUpdates();
 
-        return chunk.getWorld();
-    }
+		return chunk.getWorld();
+	}
 }

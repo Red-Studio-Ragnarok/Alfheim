@@ -12,43 +12,44 @@ import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 /// @since 1.3
 public final class DeduplicatedLongQueue {
 
-    // TODO: Fully Implement my own implementation to get rid of the downsides of reduce etc...
+	// TODO: Fully Implement my own implementation to get rid of the downsides of reduce etc...
 
-    private final LongArrayFIFOQueue queue;
-    private LongOpenHashSet set;
+	private final LongArrayFIFOQueue queue;
+	private LongOpenHashSet set;
 
-    /// Creates a new deduplicated queue with the given capacity.
-    ///
-    /// @param capacity The capacity of the deduplicated queue
-    public DeduplicatedLongQueue(final int capacity) {
-        set = new LongOpenHashSet(capacity);
-        queue = new LongArrayFIFOQueue(capacity);
-    }
+	/// Creates a new deduplicated queue with the given capacity.
+	///
+	/// @param capacity The capacity of the deduplicated queue
+	public DeduplicatedLongQueue(final int capacity) {
+		set = new LongOpenHashSet(capacity);
+		queue = new LongArrayFIFOQueue(capacity);
+	}
 
-    /// Adds a value to the queue.
-    ///
-    /// @param value The value to add to the queue
-    public void enqueue(final long value) {
-        if (set.add(value))
-            queue.enqueue(value);
-    }
+	/// Adds a value to the queue.
+	///
+	/// @param value The value to add to the queue
+	public void enqueue(final long value) {
+		if (set.add(value)) {
+			queue.enqueue(value);
+		}
+	}
 
-    /// Removes and returns the first value in the queue.
-    ///
-    /// @return The first value in the queue
-    public long dequeue() {
-        return queue.dequeueLong();
-    }
+	/// Removes and returns the first value in the queue.
+	///
+	/// @return The first value in the queue
+	public long dequeue() {
+		return queue.dequeueLong();
+	}
 
-    /// Returns whether the queue is empty.
-    ///
-    /// @return `true` if the queue is empty,`false` otherwise
-    public boolean isEmpty() {
-        return queue.isEmpty();
-    }
+	/// Returns whether the queue is empty.
+	///
+	/// @return `true` if the queue is empty,`false` otherwise
+	public boolean isEmpty() {
+		return queue.isEmpty();
+	}
 
-    /// Creates a new deduplication set.
-    public void newDeduplicationSet() {
-        set = new LongOpenHashSet(queue.size());
-    }
+	/// Creates a new deduplication set.
+	public void newDeduplicationSet() {
+		set = new LongOpenHashSet(queue.size());
+	}
 }

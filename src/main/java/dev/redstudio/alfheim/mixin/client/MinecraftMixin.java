@@ -20,17 +20,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Minecraft.class)
 public abstract class MinecraftMixin {
 
-    @Shadow @Final public Profiler profiler;
+	@Shadow
+	@Final
+	public Profiler profiler;
 
-    @Shadow public RenderGlobal renderGlobal;
+	@Shadow
+	public RenderGlobal renderGlobal;
 
-    @Shadow private boolean isGamePaused;
+	@Shadow
+	private boolean isGamePaused;
 
-    @Inject(method = "runTick", at = @At(value = "CONSTANT", args = "stringValue=level", shift = At.Shift.BEFORE))
-    private void onRunTick(final CallbackInfo callbackInfo) {
-        profiler.endStartSection("processRenderGlobalLightUpdates");
+	@Inject(method = "runTick", at = @At(value = "CONSTANT", args = "stringValue=level", shift = At.Shift.BEFORE))
+	private void onRunTick(final CallbackInfo callbackInfo) {
+		profiler.endStartSection("processRenderGlobalLightUpdates");
 
-        if (!isGamePaused)
-            ((ILightUpdatesProcessor) renderGlobal).alfheim$processLightUpdates();
-    }
+		if (!isGamePaused) {
+			((ILightUpdatesProcessor) renderGlobal).alfheim$processLightUpdates();
+		}
+	}
 }

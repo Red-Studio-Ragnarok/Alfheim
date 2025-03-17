@@ -18,20 +18,23 @@ import org.spongepowered.asm.mixin.Shadow;
 @Mixin(ChunkCache.class)
 public abstract class ChunkCacheMixin implements ILightLevelProvider {
 
-    @SideOnly(Side.CLIENT) @Shadow public abstract int getLightFor(final EnumSkyBlock lightType, final BlockPos blockPos);
+	@SideOnly(Side.CLIENT)
+	@Shadow
+	public abstract int getLightFor(final EnumSkyBlock lightType, final BlockPos blockPos);
 
-    @Shadow public abstract IBlockState getBlockState(BlockPos pos);
+	@Shadow
+	public abstract IBlockState getBlockState(BlockPos pos);
 
-    /// @reason Redirect to our lighting engine.
-    /// @author Luna Mira Lage (Desoroxxx)
-    @Overwrite
-    @SideOnly(Side.CLIENT)
-    private int getLightForExt(final EnumSkyBlock lightType, final BlockPos blockPos) {
-        return ((ILightInfoProvider) getBlockState(blockPos)).alfheim$getLightFor(((ChunkCache) (Object) this), lightType, blockPos);
-    }
+	/// @reason Redirect to our lighting engine.
+	/// @author Luna Mira Lage (Desoroxxx)
+	@Overwrite
+	@SideOnly(Side.CLIENT)
+	private int getLightForExt(final EnumSkyBlock lightType, final BlockPos blockPos) {
+		return ((ILightInfoProvider) getBlockState(blockPos)).alfheim$getLightFor(((ChunkCache) (Object) this), lightType, blockPos);
+	}
 
-    @Override
-    public int alfheim$getLight(final EnumSkyBlock lightType, final BlockPos blockPos) {
-        return getLightFor(lightType, blockPos);
-    }
+	@Override
+	public int alfheim$getLight(final EnumSkyBlock lightType, final BlockPos blockPos) {
+		return getLightFor(lightType, blockPos);
+	}
 }

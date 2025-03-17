@@ -12,12 +12,13 @@ import net.minecraftforge.fml.common.Loader;
 /// @since 1.0
 public final class LightUtil {
 
-    private static final boolean DYNAMIC_LIGHTS_LOADED = Loader.isModLoaded("dynamiclights");
+	private static final boolean DYNAMIC_LIGHTS_LOADED = Loader.isModLoaded("dynamiclights");
 
-    public static int getLightValueForState(final IBlockState blockState, final IBlockAccess blockAccess, final BlockPos blockPos) {
-        if (DYNAMIC_LIGHTS_LOADED)
-            return DynamicLights.getLightValue(blockState.getBlock(), blockState, blockAccess, blockPos); // Use the Dynamic Lights implementation
-        else
-            return blockState.getLightValue(blockAccess, blockPos); // Use the vanilla implementation
-    }
+	public static int getLightValueForState(final IBlockState blockState, final IBlockAccess blockAccess, final BlockPos blockPos) {
+		if (DYNAMIC_LIGHTS_LOADED) {
+			return DynamicLights.getLightValue(blockState.getBlock(), blockState, blockAccess, blockPos); // Use the Dynamic Lights implementation
+		} else {
+			return blockState.getLightValue(blockAccess, blockPos); // Use the vanilla implementation
+		}
+	}
 }

@@ -19,41 +19,45 @@ import org.spongepowered.asm.mixin.Shadow;
 @Mixin(BlockStateContainer.class)
 public abstract class BlockStateContainerMixin implements ILightInfoProvider {
 
-    @Shadow @Final private Block block;
+	@Shadow
+	@Final
+	private Block block;
 
-    @Override
-    public int alfheim$getLightFor(IBlockAccess iBlockAccess, EnumSkyBlock lightType, BlockPos blockPos) {
-        return ((ILitBlock) block).alfheim$getLightFor(((IBlockState) this), iBlockAccess, lightType, blockPos);
-    }
+	@Override
+	public int alfheim$getLightFor(IBlockAccess iBlockAccess, EnumSkyBlock lightType, BlockPos blockPos) {
+		return ((ILitBlock) block).alfheim$getLightFor(((IBlockState) this), iBlockAccess, lightType, blockPos);
+	}
 
-    @Override
-    public boolean alfheim$useNeighborBrightness(EnumFacing facing, IBlockAccess blockAccess, BlockPos blockPos) {
-        return ((ILitBlock) block).alfheim$useNeighborBrightness(((IBlockState) this), facing, blockAccess, blockPos);
-    }
+	@Override
+	public boolean alfheim$useNeighborBrightness(EnumFacing facing, IBlockAccess blockAccess, BlockPos blockPos) {
+		return ((ILitBlock) block).alfheim$useNeighborBrightness(((IBlockState) this), facing, blockAccess, blockPos);
+	}
 
-    @Override
-    public int alfheim$getLightOpacity(EnumFacing facing, IBlockAccess blockAccess, BlockPos blockPos) {
-        return ((ILitBlock) block).alfheim$getLightOpacity(((IBlockState) this), facing, blockAccess, blockPos);
-    }
+	@Override
+	public int alfheim$getLightOpacity(EnumFacing facing, IBlockAccess blockAccess, BlockPos blockPos) {
+		return ((ILitBlock) block).alfheim$getLightOpacity(((IBlockState) this), facing, blockAccess, blockPos);
+	}
 
-    @Mixin(BlockStateContainer.StateImplementation.class)
-    public static class StateImplementationMixin implements ILightInfoProvider {
+	@Mixin(BlockStateContainer.StateImplementation.class)
+	public static class StateImplementationMixin implements ILightInfoProvider {
 
-        @Shadow @Final private Block block;
+		@Shadow
+		@Final
+		private Block block;
 
-        @Override
-        public int alfheim$getLightFor(IBlockAccess iBlockAccess, EnumSkyBlock lightType, BlockPos blockPos) {
-            return ((ILitBlock) block).alfheim$getLightFor(((IBlockState) this), iBlockAccess, lightType, blockPos);
-        }
+		@Override
+		public int alfheim$getLightFor(IBlockAccess iBlockAccess, EnumSkyBlock lightType, BlockPos blockPos) {
+			return ((ILitBlock) block).alfheim$getLightFor(((IBlockState) this), iBlockAccess, lightType, blockPos);
+		}
 
-        @Override
-        public boolean alfheim$useNeighborBrightness(EnumFacing facing, IBlockAccess blockAccess, BlockPos blockPos) {
-            return ((ILitBlock) block).alfheim$useNeighborBrightness(((IBlockState) this), facing, blockAccess, blockPos);
-        }
+		@Override
+		public boolean alfheim$useNeighborBrightness(EnumFacing facing, IBlockAccess blockAccess, BlockPos blockPos) {
+			return ((ILitBlock) block).alfheim$useNeighborBrightness(((IBlockState) this), facing, blockAccess, blockPos);
+		}
 
-        @Override
-        public int alfheim$getLightOpacity(EnumFacing facing, IBlockAccess blockAccess, BlockPos blockPos) {
-            return ((ILitBlock) block).alfheim$getLightOpacity(((IBlockState) this), facing, blockAccess, blockPos);
-        }
-    }
+		@Override
+		public int alfheim$getLightOpacity(EnumFacing facing, IBlockAccess blockAccess, BlockPos blockPos) {
+			return ((ILitBlock) block).alfheim$getLightOpacity(((IBlockState) this), facing, blockAccess, blockPos);
+		}
+	}
 }

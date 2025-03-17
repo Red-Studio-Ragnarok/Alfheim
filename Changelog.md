@@ -22,13 +22,14 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 - Removed the `comformVisibility` overwrite in `mixins.alfheim.json` as it is no longer required with MixinBooter 9.4 and above
 - Only generate sources jar for releases
 - Switched from Javadoc to Markdowndoc
+- Now uses tab indentation rather than spaces (This is an experiment that will continue to pop up on other Red Studio projects if everything goes well)
 - Updated dependencies:
-  - Updated to [gradle-buildconfig-plugin](https://github.com/gmazzo/gradle-buildconfig-plugin) 5.5.2
-  - Updated to [gradle-idea-ext-plugin](https://github.com/JetBrains/gradle-idea-ext-plugin) 1.1.10
-  - Updated to [io.freefair.lombok](https://plugins.gradle.org/plugin/io.freefair.lombok) 8.12.2.1
-  - Updated to [RetroFuturaGradle](https://github.com/GTNewHorizons/RetroFuturaGradle) 1.4.5
-  - Updated to [MixinBooter](https://www.curseforge.com/minecraft/mc-mods/mixin-booter) 10.5
-  - Updated to [Gradle](https://gradle.org) 8.13
+    - Updated to [gradle-buildconfig-plugin](https://github.com/gmazzo/gradle-buildconfig-plugin) 5.5.2
+    - Updated to [gradle-idea-ext-plugin](https://github.com/JetBrains/gradle-idea-ext-plugin) 1.1.10
+    - Updated to [io.freefair.lombok](https://plugins.gradle.org/plugin/io.freefair.lombok) 8.12.2.1
+    - Updated to [RetroFuturaGradle](https://github.com/GTNewHorizons/RetroFuturaGradle) 1.4.5
+    - Updated to [MixinBooter](https://www.curseforge.com/minecraft/mc-mods/mixin-booter) 10.5
+    - Updated to [Gradle](https://gradle.org) 8.13
 
 ## Alfheim Version 1.5 Changelog - 2025-02-11
 
@@ -37,14 +38,14 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 - `DeduplicatedLongQueue` now creates a new deduplication set instead of clearing it
 - Improved client light processing performance by using a `DeduplicatedLongQueue` instead of a `Set` of `BlockPos` objects
 - Updated dependencies:
-  - Requires Red Core 0.6 and up
+    - Requires Red Core 0.6 and up
 
 ### Fixed
 
 - Fixed client lighting not updating past render chunk boundaries [#40](https://github.com/Red-Studio-Ragnarok/Alfheim/issues/40)
 
 ### Internal
-  
+
 - Updated to [org.jetbrains.gradle.plugin.idea-ext](https://github.com/JetBrains/gradle-idea-ext-plugin) 1.1.9
 - Updated to [MixinBooter](https://github.com/CleanroomMC/MixinBooter) 10.2
 - Updated to [gradle-buildconfig-plugin](https://github.com/gmazzo/gradle-buildconfig-plugin) 5.5.1
@@ -60,7 +61,7 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 
 - Overwrites now do not enforce the scope of methods to prevent crashes, using `conformVisibility` option instead
 - Updated dependencies:
-  - Requires MixinBooter 8.8 and up
+    - Requires MixinBooter 8.8 and up
 - Simplified Cubic Chunks detection logic
 
 ### Fixed

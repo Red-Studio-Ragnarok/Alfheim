@@ -19,13 +19,16 @@ import static net.minecraft.block.BlockStairs.EnumHalf.TOP;
 @Mixin(BlockStairs.class)
 public abstract class BlockStairsMixin extends BlockMixin implements ILitBlock {
 
-    @Shadow @Final public static PropertyEnum<BlockStairs.EnumHalf> HALF;
+	@Shadow
+	@Final
+	public static PropertyEnum<BlockStairs.EnumHalf> HALF;
 
-    @Override
-    public boolean alfheim$useNeighborBrightness(final IBlockState blockState, final EnumFacing facing, final IBlockAccess blockAccess, final BlockPos blockPos) {
-        if (facing.getAxis() != EnumFacing.Axis.Y)
-            return false;
+	@Override
+	public boolean alfheim$useNeighborBrightness(final IBlockState blockState, final EnumFacing facing, final IBlockAccess blockAccess, final BlockPos blockPos) {
+		if (facing.getAxis() != EnumFacing.Axis.Y) {
+			return false;
+		}
 
-        return facing == (blockState.getValue(HALF) == TOP ? EnumFacing.DOWN : EnumFacing.UP);
-    }
+		return facing == (blockState.getValue(HALF) == TOP ? EnumFacing.DOWN : EnumFacing.UP);
+	}
 }

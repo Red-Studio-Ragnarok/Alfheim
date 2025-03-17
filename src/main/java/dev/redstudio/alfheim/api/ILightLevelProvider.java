@@ -8,5 +8,5 @@ import net.minecraft.world.EnumSkyBlock;
 /// @since 1.0
 public interface ILightLevelProvider {
 
-    int alfheim$getLight(final EnumSkyBlock lightType, final BlockPos blockPos);
+	int alfheim$getLight(final EnumSkyBlock lightType, final BlockPos blockPos);
 }
