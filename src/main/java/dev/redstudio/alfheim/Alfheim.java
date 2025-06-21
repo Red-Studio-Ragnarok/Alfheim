@@ -32,4 +32,5 @@ public final class Alfheim {
 
 	public static final boolean IS_NOTHIRIUM_LOADED = Loader.isModLoaded("nothirium");
 	public static final boolean IS_VINTAGIUM_LOADED = Loader.isModLoaded("vintagium");
+	public static final boolean IS_CELERITAS_LOADED = Loader.isModLoaded("celeritas");
 }
