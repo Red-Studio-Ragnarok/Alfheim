@@ -18,7 +18,6 @@ import org.spongepowered.asm.mixin.Unique;
 
 /// @author Luna Mira Lage (Desoroxxx)
 /// @author Angeline (@jellysquid)
-/// @version 2023-11-08
 /// @since 1.0
 @Mixin(World.class)
 public abstract class WorldMixin implements ILightingEngineProvider, ILightLevelProvider {

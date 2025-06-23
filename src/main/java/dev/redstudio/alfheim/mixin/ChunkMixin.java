@@ -28,7 +28,6 @@ import static dev.redstudio.alfheim.Alfheim.FLAG_COUNT;
 /// @author kappa-maintainer
 /// @author embeddedt
 /// @author Angeline (@jellysquid)
-/// @version 2024-08-21
 /// @since 1.0
 @Mixin(Chunk.class)
 public abstract class ChunkMixin implements IChunkLightingData, ILightingEngineProvider {

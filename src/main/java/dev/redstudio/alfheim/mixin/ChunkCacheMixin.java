@@ -13,7 +13,6 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 /// @author Luna Mira Lage (Desoroxxx)
-/// @version 2024-11-08
 /// @since 1.0
 @Mixin(ChunkCache.class)
 public abstract class ChunkCacheMixin implements ILightLevelProvider {

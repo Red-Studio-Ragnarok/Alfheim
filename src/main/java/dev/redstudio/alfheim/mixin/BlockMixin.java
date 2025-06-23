@@ -25,7 +25,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 /// @author Luna Mira Lage (Desoroxxx)
-/// @version 2024-08-21
 /// @since 1.0
 @Mixin(Block.class)
 public abstract class BlockMixin implements ILitBlock {

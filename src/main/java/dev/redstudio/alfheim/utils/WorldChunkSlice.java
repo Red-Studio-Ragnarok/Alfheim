@@ -7,7 +7,6 @@ import net.minecraft.world.chunk.IChunkProvider;
 ///
 /// @author Luna Mira Lage (Desoroxxx)
 /// @author Angeline (@jellysquid)
-/// @version 2023-09-06
 /// @since 1.0
 public class WorldChunkSlice {
 

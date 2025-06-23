@@ -20,7 +20,6 @@ import static dev.redstudio.alfheim.ProjectConstants.VERSION;
 /// This class mainly contains constants and metadata.
 ///
 /// @author Luna Mira Lage (Desoroxxx)
-/// @version 2025-02-14
 /// @since 1.0
 @Mod(modid = ID, version = VERSION, updateJSON = "https://forge.curseupdate.com/910715/" + ID, useMetadata = true, dependencies = "required-after:mixinbooter@[10.6,);required-after:redcore@[0.6,);")
 public final class Alfheim {

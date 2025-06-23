@@ -26,7 +26,6 @@ import static dev.redstudio.alfheim.ProjectConstants.NAME;
 /// @author kappa-maintainer
 /// @author embeddedt
 /// @author Angeline (@jellysquid)
-/// @version 2024-11-14
 /// @since 1.0
 public final class LightingEngine {
 

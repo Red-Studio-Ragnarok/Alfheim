@@ -20,7 +20,6 @@ import static dev.redstudio.alfheim.ProjectConstants.LOGGER;
 
 /// @author Luna Mira Lage (Desoroxxx)
 /// @author Angeline (@jellysquid)
-/// @version 2023-11-03
 /// @since 1.0
 @Mixin(AnvilChunkLoader.class)
 public abstract class AnvilChunkLoaderMixin {

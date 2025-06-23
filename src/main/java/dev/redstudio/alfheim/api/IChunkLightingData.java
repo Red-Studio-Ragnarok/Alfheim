@@ -5,7 +5,6 @@ import net.minecraft.world.EnumSkyBlock;
 
 /// @author Luna Mira Lage (Desoroxxx)
 /// @author Angeline (@jellysquid)
-/// @version 2023-09-06
 /// @since 1.0
 public interface IChunkLightingData {
 

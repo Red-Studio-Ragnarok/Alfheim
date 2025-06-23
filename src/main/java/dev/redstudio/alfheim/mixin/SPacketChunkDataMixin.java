@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 /// @author Luna Mira Lage (Desoroxxx)
-/// @version 2023-09-06
 /// @since 1.0
 @Mixin(SPacketChunkData.class)
 public abstract class SPacketChunkDataMixin {

@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 /// @author Luna Mira Lage (Desoroxxx)
-/// @version 2023-11-18
 /// @since 1.0
 @SideOnly(Side.CLIENT)
 @Mixin(BlockModelRenderer.class)

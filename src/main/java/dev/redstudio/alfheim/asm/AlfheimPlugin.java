@@ -14,7 +14,6 @@ import java.util.Set;
 import static dev.redstudio.alfheim.ProjectConstants.*;
 
 /// @author Luna Mira Lage (Desoroxxx)
-/// @version 2025-02-14
 /// @since 1.0
 @IFMLLoadingPlugin.MCVersion("1.12.2")
 @IFMLLoadingPlugin.TransformerExclusions("dev.redstudio." + ID + ".asm")

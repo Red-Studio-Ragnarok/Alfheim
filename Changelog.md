@@ -28,6 +28,7 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 - Switched from Javadoc to Markdowndoc
 - Now uses tab indentation rather than spaces (This is an experiment that will continue to pop up on other Red Studio projects if everything goes well)
 - Update to use Gradle best practices
+- Remove `@version` tag from classes
 - Updated dependencies:
     - Updated to [gradle-buildconfig-plugin](https://github.com/gmazzo/gradle-buildconfig-plugin) 5.6.6
     - Updated to [gradle-idea-ext-plugin](https://github.com/JetBrains/gradle-idea-ext-plugin) 1.1.10

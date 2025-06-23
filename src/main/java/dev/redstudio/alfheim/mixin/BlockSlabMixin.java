@@ -14,7 +14,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import static net.minecraft.block.BlockSlab.EnumBlockHalf.TOP;
 
 /// @author Luna Mira Lage (Desoroxxx)
-/// @version 2023-09-06
 /// @since 1.0
 @Mixin(BlockSlab.class)
 public abstract class BlockSlabMixin extends BlockMixin implements ILitBlock {

@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.Unique;
 
 /// @author Luna Mira Lage (Desoroxxx)
 /// @author Angeline (@jellysquid)
-/// @version 2023-09-06
 /// @since 1.0
 @Mixin(ExtendedBlockStorage.class)
 public abstract class ExtendedBlockStorageMixin {

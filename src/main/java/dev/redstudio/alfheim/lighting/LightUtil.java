@@ -8,7 +8,6 @@ import net.minecraftforge.fml.common.Loader;
 
 /// @author Luna Mira Lage (Desoroxxx)
 /// @author embeddedt
-/// @version 2023-09-06
 /// @since 1.0
 public final class LightUtil {
 

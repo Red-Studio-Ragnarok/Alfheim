@@ -20,7 +20,6 @@ import static dev.redstudio.alfheim.Alfheim.*;
 import static net.minecraft.util.math.BlockPos.*;
 
 /// @author Luna Mira Lage (Desoroxxx)
-/// @version 2025-03-17
 /// @since 1.0
 @SideOnly(Side.CLIENT)
 @Mixin(RenderGlobal.class)
