@@ -165,9 +165,8 @@ public abstract class ChunkMixin implements IChunkLightingData, ILightingEngineP
 		while (newHeightMapY > 0 && getBlockLightOpacity(x, newHeightMapY - 1, z) == 0)
 			--newHeightMapY;
 
-		if (newHeightMapY == heightMapY) {
+		if (newHeightMapY == heightMapY)
 			return;
-		}
 
 		heightMap[z << 4 | x] = newHeightMapY;
 
@@ -225,9 +224,8 @@ public abstract class ChunkMixin implements IChunkLightingData, ILightingEngineP
 	/// @author Angeline (@jellysquid)
 	@Overwrite
 	private void recheckGaps(final boolean onlyOne) {
-		if (!world.isAreaLoaded(new BlockPos((x << 4) + 8, 0, (z << 4) + 8), 16)) {
+		if (!world.isAreaLoaded(new BlockPos((x << 4) + 8, 0, (z << 4) + 8), 16))
 			return;
-		}
 
 		final WorldChunkSlice slice = new WorldChunkSlice(world.getChunkProvider(), x, z);
 
@@ -327,9 +325,8 @@ public abstract class ChunkMixin implements IChunkLightingData, ILightingEngineP
 
 	@Unique
 	private void alfheim$checkSkylightNeighborHeight(final WorldChunkSlice slice, final int x, final int z, final int maxValue) {
-		if (slice.getChunkFromWorldCoords(x, z) == null) {
+		if (slice.getChunkFromWorldCoords(x, z) == null)
 			return;
-		}
 
 		final int y = slice.getChunkFromWorldCoords(x, z).getHeightValue(x & 15, z & 15);
 
@@ -342,13 +339,11 @@ public abstract class ChunkMixin implements IChunkLightingData, ILightingEngineP
 
 	@Unique
 	private void alfheim$updateSkylightNeighborHeight(final WorldChunkSlice slice, final int x, final int z, final int startY, final int endY) {
-		if (endY < startY) {
+		if (endY < startY)
 			return;
-		}
 
-		if (!slice.isLoaded(x, z, 16)) {
+		if (!slice.isLoaded(x, z, 16))
 			return;
-		}
 
 		for (int y = startY; y < endY; ++y)
 			world.checkLightFor(EnumSkyBlock.SKY, new BlockPos(x, y, z));
@@ -360,9 +355,8 @@ public abstract class ChunkMixin implements IChunkLightingData, ILightingEngineP
 	private static void alfheim$mergeFlags(final EnumSkyBlock lightType, final Chunk inChunk, final Chunk outChunk, final EnumFacing dir, final EnumFacing.AxisDirection axisDirection) {
 		final IChunkLightingData outChunkLightingData = (IChunkLightingData) outChunk;
 
-		if (outChunkLightingData.alfheim$getNeighborLightChecks() == null) {
+		if (outChunkLightingData.alfheim$getNeighborLightChecks() == null)
 			return;
-		}
 
 		((IChunkLightingData) inChunk).alfheim$initNeighborLightChecks();
 
@@ -377,17 +371,15 @@ public abstract class ChunkMixin implements IChunkLightingData, ILightingEngineP
 	private void alfheim$scheduleRelightChecksForBoundary(final Chunk chunk, Chunk nChunk, Chunk sChunk, final EnumSkyBlock lightType, final int xOffset, final int zOffset, final EnumFacing.AxisDirection axisDirection) {
 		final IChunkLightingData chunkLightingData = (IChunkLightingData) chunk;
 
-		if (chunkLightingData.alfheim$getNeighborLightChecks() == null) {
+		if (chunkLightingData.alfheim$getNeighborLightChecks() == null)
 			return;
-		}
 
 		final int flagIndex = alfheim$getFlagIndex(lightType, xOffset, zOffset, axisDirection, EnumBoundaryFacing.IN); // OUT checks from neighbor are already merged
 
 		final int flags = chunkLightingData.alfheim$getNeighborLightChecks()[flagIndex];
 
-		if (flags == 0) {
+		if (flags == 0)
 			return;
-		}
 
 		if (nChunk == null) {
 			nChunk = world.getChunkProvider().getLoadedChunk(chunk.x + xOffset, chunk.z + zOffset);
@@ -450,9 +442,8 @@ public abstract class ChunkMixin implements IChunkLightingData, ILightingEngineP
 
 	@Unique
 	private void alfheim$initSkylightForSection(final ExtendedBlockStorage extendedBlockStorage) {
-		if (!world.provider.hasSkyLight()) {
+		if (!world.provider.hasSkyLight())
 			return;
-		}
 
 		for (int x = 0; x < 16; ++x) {
 			for (int z = 0; z < 16; ++z) {

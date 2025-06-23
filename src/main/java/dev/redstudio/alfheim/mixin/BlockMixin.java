@@ -69,28 +69,24 @@ public abstract class BlockMixin implements ILitBlock {
 	public int alfheim$getLightFor(final IBlockState blockState, final IBlockAccess blockAccess, final EnumSkyBlock lightType, final BlockPos blockPos) {
 		int lightLevel = ((ILightLevelProvider) blockAccess).alfheim$getLight(lightType, blockPos);
 
-		if (lightLevel == 15) {
+		if (lightLevel == 15)
 			return lightLevel;
-		}
 
-		if (!blockState.useNeighborBrightness()) {
+		if (!blockState.useNeighborBrightness())
 			return lightLevel;
-		}
 
 		for (EnumFacing facing : EnumFacing.VALUES) {
 			if (((ILightInfoProvider) blockState).alfheim$useNeighborBrightness(facing, blockAccess, blockPos)) {
 				int opacity = ((ILightInfoProvider) blockState).alfheim$getLightOpacity(facing, blockAccess, blockPos);
 				final int neighborLightLevel = ((ILightLevelProvider) blockAccess).alfheim$getLight(lightType, blockPos.offset(facing));
 
-				if (opacity == 0 && (lightType != EnumSkyBlock.SKY || neighborLightLevel != EnumSkyBlock.SKY.defaultLightValue)) {
+				if (opacity == 0 && (lightType != EnumSkyBlock.SKY || neighborLightLevel != EnumSkyBlock.SKY.defaultLightValue))
 					opacity = 1;
-				}
 
 				lightLevel = Math.max(lightLevel, neighborLightLevel - opacity);
 
-				if (lightLevel == 15) {
+				if (lightLevel == 15)
 					return lightLevel;
-				}
 			}
 		}
 

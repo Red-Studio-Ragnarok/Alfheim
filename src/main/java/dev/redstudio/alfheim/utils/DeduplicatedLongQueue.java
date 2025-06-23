@@ -28,9 +28,8 @@ public final class DeduplicatedLongQueue {
 	///
 	/// @param value The value to add to the queue
 	public void enqueue(final long value) {
-		if (set.add(value)) {
+		if (set.add(value))
 			queue.enqueue(value);
-		}
 	}
 
 	/// Removes and returns the first value in the queue.

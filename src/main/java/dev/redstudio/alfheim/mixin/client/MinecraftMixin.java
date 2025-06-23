@@ -33,8 +33,7 @@ public abstract class MinecraftMixin {
 	private void onRunTick(final CallbackInfo callbackInfo) {
 		profiler.endStartSection("processRenderGlobalLightUpdates");
 
-		if (!isGamePaused) {
+		if (!isGamePaused)
 			((ILightUpdatesProcessor) renderGlobal).alfheim$processLightUpdates();
-		}
 	}
 }

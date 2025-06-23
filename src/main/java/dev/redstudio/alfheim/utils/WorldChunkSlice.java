@@ -48,9 +48,8 @@ public class WorldChunkSlice {
 
 		for (int currentX = xStart; currentX <= xEnd; ++currentX)
 			for (int currentZ = zStart; currentZ <= zEnd; ++currentZ)
-				if (getChunk(currentX, currentZ) == null) {
+				if (getChunk(currentX, currentZ) == null)
 					return false;
-				}
 
 		return true;
 	}

@@ -157,16 +157,14 @@ public final class LightingEngine {
 	public void processLightUpdatesForType(final EnumSkyBlock lightType) {
 		// We only want to perform updates if we're being called from a tick event on the client.
 		// There are many locations in the client code that will end up making calls to this method, usually from other threads.
-		if (world.isRemote && !isCallingFromMainThread()) {
+		if (world.isRemote && !isCallingFromMainThread())
 			return;
-		}
 
 		final DeduplicatedLongQueue queue = lightUpdateQueues[lightType.ordinal()];
 
 		// Quickly check if the queue is empty before we acquire a more expensive lock.
-		if (queue.isEmpty()) {
+		if (queue.isEmpty())
 			return;
-		}
 
 		profiler.startSection("process");
 
@@ -187,9 +185,8 @@ public final class LightingEngine {
 	}
 
 	private void lock() {
-		if (lock.tryLock()) {
+		if (lock.tryLock())
 			return;
-		}
 
 		// If we cannot lock, something has gone wrong... Only one thread should ever acquire the lock.
 		// Validate that we're on the right thread immediately, so we can gather information.
@@ -213,9 +210,8 @@ public final class LightingEngine {
 
 	private void processLightUpdatesForTypeInner(final EnumSkyBlock lightType, final DeduplicatedLongQueue queue) {
 		// Avoid nested calls
-		if (updating) {
+		if (updating)
 			throw new IllegalStateException("Already processing updates!");
-		}
 
 		updating = true;
 
@@ -223,17 +219,15 @@ public final class LightingEngine {
 
 		currentQueue = queue;
 
-		if (currentQueue != null) {
+		if (currentQueue != null)
 			currentQueue.newDeduplicationSet();
-		}
 
 		profiler.startSection("prepare");
 
 		// Process the queued updates and enqueue them for further processing
 		while (nextItem()) {
-			if (currentChunk == null) {
+			if (currentChunk == null)
 				continue;
-			}
 
 			final byte oldLight = getCursorCachedLight(lightType);
 			final byte newLight = calculateNewLightFromCursor(lightType);
@@ -249,32 +243,28 @@ public final class LightingEngine {
 
 		currentQueue = initialBrightenings;
 
-		if (currentQueue != null) {
+		if (currentQueue != null)
 			currentQueue.newDeduplicationSet();
-		}
 
 		while (nextItem()) {
 			final byte newLight = (byte) (currentData >> S_L & M_L);
 
-			if (newLight > getCursorCachedLight(lightType)) {
+			if (newLight > getCursorCachedLight(lightType))
 				enqueueBrightening(currentPos, currentData & M_POS, newLight, currentChunk, lightType); // Sets the light to newLight to only schedule once. Clear leading bits of curData for later
-			}
 		}
 
 		profiler.endStartSection("enqueueDarkening");
 
 		currentQueue = initialDarkenings;
 
-		if (currentQueue != null) {
+		if (currentQueue != null)
 			currentQueue.newDeduplicationSet();
-		}
 
 		while (nextItem()) {
 			final byte oldLight = getCursorCachedLight(lightType);
 
-			if (oldLight != 0) {
+			if (oldLight != 0)
 				enqueueDarkening(currentPos, currentData, oldLight, currentChunk, lightType); // Sets the light to zero to only schedule once
-			}
 		}
 
 		profiler.endStartSection("process");
@@ -283,15 +273,13 @@ public final class LightingEngine {
 		for (byte currentLight = MAX_LIGHT_LEVEL; currentLight >= 0; --currentLight) {
 			currentQueue = darkeningQueues[currentLight];
 
-			if (currentQueue != null) {
+			if (currentQueue != null)
 				currentQueue.newDeduplicationSet();
-			}
 
 			while (nextItem()) {
 				// Don't darken if we got brighter due to some other change
-				if (getCursorCachedLight(lightType) >= currentLight) {
+				if (getCursorCachedLight(lightType) >= currentLight)
 					continue;
-				}
 
 				final IBlockState blockState = currentChunk.getBlockState(currentPos);
 				final byte luminosity = getCursorLuminosity(blockState, lightType);
@@ -313,15 +301,13 @@ public final class LightingEngine {
 					for (final NeighborInfo neighborInfo : neighborInfos) {
 						final Chunk neighborChunk = neighborInfo.chunk;
 
-						if (neighborChunk == null) {
+						if (neighborChunk == null)
 							continue;
-						}
 
 						final byte neighborLight = neighborInfo.light;
 
-						if (neighborLight == 0) {
+						if (neighborLight == 0)
 							continue;
-						}
 
 						final MutableBlockPos neighborPos = neighborInfo.mutableBlockPos;
 
@@ -342,9 +328,8 @@ public final class LightingEngine {
 
 			currentQueue = brighteningQueues[currentLight];
 
-			if (currentQueue != null) {
+			if (currentQueue != null)
 				currentQueue.newDeduplicationSet();
-			}
 
 			while (nextItem()) {
 				final byte oldLight = getCursorCachedLight(lightType);
@@ -353,9 +338,8 @@ public final class LightingEngine {
 				if (oldLight == currentLight) {
 					world.notifyLightSet(currentPos);
 
-					if (currentLight > 1) {
+					if (currentLight > 1)
 						spreadLightFromCursor(currentLight, lightType);
-					}
 				}
 			}
 		}
@@ -369,9 +353,8 @@ public final class LightingEngine {
 	/// If a neighbor can't be accessed/doesn't exist, the corresponding entry in neighborChunks is null - others are not reset
 	private void fetchNeighborDataFromCursor(final EnumSkyBlock lightType) {
 		// Only update if curPos was changed
-		if (isNeighborDataValid) {
+		if (isNeighborDataValid)
 			return;
-		}
 
 		isNeighborDataValid = true;
 
@@ -432,18 +415,16 @@ public final class LightingEngine {
 	}
 
 	private byte calculateNewLightFromCursor(final byte luminosity, final byte opacity, final EnumSkyBlock lightType) {
-		if (luminosity >= MAX_LIGHT_LEVEL - opacity) {
+		if (luminosity >= MAX_LIGHT_LEVEL - opacity)
 			return luminosity;
-		}
 
 		byte newLight = luminosity;
 
 		fetchNeighborDataFromCursor(lightType);
 
 		for (final NeighborInfo neighborInfo : neighborInfos) {
-			if (neighborInfo.chunk == null) {
+			if (neighborInfo.chunk == null)
 				continue;
-			}
 
 			newLight = (byte) Math.max(neighborInfo.light - opacity, newLight);
 		}
@@ -457,17 +438,15 @@ public final class LightingEngine {
 		for (final NeighborInfo neighborInfo : neighborInfos) {
 			final Chunk neighborChunk = neighborInfo.chunk;
 
-			if (neighborChunk == null || currentLight < neighborInfo.light) {
+			if (neighborChunk == null || currentLight < neighborInfo.light)
 				continue;
-			}
 
 			final BlockPos neighborBlockPos = neighborInfo.mutableBlockPos;
 
 			final byte newLight = (byte) (currentLight - getPosOpacity(neighborBlockPos, neighborChunk.getBlockState(neighborBlockPos)));
 
-			if (newLight > neighborInfo.light) {
+			if (newLight > neighborInfo.light)
 				enqueueBrightening(neighborBlockPos, neighborInfo.key, newLight, neighborChunk, lightType);
-			}
 		}
 	}
 
@@ -528,13 +507,8 @@ public final class LightingEngine {
 
 	/// Calculates the luminosity for [#currentPos], taking into account the light type
 	private byte getCursorLuminosity(final IBlockState state, final EnumSkyBlock lightType) {
-		if (lightType == EnumSkyBlock.SKY) {
-			if (currentChunk.canSeeSky(currentPos)) {
-				return (byte) EnumSkyBlock.SKY.defaultLightValue;
-			} else {
-				return 0;
-			}
-		}
+		if (lightType == EnumSkyBlock.SKY)
+            return currentChunk.canSeeSky(currentPos) ? (byte) EnumSkyBlock.SKY.defaultLightValue : 0;
 
 		return (byte) ClampUtil.clampMinFirst(LightUtil.getLightValueForState(state, world, currentPos), 0, MAX_LIGHT_LEVEL);
 	}

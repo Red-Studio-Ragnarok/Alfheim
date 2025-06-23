@@ -29,6 +29,7 @@ public final class Alfheim {
 	/// `2 light types * 4 directions * 2 halves * (inwards + outwards)`
 	public static final byte FLAG_COUNT = 32;
 
+    public static final boolean IS_DYNAMIC_LIGHTS_LOADED = Loader.isModLoaded("dynamiclights");
 	public static final boolean IS_NOTHIRIUM_LOADED = Loader.isModLoaded("nothirium");
 	public static final boolean IS_VINTAGIUM_LOADED = Loader.isModLoaded("vintagium");
 	public static final boolean IS_CELERITAS_LOADED = Loader.isModLoaded("celeritas");

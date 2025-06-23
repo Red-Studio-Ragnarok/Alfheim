@@ -59,9 +59,8 @@ public abstract class AnvilChunkLoaderMixin {
 
 	@Unique
 	private static void alfheim$readNeighborLightChecksFromNBT(final Chunk chunk, final NBTTagCompound compound) {
-		if (!compound.hasKey(NEIGHBOR_LIGHT_CHECKS_KEY, 9)) {
+		if (!compound.hasKey(NEIGHBOR_LIGHT_CHECKS_KEY, 9))
 			return;
-		}
 
 		final NBTTagList tagList = compound.getTagList(NEIGHBOR_LIGHT_CHECKS_KEY, 2);
 
@@ -82,9 +81,8 @@ public abstract class AnvilChunkLoaderMixin {
 	private static void alfheim$writeNeighborLightChecksToNBT(final Chunk chunk, final NBTTagCompound compound) {
 		final short[] neighborLightChecks = ((IChunkLightingData) chunk).alfheim$getNeighborLightChecks();
 
-		if (neighborLightChecks == null) {
+		if (neighborLightChecks == null)
 			return;
-		}
 
 		boolean empty = true;
 
@@ -93,13 +91,11 @@ public abstract class AnvilChunkLoaderMixin {
 		for (final short flags : neighborLightChecks) {
 			list.appendTag(new NBTTagShort(flags));
 
-			if (flags != 0) {
+			if (flags != 0)
 				empty = false;
-			}
 		}
 
-		if (!empty) {
+		if (!empty)
 			compound.setTag(NEIGHBOR_LIGHT_CHECKS_KEY, list);
-		}
 	}
 }

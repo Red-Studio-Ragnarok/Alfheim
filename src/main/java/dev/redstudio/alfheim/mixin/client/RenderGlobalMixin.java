@@ -61,9 +61,8 @@ public abstract class RenderGlobalMixin implements ILightUpdatesProcessor {
 	/// @since 1.0
 	@Override
 	public void alfheim$processLightUpdates() {
-		if (alfheim$lightUpdatesQueue.isEmpty() || (!IS_NOTHIRIUM_LOADED && !IS_VINTAGIUM_LOADED && !IS_CELERITAS_LOADED && renderDispatcher.hasNoFreeRenderBuilders())) {
+		if (alfheim$lightUpdatesQueue.isEmpty() || (!IS_NOTHIRIUM_LOADED && !IS_VINTAGIUM_LOADED && !IS_CELERITAS_LOADED && renderDispatcher.hasNoFreeRenderBuilders()))
 			return;
-		}
 
 		while (!alfheim$lightUpdatesQueue.isEmpty()) {
 			final long longPos = alfheim$lightUpdatesQueue.dequeue();

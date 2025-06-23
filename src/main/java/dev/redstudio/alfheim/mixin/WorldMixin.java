@@ -51,9 +51,8 @@ public abstract class WorldMixin implements ILightingEngineProvider, ILightLevel
 	/// @author Luna Mira Lage (Desoroxxx)
 	@Overwrite
 	public int getLight(final BlockPos blockPos, final boolean checkNeighbors) {
-		if (!checkNeighbors) {
+		if (!checkNeighbors)
 			return getLight(blockPos);
-		}
 
 		final IBlockState blockState = getBlockState(blockPos);
 
