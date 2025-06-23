@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com),
 and this project follows the [Ragnarök Versioning Convention](https://github.com/Red-Studio-Ragnarok/Commons/blob/main/Ragnar%C3%B6k%20Versioning%20Convention.md).
 
-## [UNRELEASED] Alfheim Version 1.6 Changelog
+## Alfheim Version 1.6 Changelog - 2025-06-23
 
 ### Added
 
