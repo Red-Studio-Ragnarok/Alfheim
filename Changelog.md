@@ -17,6 +17,10 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 - Changed the URL in the mod menu to point to GitHub instead of CurseForge
 - World's lighting engines are now lazily initialized
 
+### Fixed
+
+- Fixed compatibility with Celeritas
+
 ### Internal
 
 - Removed the `comformVisibility` overwrite in `mixins.alfheim.json` as it is no longer required with MixinBooter 9.4 and above
