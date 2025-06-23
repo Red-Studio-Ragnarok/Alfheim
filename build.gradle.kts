@@ -6,8 +6,8 @@ import org.jetbrains.gradle.ext.Gradle
 plugins {
 	id("org.jetbrains.gradle.plugin.idea-ext") version "1.1.10"
 	id("com.gtnewhorizons.retrofuturagradle") version "1.4.5"
-	id("com.github.gmazzo.buildconfig") version "5.5.2"
-	id("io.freefair.lombok") version "8.12.2.1"
+	id("com.github.gmazzo.buildconfig") version "5.6.6"
+	id("io.freefair.lombok") version "8.14"
 }
 
 group = "dev.redstudio"
@@ -18,7 +18,7 @@ val plugin = "${project.group}.${id}.asm.${project.name}Plugin"
 
 val redCoreVersion = "1.8-1.12-" + "0.6"
 
-val mixinBooterVersion = "10.5"
+val mixinBooterVersion = "10.6"
 
 minecraft {
 	mcVersion = "1.12.2"
@@ -59,13 +59,13 @@ repositories {
 }
 
 dependencies {
-	implementation("dev.redstudio", "Red-Core-MC", redCoreVersion)
+	implementation("dev.redstudio:Red-Core-MC:$redCoreVersion")
 
 	compileOnly(rfg.deobf("curse.maven:dynamic-lights-227874:2563244"))
 
-	annotationProcessor("org.ow2.asm", "asm-debug-all", "5.2")
-	annotationProcessor("com.google.guava", "guava", "32.1.2-jre")
-	annotationProcessor("com.google.code.gson", "gson", "2.8.9")
+	annotationProcessor("org.ow2.asm:asm-debug-all:5.2")
+	annotationProcessor("com.google.guava:guava:32.1.2-jre")
+	annotationProcessor("com.google.code.gson:gson:2.8.9")
 
 	val mixinBooter: String = modUtils.enableMixins("zone.rong:mixinbooter:$mixinBooterVersion", "mixins.${id}.refmap.json") as String
 	api(mixinBooter) {

@@ -13,7 +13,7 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 
 ### Changed
 
-- Now requires MixinBooter 10.5 and up
+- Now requires MixinBooter 10.6 and up
 - Changed the URL in the mod menu to point to GitHub instead of CurseForge
 - World's lighting engines are now lazily initialized
 
@@ -23,13 +23,15 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 - Only generate sources jar for releases
 - Switched from Javadoc to Markdowndoc
 - Now uses tab indentation rather than spaces (This is an experiment that will continue to pop up on other Red Studio projects if everything goes well)
+- Update to use Gradle best practices
 - Updated dependencies:
-    - Updated to [gradle-buildconfig-plugin](https://github.com/gmazzo/gradle-buildconfig-plugin) 5.5.2
+    - Updated to [gradle-buildconfig-plugin](https://github.com/gmazzo/gradle-buildconfig-plugin) 5.6.6
     - Updated to [gradle-idea-ext-plugin](https://github.com/JetBrains/gradle-idea-ext-plugin) 1.1.10
-    - Updated to [io.freefair.lombok](https://plugins.gradle.org/plugin/io.freefair.lombok) 8.12.2.1
+    - Updated to [io.freefair.lombok](https://plugins.gradle.org/plugin/io.freefair.lombok) 8.14
     - Updated to [RetroFuturaGradle](https://github.com/GTNewHorizons/RetroFuturaGradle) 1.4.5
-    - Updated to [MixinBooter](https://www.curseforge.com/minecraft/mc-mods/mixin-booter) 10.5
-    - Updated to [Gradle](https://gradle.org) 8.13
+    - Updated to [foojay-resolver](https://github.com/gradle/foojay-toolchains) 1.0.0
+    - Updated to [MixinBooter](https://www.curseforge.com/minecraft/mc-mods/mixin-booter) 10.6
+    - Updated to [Gradle](https://gradle.org) 8.14.2
 
 ## Alfheim Version 1.5 Changelog - 2025-02-11
 
