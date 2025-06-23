@@ -16,8 +16,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.Set;
 
-import static dev.redstudio.alfheim.Alfheim.IS_NOTHIRIUM_LOADED;
-import static dev.redstudio.alfheim.Alfheim.IS_VINTAGIUM_LOADED;
+import static dev.redstudio.alfheim.Alfheim.*;
 import static net.minecraft.util.math.BlockPos.*;
 
 /// @author Luna Mira Lage (Desoroxxx)
@@ -63,7 +62,7 @@ public abstract class RenderGlobalMixin implements ILightUpdatesProcessor {
 	/// @since 1.0
 	@Override
 	public void alfheim$processLightUpdates() {
-		if (alfheim$lightUpdatesQueue.isEmpty() || (!IS_NOTHIRIUM_LOADED && !IS_VINTAGIUM_LOADED && renderDispatcher.hasNoFreeRenderBuilders())) {
+		if (alfheim$lightUpdatesQueue.isEmpty() || (!IS_NOTHIRIUM_LOADED && !IS_VINTAGIUM_LOADED && !IS_CELERITAS_LOADED && renderDispatcher.hasNoFreeRenderBuilders())) {
 			return;
 		}
 
