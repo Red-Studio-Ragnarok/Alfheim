@@ -19,7 +19,7 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 
 ### Fixed
 
-- Fixed compatibility with Celeritas
+- Fixed compatibility with Celeritas (In [#112](https://github.com/Red-Studio-Ragnarok/Alfheim/pull/112) by [Karnatour](https://github.com/Karnatour))
 
 ### Internal
 
