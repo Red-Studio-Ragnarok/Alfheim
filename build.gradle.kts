@@ -11,19 +11,21 @@ plugins {
 }
 
 group = "dev.redstudio"
-version = "1.6" // Versioning must follow Ragnarök versioning convention: https://github.com/Red-Studio-Ragnarok/Commons/blob/main/Ragnar%C3%B6k%20Versioning%20Convention.md
+version = "1.7-Dev-1" // Versioning must follow Ragnarök versioning convention: https://github.com/Red-Studio-Ragnarok/Commons/blob/main/Ragnar%C3%B6k%20Versioning%20Convention.md
 
 val id = project.name.lowercase()
 val plugin = "${project.group}.${id}.asm.${project.name}Plugin"
 
-val redCoreVersion = "1.8-1.12-" + "0.6"
+val jvmCommonArgs = "-Dfile.encoding=UTF-8 -XX:+UseStringDeduplication"
 
-val mixinBooterVersion = "10.6"
+val redCoreVersion = "1.8-1.12-" + "0.7.1"
+
+val mixinBooterVersion = "10.7"
 
 minecraft {
 	mcVersion = "1.12.2"
 	username = "Desoroxxx"
-	extraRunJvmArguments = listOf("-Dforge.logging.console.level=debug", "-Dfml.coreMods.load=${plugin}", "-Dmixin.hotSwap=true", "-Dmixin.checks.mixininterfaces=true", "-Dmixin.debug.export=true")
+	extraRunJvmArguments = listOf(jvmCommonArgs, "-Dforge.logging.console.level=debug", "-Dfml.coreMods.load=${plugin}", "-Dmixin.checks.mixininterfaces=true", "-Dmixin.debug.export=true")
 }
 
 repositories {
@@ -87,6 +89,10 @@ buildConfig {
 	buildConfigField("NAME", project.name)
 	buildConfigField("VERSION", project.version.toString())
 
+	// Versions
+	buildConfigField("RED_CORE_VERSION", redCoreVersion)
+	buildConfigField("MIXIN_BOOTER_VERSION", mixinBooterVersion)
+
 	// Loggers
 	buildConfigField("org.apache.logging.log4j.Logger", "LOGGER", "org.apache.logging.log4j.LogManager.getLogger(NAME)")
 	buildConfigField("dev.redstudio.redcore.logging.RedLogger", "RED_LOGGER", """new RedLogger(NAME, "https://linkify.cz/AlfheimBugReport", LOGGER)""")
@@ -133,7 +139,35 @@ tasks {
 		}
 	}
 
-	withType<Jar> {
+	val processReadme by registering {
+		val input = rootProject.file("README.md")
+		val output = layout.buildDirectory.file("processed-readme/README.md")
+
+		inputs.file(input)
+		outputs.file(output)
+
+		doLast {
+			val content = input.readText()
+			val firstHash = content.indexOf('#')
+			val lastSeparator = content.lastIndexOf("---")
+
+			val trimmed = when {
+				firstHash != -1 && lastSeparator > firstHash -> content.substring(firstHash, lastSeparator)
+				firstHash != -1 -> content.substring(firstHash)
+				else -> content
+			}
+
+			output.get().asFile.parentFile.mkdirs()
+			output.get().asFile.writeText(trimmed.trim())
+		}
+	}
+
+	withType<Jar>  {
+		dependsOn(processReadme)
+		from(processReadme.map { it.outputs.files })
+		from(rootProject.file("LICENSE"))
+		from(rootProject.file("CHANGELOG.md"))
+
 		manifest {
 			attributes(
 				"ModSide" to "BOTH",
@@ -149,7 +183,7 @@ tasks {
 		options.encoding = "UTF-8"
 
 		options.isFork = true
-		options.forkOptions.jvmArgs = listOf("-Xmx4G", "-XX:+UseStringDeduplication")
+		options.forkOptions.jvmArgs = jvmCommonArgs.split(" ")
 	}
 }
 
@@ -171,7 +205,7 @@ idea {
 						val suffix = name.substringAfter(" ").takeIf { it != prefix } ?: ""
 						taskNames = setOf("run$prefix$suffix")
 
-						jvmArgs = "-XX:+UseStringDeduplication"
+						jvmArgs = jvmCommonArgs
 					}
 				}
 			}
