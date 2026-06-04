@@ -3,9 +3,27 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com),
-and this project follows the [Ragnarök Versioning Convention](https://github.com/Red-Studio-Ragnarok/Commons/blob/main/Ragnar%C3%B6k%20Versioning%20Convention.md).
+and this project adheres to [Ragnarök Versioning](https://github.com/Red-Studio-Ragnarok/Commons/blob/main/Ragnar%C3%B6k%20Versioning%20Convention.md).
 
-## Alfheim Version 1.6 Changelog - 2025-06-23
+## [Unreleased](https://github.com/Red-Studio-Ragnarok/Alfheim/compare/1.6...main)
+
+### Added
+
+- Full compatibility with [Fluidlogged-API](https://github.com/jbredwards/Fluidlogged-API)
+
+### Internal
+
+
+- Updated `gradle.properties` to enable configuration cache and make use of compact object headers (also stopped using ZGC)
+- Added `gradlew`, and `gradle.bat` to `idea` excluded dirs
+- Updated dependencies:
+    - Updated to [gradle-buildconfig-plugin](https://github.com/gmazzo/gradle-buildconfig-plugin) 6.0.9
+    - Updated to [gradle-idea-ext-plugin](https://github.com/JetBrains/gradle-idea-ext-plugin) 1.4.1
+    - Updated to [io.freefair.lombok](https://plugins.gradle.org/plugin/io.freefair.lombok) 9.2.0
+    - Updated to [RetroFuturaGradle](https://github.com/GTNewHorizons/RetroFuturaGradle) 2.0.2
+    - Updated to [Gradle](https://gradle.org) 9.4.1
+
+## [1.6](https://github.com/Red-Studio-Ragnarok/Alfheim/compare/1.4..1.5) - 2025-06-23
 
 ### Added
 
@@ -38,7 +56,7 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
     - Updated to [MixinBooter](https://www.curseforge.com/minecraft/mc-mods/mixin-booter) 10.6
     - Updated to [Gradle](https://gradle.org) 8.14.2
 
-## Alfheim Version 1.5 Changelog - 2025-02-11
+## [1.5](https://github.com/Red-Studio-Ragnarok/Alfheim/compare/1.4...1.5) - 2025-02-11
 
 ### Changed
 
@@ -62,7 +80,7 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 - Reworked buildscript
 - Updated [Red Core](https://www.curseforge.com/minecraft/mc-mods/red-core) dependency to 0.6
 
-## Alfheim Version 1.4 Changelog - 2024-08-21
+## [1.4](https://github.com/Red-Studio-Ragnarok/Alfheim/compare/1.3...1.4) - 2024-08-21
 
 ### Changed
 
@@ -92,7 +110,7 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 - Set a minimum Gradle Daemon JVM version requirement
 - General cleanup
 
-## Alfheim Version 1.3 Changelog - 2024-03-28
+## [1.3](https://github.com/Red-Studio-Ragnarok/Alfheim/compare/1.2...1.3) - 2024-03-28
 
 ### Changed
 
@@ -112,7 +130,7 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 - Updated [io.freefair.lombok](https://plugins.gradle.org/plugin/io.freefair.lombok) to version 8.6
 - Updated [org.jetbrains.gradle.plugin.idea-ext](https://plugins.gradle.org/plugin/org.jetbrains.gradle.plugin.idea-ext) to version 1.1.8
 
-## Alfheim Version 1.2 Changelog - 2023-12-11
+## [1.2](https://github.com/Red-Studio-Ragnarok/Alfheim/compare/1.1.1...1.2) - 2023-12-11
 
 ### Changed
 
@@ -127,13 +145,13 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 - Fixed the names of the arrays of queues
 - Cleaned up `LightingEngine`
 
-## Alfheim Version 1.1.1 Changelog - 2023-11-19
+## [1.1.1](https://github.com/Red-Studio-Ragnarok/Alfheim/compare/1.1...1.1.1) - 2023-11-19
 
 ### Fixed
 
 - Fixed log spam
 
-## Alfheim Version 1.1 Changelog - 2023-11-18
+## [1.1](https://github.com/Red-Studio-Ragnarok/Alfheim/compare/1.0.2...1.1) - 2023-11-18
 
 #### Now depends on Red Core 0.5
 #### Now depends on MixinBooter 8.6
@@ -169,7 +187,7 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 
 - Removed access transformed as overwrites can already do the job on their own
 
-## Alfheim Version 1.0.2 Changelog - 2023-09-12
+## [1.0.2](https://github.com/Red-Studio-Ragnarok/Alfheim/compare/1.0.1...1.0.2) - 2023-09-12
 
 ### Fixed
 
@@ -181,12 +199,12 @@ and this project follows the [Ragnarök Versioning Convention](https://github.co
 - Reorganized `ChunkMixin`
 - Cleaned up `ChunkMixin`
 
-## Alfheim Version 1.0.1 Changelog - 2023-09-08
+## [1.0.1](https://github.com/Red-Studio-Ragnarok/Alfheim/compare/1.0...1.0.1) - 2023-09-08
 
 ### Fixed
 
 - Fixed crash on launch with certain mods (Fluidlogged API, CodeChickenLib, FunkyLocomotion and more)
 
-## Alfheim Version 1.0 Changelog - 2023-09-06
+## [1.0](https://github.com/Red-Studio-Ragnarok/Alfheim/tree/1.0) - 2023-09-06
 
 Initial Release
